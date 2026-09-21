@@ -1,0 +1,12 @@
+# Line endings are part of this repository's provenance. `results/usage.jsonl` is identified by the
+# SHA-256 of its bytes, so a checkout that rewrites LF to CRLF silently changes the artifact every
+# hash in FREEZE.md refers to. Git on Windows defaults to `core.autocrlf=true`, which does exactly
+# that, so the behaviour is pinned here rather than left to each machine's config.
+#
+# `text=auto` lets Git decide what is text and leaves binaries alone; `eol=lf` forces LF on checkout
+# for whatever it decides is text. This covers the .py, .md, .toml, .lock, .jsonl, .env template,
+# .gitignore and .python-version files in this repo without naming them individually.
+#
+# `.secrets/typesafe.env` is local-only and ignored, so it is never checked out and no rule here
+# concerns it.
+* text=auto eol=lf

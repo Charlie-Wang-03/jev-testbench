@@ -1,0 +1,50 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Test scratch space (project-local pytest basetemp)
+.pytest-tmp/
+
+# pytest's own cache. It writes a .gitignore of its own inside the directory, but that is pytest's
+# behaviour to change, not ours — ignore it here explicitly instead of relying on it.
+.pytest_cache/
+
+# Secrets: never commit these, in any form. The last matching pattern is the one git reports, so
+# `.secrets/` is listed after the basename rules and is the rule `git check-ignore` names for a file
+# inside it. Nothing in this section is a substitute for the others; each covers a different way a
+# credential file gets written.
+.env
+*.env
+.env.*
+*.secret
+*.secrets
+.secrets/
+
+# The example directory is a committed template, so its file is re-included explicitly. Without
+# this, the `*.env` rule above would ignore it — and that file is the one meant to be committed.
+# (A negation cannot resurrect a file whose parent directory is ignored, which is why `.secrets/`
+# above is a directory rule and this one names the directory separately.)
+!.secrets.example/
+!.secrets.example/typesafe.env
+
+# Run artifacts. Two files in `results/` are part of the frozen evaluation and are tracked: the
+# canonical log, and the report derived from it. Everything else here is a regenerable view.
+#
+# The rule is `results/*` and then a negation per tracked file, rather than `results/*` blanket:
+# a tracked canonical log is what makes an evaluation citable, and a clone without it has the
+# bench but not the measurements. The derived files stay ignored on purpose -- they are rebuilt
+# from the log by `report`, `snapshot`, and `final-report`, and a checked-in copy of a derived
+# file is a second source of truth that can drift.
+#
+# A negation cannot resurrect a file whose *parent directory* is ignored, which is why the pattern
+# is `results/*` and not `results/` -- the directory itself is not ignored, so these work.
+results/*
+!results/usage.jsonl
+!results/JEV_LOCAL_EVALUATION_FINAL.md

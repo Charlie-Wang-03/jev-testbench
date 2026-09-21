@@ -1,0 +1,33 @@
+[project]
+name = "jev-test"
+version = "0.1.0"
+description = "A reproducible local benchmark for evaluating TypeSafe Jev capabilities, stability, usage, and agent-control patterns."
+readme = "README.md"
+authors = [
+    { name = "Yichuan Wang", email = "133667618+Charlie-Wang-03@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "typesafe-sdk>=0.7.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# The distribution is named `jev-test`, but the import package is `jev_lab`. Left unset, the
+# backend looks for a module matching the *project* name (`src/jev_test/`) and the build fails.
+module-name = "jev_lab"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+# Only `tests/` is collected. Scoping it here is what keeps a stray scratch script at the repo
+# root from being imported by pytest -- unit tests in this repo must never reach the live API.
+testpaths = ["tests"]
+# A project-local basetemp keeps the suite runnable where the system %TEMP% is not writable.
+addopts = "-q --basetemp=.pytest-tmp"
