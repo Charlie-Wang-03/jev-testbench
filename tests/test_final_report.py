@@ -19,7 +19,15 @@ import re
 
 import pytest
 
-from jev_lab.experiments import EXPERIMENTS, experiment_names
+from jev_lab.composite import COMPOSITE, COMPOSITE_DIMENSIONS
+from jev_lab.experiments import (
+    CONFIDENCE_GATE_THRESHOLD,
+    EXPERIMENTS,
+    GATE_ACCEPT,
+    GATE_ESCALATE,
+    experiment_names,
+)
+from jev_lab.fanout import FANOUT, PARALLEL
 from jev_lab.final_report import (
     ACTUAL_HANDLER_EXECUTION_REALIZED,
     ACTUAL_HANDLER_EXECUTION_UNTESTED,
@@ -29,6 +37,7 @@ from jev_lab.final_report import (
     LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK,
     OPTIONAL_EDGE_COVERAGE_BACKLOG,
     build_final_report,
+    confidence_gate,
     measured_counts,
     measured_experiment_names,
     optional_backlog,
@@ -36,6 +45,7 @@ from jev_lab.final_report import (
 from jev_lab.recorder import DEFAULT_RESULTS_DIR, read_records
 from jev_lab.report import TOTAL_LABEL, build_summary
 from jev_lab.routing import (
+    FAIL_CLOSED_SUPPRESSION_REALIZED,
     ROUTING,
     ROUTING_ARGUMENT_QUESTION,
     ROUTING_EXPECTED,
@@ -604,3 +614,347 @@ class TestWriteFinalReport:
         before = log.read_bytes()
         write_final_report(results)
         assert log.read_bytes() == before
+
+
+# --------------------------------------------------------------------------------------
+# Measurement-dependent prose follows the measurement
+# --------------------------------------------------------------------------------------
+#
+# Every claim below was, at some point, a fixed sentence asserting an outcome the generator never
+# computed -- the `04_confidence` gate being the one that was actually wrong against the frozen
+# log. Each test moves the underlying record and holds the sentence to the move, in both
+# directions: a generator that ignored the records would fail half of every pair here.
+
+CONFIDENCE = "04_confidence"
+INSTRUCTION = "07_instruction_precision"
+GATE_LINE = "which is the gate behaving as written"
+
+
+def confidence_record(case_id, ambiguity, *, confidence, threshold=CONFIDENCE_GATE_THRESHOLD,
+                      decision=None):
+    """One `04_confidence` record, carrying the gate the run would have stored for its confidence.
+
+    `decision` is overridable so a record can be built that contradicts its own numbers; nothing
+    else here does that, because the point of the gate is that the two agree.
+    """
+    return record(
+        CONFIDENCE,
+        case_id,
+        answers={
+            "intent": {
+                "type": "choice",
+                "choice": "other",
+                "confidence": confidence,
+                "probabilities": {"other": confidence},
+            },
+            "specificity": {
+                "type": "score",
+                "score": 1.0,
+                "confidence": 0.9,
+                "legend": {"0": "none", "1": "hinted", "2": "stated"},
+                "probabilities": {"2": 1.0},
+            },
+        },
+        notes={
+            "ambiguity": ambiguity,
+            "derived": {
+                "intent": "other",
+                "intent_confidence": confidence,
+                "expected": None,
+                "matches_expected": None,
+                "gate": {
+                    "decision": decision
+                    if decision is not None
+                    else (GATE_ACCEPT if confidence >= threshold else GATE_ESCALATE),
+                    "threshold": threshold,
+                    "threshold_basis": (
+                        "demo threshold; not calibrated, not tuned on any data, not claimed optimal"
+                    ),
+                },
+            },
+        },
+    )
+
+
+def confidence_arms(*, ambiguous_confidence, threshold=CONFIDENCE_GATE_THRESHOLD,
+                    ambiguous_decision=None):
+    """The two-case A/B the chapter needs, with the ambiguous arm placed where the test wants it."""
+    return [
+        confidence_record("specific_evidence", "clear", confidence=1.0, threshold=threshold),
+        confidence_record(
+            "ambiguous_evidence",
+            "ambiguous",
+            confidence=ambiguous_confidence,
+            threshold=threshold,
+            decision=ambiguous_decision,
+        ),
+    ]
+
+
+class TestTheStoredGateDecisionIsRecomputed:
+    """The reported decision is the stored one, and it is checked against the numbers beside it."""
+
+    def test_a_consistent_record_reports_its_stored_decision(self):
+        gate = confidence_gate(confidence_record("c", "clear", confidence=0.61))
+        assert gate["decision"] == GATE_ACCEPT
+        assert gate["cleared"] is True
+        assert gate["threshold"] == CONFIDENCE_GATE_THRESHOLD
+
+    @pytest.mark.parametrize(
+        "confidence,expected",
+        [(1.0, GATE_ACCEPT), (0.61, GATE_ACCEPT), (0.6, GATE_ACCEPT), (0.59, GATE_ESCALATE)],
+    )
+    def test_the_boundary_is_greater_than_or_equal(self, confidence, expected):
+        # Equality clears. This is the experiment's `>=`, and a report that read the boundary the
+        # other way would be describing different semantics than the run applied.
+        assert confidence_gate(confidence_record("c", "clear", confidence=confidence))[
+            "decision"
+        ] == expected
+
+    def test_a_record_whose_decision_contradicts_its_numbers_stops_the_build(self):
+        # Fail closed: the report declines to choose between the stored decision and the stored
+        # numbers rather than silently printing one of them.
+        rows = confidence_arms(ambiguous_confidence=0.59, ambiguous_decision=GATE_ACCEPT)
+        with pytest.raises(ValueError, match="recomputes to"):
+            build_final_report(rows)
+
+    def test_a_record_with_no_gate_is_not_an_error(self):
+        assert confidence_gate(record(CONFIDENCE, "c", answers={}, notes={})) is None
+
+
+class TestTheConfidenceGateDirectionIsRead:
+    """The chapter's gate sentence has to move with the gate, in both directions."""
+
+    def outcome(self, rows):
+        return line_with(build_final_report(rows), GATE_LINE)
+
+    def test_an_ambiguous_case_above_the_threshold_is_reported_as_cleared(self):
+        line = self.outcome(confidence_arms(ambiguous_confidence=0.61))
+        assert "accepted and cleared on every one" in line
+        assert "did not clear" not in line
+
+    def test_an_ambiguous_case_below_the_threshold_is_reported_as_not_cleared(self):
+        line = self.outcome(confidence_arms(ambiguous_confidence=0.59))
+        assert "escalated without clearing on ambiguous" in line
+        assert "accepted and cleared on every" not in line
+
+    def test_an_ambiguous_case_on_the_threshold_is_reported_as_cleared(self):
+        line = self.outcome(confidence_arms(ambiguous_confidence=CONFIDENCE_GATE_THRESHOLD))
+        assert "accepted and cleared on every one" in line
+
+    def test_both_cases_refused_is_not_reported_as_any_of_them_clearing(self):
+        rows = [
+            confidence_record("specific_evidence", "clear", confidence=0.5),
+            confidence_record("ambiguous_evidence", "ambiguous", confidence=0.5),
+        ]
+        line = self.outcome(rows)
+        assert "escalated on every one" in line
+        assert "none cleared" in line
+
+    def test_the_sentence_follows_the_records_and_not_the_other_way_round(self):
+        # The whole point: the same input shape, one number moved, opposite conclusions.
+        accepted = build_final_report(confidence_arms(ambiguous_confidence=0.61))
+        refused = build_final_report(confidence_arms(ambiguous_confidence=0.59))
+        assert accepted != refused
+        assert "accepted and cleared on every one" in accepted
+        assert "escalated without clearing on ambiguous" in refused
+
+    def test_the_threshold_reported_is_the_one_the_records_were_gated_on(self):
+        assert "`confidence >= 0.6`" in build_final_report(confidence_arms(ambiguous_confidence=0.61))
+
+
+class TestTheInstructionConclusionIsRead:
+    """`07_instruction_precision` said the wording "materially changed" the judgment regardless."""
+
+    def instruction_arms(self, vague, explicit):
+        return [
+            record(
+                INSTRUCTION,
+                "vague_boundary",
+                notes={"boundary": "vague"},
+                answers={"blocked": {"type": "noul", "noul": vague}},
+            ),
+            record(
+                INSTRUCTION,
+                "explicit_boundary",
+                notes={"boundary": "explicit"},
+                answers={"blocked": {"type": "noul", "noul": explicit}},
+            ),
+        ]
+
+    def test_a_moved_judgment_is_reported_as_moved(self):
+        text = build_final_report(self.instruction_arms(0.75, 0.2))
+        assert "materially changed the observed judgment" in text
+
+    def test_an_unmoved_judgment_is_not_reported_as_having_moved(self):
+        text = build_final_report(self.instruction_arms(0.5, 0.5))
+        assert "materially changed the observed judgment" not in text
+        assert "left the observed judgment unchanged" in text
+
+    def test_the_sentence_follows_the_records_and_not_the_other_way_round(self):
+        moved = build_final_report(self.instruction_arms(0.75, 0.2))
+        still = build_final_report(self.instruction_arms(0.5, 0.5))
+        assert "materially changed the observed judgment" in moved
+        assert "materially changed the observed judgment" not in still
+
+
+class TestTheBatchingSpreadIsComputed:
+    """The spread-versus-difference sentence asserted a comparison the generator never made."""
+
+    def batching_arms(self, batched_latencies, separate_latencies):
+        rows = [
+            record(PARALLEL, f"b{i}", notes={"arm": "batched", "cycle": i + 1}, latency_ms=value)
+            for i, value in enumerate(batched_latencies)
+        ]
+        rows += [
+            record(PARALLEL, f"s{i}", notes={"arm": "separate", "cycle": 1}, latency_ms=value)
+            for i, value in enumerate(separate_latencies)
+        ]
+        return rows
+
+    def spread_line(self, rows):
+        return line_with(build_final_report(rows), "were spread by")
+
+    def test_a_dominant_within_arm_spread_is_reported_as_larger(self):
+        line = self.spread_line(self.batching_arms([3204.053, 611.128], [580.0, 580.0]))
+        assert "**2592.925 ms**" in line
+        assert "the within-arm spread is larger than" in line
+
+    def test_a_spread_smaller_than_the_difference_is_reported_as_such(self):
+        # Batched observations almost identical, arms far apart: the opposite reading.
+        line = self.spread_line(self.batching_arms([600.0, 601.0], [1200.0, 1200.0]))
+        assert "the within-arm spread is not larger than" in line
+
+    def test_the_numbers_are_the_records_own(self):
+        line = self.spread_line(self.batching_arms([900.0, 300.0], [100.0]))
+        assert "**600 ms**" in line
+        assert "**500 ms**" in line
+
+    def test_the_latency_boundary_is_stated_even_when_nothing_can_be_compared(self):
+        # One arm only: no comparison is available, and the limit is still stated rather than the
+        # sentence vanishing along with the arm it needed.
+        text = build_final_report([record(PARALLEL, "b", notes={"arm": "batched"})])
+        assert "never as a speedup" in text
+        assert "were spread by" not in text
+
+
+class TestTheFanoutDirectionConsistencyIsRead:
+    """The chapter said the pairs disagreed on latency direction whatever the pairs did."""
+
+    def pair(self, name, fanout_ms, staged_ms):
+        return [
+            record(FANOUT, f"{name}_fanout", notes={"pair": name, "strategy": "fanout"},
+                   latency_ms=fanout_ms),
+            record(FANOUT, f"{name}_staged", notes={"pair": name, "strategy": "staged", "stage": 1},
+                   latency_ms=staged_ms),
+        ]
+
+    def direction_line(self, rows):
+        return line_with(build_final_report(rows), "latency direction per pair")
+
+    def test_pairs_that_disagree_are_reported_as_inconsistent(self):
+        rows = self.pair("A", 2400, 560) + self.pair("B", 550, 630)
+        assert "inconsistent across pairs" in self.direction_line(rows)
+
+    def test_pairs_that_agree_are_not_reported_as_inconsistent(self):
+        rows = self.pair("A", 2400, 560) + self.pair("B", 2400, 560)
+        line = self.direction_line(rows)
+        assert "inconsistent across pairs" not in line
+        assert "consistent across pairs" in line
+
+    def test_the_sentence_follows_the_records_and_not_the_other_way_round(self):
+        disagree = build_final_report(self.pair("A", 2400, 560) + self.pair("B", 550, 630))
+        agree = build_final_report(self.pair("A", 2400, 560) + self.pair("B", 2400, 560))
+        assert "inconsistent across pairs" in disagree
+        assert "inconsistent across pairs" not in agree
+
+
+class TestTheCompositeSuperlativeIsChecked:
+    """`06_composite_scoring` called one dimension's confidence the run's lowest without looking."""
+
+    LEGEND = {"0": "none", "1": "weak", "2": "adequate", "3": "strong"}
+
+    def composite_record(self, case_id, scenario_class, scores, confidences):
+        return record(
+            COMPOSITE,
+            case_id,
+            notes={"scenario_class": scenario_class},
+            answers={
+                dimension: {
+                    "type": "score",
+                    "score": scores[dimension],
+                    "confidence": confidences[dimension],
+                    "legend": self.LEGEND,
+                    "probabilities": {"3": 1.0},
+                }
+                for dimension in COMPOSITE_DIMENSIONS
+            },
+        )
+
+    def scenario(self, *, lowest_elsewhere=False):
+        """`low_risk`'s largest contribution is `evidence_quality`, at confidence 0.24."""
+        low = self.composite_record(
+            "low_risk",
+            "low_risk",
+            {"evidence_quality": 0.0, "numerical_stability": 3.0, "reproducibility": 3.0,
+             "failure_severity": 0.0},
+            {"evidence_quality": 0.24, "numerical_stability": 0.9, "reproducibility": 0.9,
+             "failure_severity": 0.05 if lowest_elsewhere else 0.9},
+        )
+        others = [
+            self.composite_record(
+                case_id, scenario_class, dict.fromkeys(COMPOSITE_DIMENSIONS, 1.5),
+                dict.fromkeys(COMPOSITE_DIMENSIONS, 0.9),
+            )
+            for case_id, scenario_class in (("mixed", "mixed"), ("high_risk", "high_risk"))
+        ]
+        return [low, *others]
+
+    def contribution_line(self, rows):
+        return line_with(build_final_report(rows), "largest single contribution")
+
+    def test_it_keeps_the_superlative_when_the_run_agrees(self):
+        assert "the lowest confidence recorded anywhere" in self.contribution_line(self.scenario())
+
+    def test_it_drops_the_superlative_when_a_lower_confidence_exists_elsewhere(self):
+        line = self.contribution_line(self.scenario(lowest_elsewhere=True))
+        assert "the lowest confidence recorded anywhere" not in line
+        assert "confidence **0.24**" in line
+
+
+class TestTheRoutingMarkersAreChecked:
+    """Two routing sentences asserted realised behaviour without consulting the computed markers."""
+
+    def test_a_fail_closed_run_carries_the_marker(self):
+        text = build_final_report(routing_records(suppress_everything=True))
+        assert f"`{FAIL_CLOSED_SUPPRESSION_REALIZED}`" in text
+        assert "were withheld and no handler ran for any of them" in text
+
+    def test_the_marker_is_never_asserted_without_its_condition(self):
+        # Nothing withheld means the marker cannot be carried, and the report must say so rather
+        # than keep the sentence about suppression that did not happen.
+        text = build_final_report(routing_records(suppress_everything=False))
+        assert "either no route was suppressed, or a suppressed route reached a handler" in text
+        assert "were withheld and no handler ran for any of them" not in text
+
+    def test_the_sentence_follows_the_records_and_not_the_other_way_round(self):
+        suppressed = build_final_report(routing_records(suppress_everything=True))
+        executed = build_final_report(routing_records(suppress_everything=False))
+        assert "were withheld and no handler ran for any of them" in suppressed
+        assert "were withheld and no handler ran for any of them" not in executed
+
+    def test_the_architectural_conclusion_does_not_outrun_the_match_count(self):
+        # The canonical shape: every resolved case matched, so the universal is earned.
+        rows = routing_records(suppress_everything=True)
+        assert "produced the intended function and argument in every resolved case" in (
+            build_final_report(rows)
+        )
+
+    def test_the_conclusion_reports_counts_when_a_case_did_not_match(self):
+        rows = routing_records(suppress_everything=True)
+        # Move one case's frozen expectation off the label the record actually answered, so the
+        # case still resolves but no longer matches. The answer itself is left alone.
+        rows[0]["notes"]["expected_function"] = "compare_runs"
+        text = build_final_report(rows)
+        assert "produced the intended function and argument in every resolved case" not in text
+        assert "produced the intended function in 1 of 2 resolved case(s)" in text

@@ -55,7 +55,7 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **LOCAL MEASUREMENT** — clear evidence: `release_transfer` at confidence 1, distribution `release_transfer` 1, `read_balance` 0, `other` 0.
 - **LOCAL MEASUREMENT** — clear evidence: the specificity Score was 2 with confidence 1.
 - **DESIGN ASSUMPTION** — the experiment gated in code on `confidence >= 0.6` alone, a demonstration parameter that was fixed before the run, is not calibrated, and is not claimed to be optimal.
-- **LOCAL MEASUREMENT** — the clear case cleared that gate and the ambiguous case did not, which is the gate behaving as written on these two answers.
+- **LOCAL MEASUREMENT** — the gate accepted and cleared on every one of these cases (ambiguous, clear), which is the gate behaving as written on these answers.
 - **LIMITATION** — **confidence is not correctness**, and a threshold on it is not a correctness filter: an arbitrary cut accepts an ambiguous case whenever its confidence happens to land above the line. The two are reported side by side and never combined, and no accuracy rate is computed anywhere in this report.
 
 ## 5. Instruction sensitivity — `07_instruction_precision`
@@ -73,7 +73,8 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **DERIVED CALCULATION** — estimated cost $0.000034272 against $0.00014616, a ratio of 4.2647x. The cost ratio equals the input ratio here because the encoded price for this model charges input only.
 - **LOCAL MEASUREMENT** — of 10 question(s) asked in both arms across the two cycles, **10** returned the same selected value; this compares labels, not distributions.
 - **LOCAL MEASUREMENT** — transport attempts recorded on 12 of 12 call(s): 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 — no HTTP retry was locally observed for them, which is all that count licenses.
-- **LOCAL MEASUREMENT** — the batched arm's own observations differed by more than the arm-to-arm difference they would be used to explain, so latency here is reported as an observation and never as a speedup.
+- **LOCAL MEASUREMENT** — the batched arm's own 2 observation(s) were spread by **2592.925 ms**, against an arm-to-arm mean difference of **1327.166 ms** — the within-arm spread is larger than the difference it would be used to explain.
+- **LIMITATION** — latency here is reported as an observation and never as a speedup: two cycles cannot separate arm identity from request position, so no factor is attributed to batching.
 
 **Core local finding.** Batching substantially reduced repeated-state input usage in this workload: the identical state and the identical question definitions cost materially fewer input tokens in one request than in five.
 
@@ -157,9 +158,9 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **LOCAL MEASUREMENT** — `out_of_range_values`: confidence 1 (floor cleared at 0.8), review signal 0.94 (not cleared at 0.5), execution withheld.
 - **LOCAL MEASUREMENT** — `ROUTING_SUPPRESSION_EXPECTATION_MISSED` — 3 case(s) the design wrote as routine were withheld, against 1 of 1 expected suppression(s) observed. The pre-registered expectation and the answers disagree, and the disagreement is left standing: no threshold was moved after seeing it.
 - **LOCAL MEASUREMENT** — `ACTUAL_HANDLER_EXECUTION_UNTESTED` — no handler was called: every resolved route was withheld (4 of 4), so the allowed-route branch was never entered under a live answer.
-- **LOCAL MEASUREMENT** — `FAIL_CLOSED_SUPPRESSION_REALIZED` — suppression happened and no handler ran for any suppressed route; nothing was substituted for a withheld route.
+- **LOCAL MEASUREMENT** — `FAIL_CLOSED_SUPPRESSION_REALIZED` — 4 route(s) were withheld and no handler ran for any of them; nothing was substituted for a withheld route.
 
-**Architectural conclusion.** Semantic routing is not execution authorization. The model produced the intended function and argument in every case, and the code still refused to act — correctly, under the frozen policy. A system that treats a confident route as permission to act has removed the layer that produced this result.
+**Architectural conclusion.** Semantic routing is not execution authorization. The model produced the intended function and argument in every resolved case, and the code still refused to act — correctly, under the frozen policy. A system that treats a confident route as permission to act has removed the layer that produced this result.
 
 - **LIMITATION** — the execution path from an allowed route to the handler is **not** established by a live run here, and this report does not claim a full execution chain succeeded.
 

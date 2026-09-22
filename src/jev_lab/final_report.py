@@ -34,8 +34,20 @@ from .composite import (
     confidence_diagnostics,
     contribution_shares,
 )
-from .experiments import EXPERIMENTS, experiment_call_ceiling, experiment_names
-from .fanout import FANOUT, PARALLEL, analyze_fanout
+from .experiments import (
+    CONFIDENCE_GATE_THRESHOLD,
+    EXPERIMENTS,
+    GATE_ACCEPT,
+    GATE_ESCALATE,
+    experiment_call_ceiling,
+    experiment_names,
+)
+from .fanout import (
+    FANOUT,
+    FANOUT_LATENCY_DIRECTION_INCONSISTENT_ACROSS_PAIRS,
+    PARALLEL,
+    analyze_fanout,
+)
 from .pricing import price_for
 from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
 from .repeatability import REPEATABILITY
@@ -44,6 +56,7 @@ from .report import TOTAL_LABEL, _plain_decimal, build_summary
 from .routing import (
     ACTUAL_HANDLER_EXECUTION_REALIZED,
     ACTUAL_HANDLER_EXECUTION_UNTESTED,
+    FAIL_CLOSED_SUPPRESSION_REALIZED,
     ROUTING,
     ROUTING_CONFIDENCE_FLOOR,
     ROUTING_HUMAN_REVIEW_THRESHOLD,
@@ -85,10 +98,9 @@ ADDRESSING = "02_structured_addressing"
 CONFIDENCE = "04_confidence"
 INSTRUCTION = "07_instruction_precision"
 
-# The demo gate `04_confidence` applied in code. Restated here only to describe what the experiment
-# did; the value itself lives with the experiment.
-CONFIDENCE_GATE_THRESHOLD = 0.60
-
+# The demo gate `04_confidence` applied in code, imported from the experiment that owns it. It is
+# used only as the fallback wording when a record carries no gate of its own; the threshold these
+# records were actually gated on is read back out of `notes.derived.gate` below.
 RATIO_DECIMALS = 4
 PERCENT_DECIMALS = 2
 
@@ -547,6 +559,63 @@ def _addressing(records: Sequence[Mapping[str, Any]]) -> list[str]:
     return lines + [""]
 
 
+def confidence_gate(record: Mapping[str, Any]) -> dict[str, Any] | None:
+    """One record's confidence gate, read from the record and checked against its own numbers.
+
+    The run froze its gate decision into ``notes.derived.gate`` at measurement time, and that
+    stored decision is what gets reported -- but it is first recomputed from the confidence the
+    answer carried and the threshold the record names. A report that trusted the stored decision
+    while ignoring the numbers beside it could describe a gate that never ran, so the two are
+    required to agree: a record whose stored decision and stored numbers disagree is not a record
+    this report can describe, and picking either reading would be a guess. That case stops the
+    build rather than printing a direction.
+
+    Returns ``None`` when the record carries no gate at all, which is not an error -- an answer
+    with no confidence has no gate to describe.
+    """
+    derived = (record.get("notes") or {}).get("derived") or {}
+    gate = derived.get("gate") or {}
+    decision = gate.get("decision")
+    threshold = gate.get("threshold")
+    answers = record.get("answers") or {}
+    choice = next((answer for answer in answers.values() if answer.get("type") == "choice"), None)
+    confidence = (choice or {}).get("confidence")
+    if decision is None or threshold is None or confidence is None:
+        return None
+    recomputed = GATE_ACCEPT if float(confidence) >= float(threshold) else GATE_ESCALATE
+    if recomputed != decision:
+        raise ValueError(
+            f"record {record.get('case_id')!r} stores gate decision {decision!r}, but its own "
+            f"confidence {confidence} at threshold {threshold} recomputes to {recomputed!r}; the "
+            "log and this build disagree about what the gate did, so no direction is reported"
+        )
+    return {
+        "decision": decision,
+        "threshold": float(threshold),
+        "confidence": float(confidence),
+        "cleared": decision == GATE_ACCEPT,
+    }
+
+
+def _gate_outcome(decisions: Sequence[tuple[str, Mapping[str, Any]]]) -> str:
+    """Which cases cleared the gate, in whichever direction the records went.
+
+    Written from the decisions rather than around them: a fixed sentence here would keep saying
+    the ambiguous case was refused on a log where it was accepted, which is precisely the reading
+    a derived report exists to prevent.
+    """
+    cleared = [label for label, gate in decisions if gate["cleared"]]
+    withheld = [label for label, gate in decisions if not gate["cleared"]]
+    if not cleared:
+        return f"escalated on every one of these cases ({', '.join(withheld)}) — none cleared"
+    if not withheld:
+        return f"accepted and cleared on every one of these cases ({', '.join(cleared)})"
+    return (
+        f"accepted and cleared on {', '.join(cleared)}, and escalated without clearing on "
+        f"{', '.join(withheld)}"
+    )
+
+
 def _confidence(records: Sequence[Mapping[str, Any]]) -> list[str]:
     group = [r for r in records if r.get("experiment") == CONFIDENCE]
     if len(group) < 2:
@@ -580,21 +649,28 @@ def _confidence(records: Sequence[Mapping[str, Any]]) -> list[str]:
                     f"{_number(score.get('confidence'))}.",
                 )
             )
+    gates = [
+        (label, gate)
+        for label, record in sorted(by_ambiguity.items())
+        if (gate := confidence_gate(record)) is not None
+    ]
+    threshold = gates[0][1]["threshold"] if gates else CONFIDENCE_GATE_THRESHOLD
     lines.append(
         _claim(
             DESIGN_ASSUMPTION,
-            f"the experiment gated in code on `confidence >= {CONFIDENCE_GATE_THRESHOLD}` alone, "
+            f"the experiment gated in code on `confidence >= {_number(threshold)}` alone, "
             "a demonstration parameter that was fixed before the run, is not calibrated, and is "
             "not claimed to be optimal.",
         )
     )
-    lines.append(
-        _claim(
-            LOCAL_MEASUREMENT,
-            "the clear case cleared that gate and the ambiguous case did not, which is the gate "
-            "behaving as written on these two answers.",
+    if gates:
+        lines.append(
+            _claim(
+                LOCAL_MEASUREMENT,
+                f"the gate {_gate_outcome(gates)}, which is the gate behaving as written on these "
+                "answers.",
+            )
         )
-    )
     lines.append(
         _claim(
             LIMITATION,
@@ -614,6 +690,7 @@ def _instruction(records: Sequence[Mapping[str, Any]]) -> list[str]:
     lines = ["## 5. Instruction sensitivity — `07_instruction_precision`", ""]
     by_boundary = {str((r.get("notes") or {}).get("boundary")): r for r in group}
     vague, explicit = by_boundary.get("vague"), by_boundary.get("explicit")
+    left = right = None
     if vague and explicit:
         state_bytes = {int(r.get("state_utf8_bytes") or 0) for r in group}
         lines.append(
@@ -644,12 +721,19 @@ def _instruction(records: Sequence[Mapping[str, Any]]) -> list[str]:
                     "0–1 probability, from the same state bytes.",
                 )
             )
-    lines.append(
-        _claim(
-            LOCAL_MEASUREMENT,
-            "decision-boundary wording materially changed the observed judgment in this case.",
+    if left is not None and right is not None:
+        lines.append(
+            _claim(
+                LOCAL_MEASUREMENT,
+                "decision-boundary wording "
+                + (
+                    "materially changed the observed judgment in this case."
+                    if float(left) != float(right)
+                    else "left the observed judgment unchanged in this case; the two Nouls are the "
+                    "same number on byte-identical state."
+                ),
+            )
         )
-    )
     lines.append(
         _claim(
             LIMITATION,
@@ -735,13 +819,38 @@ def _batching(records: Sequence[Mapping[str, Any]]) -> list[str]:
             "observed for them, which is all that count licenses.",
         )
     )
-    lines += [
+    # The spread against the effect it would be used to explain, computed here rather than asserted:
+    # the sentence below used to state this comparison without ever making it, so a log where the
+    # arms separated cleanly would still have carried the same "spread dominates" wording.
+    batch_latencies = [float(r["latency_ms"]) for r in batched if r.get("latency_ms") is not None]
+    separate_latencies = [
+        float(r["latency_ms"]) for r in separate if r.get("latency_ms") is not None
+    ]
+    latency_lines = []
+    if batch_latencies and separate_latencies:
+        spread = max(batch_latencies) - min(batch_latencies)
+        difference = abs(
+            sum(batch_latencies) / len(batch_latencies)
+            - sum(separate_latencies) / len(separate_latencies)
+        )
+        latency_lines.append(
+            _claim(
+                LOCAL_MEASUREMENT,
+                f"the batched arm's own {len(batch_latencies)} observation(s) were spread by "
+                f"**{_rounded(spread, 3)} ms**, against an arm-to-arm mean difference of "
+                f"**{_rounded(difference, 3)} ms** — the within-arm spread is "
+                f"{'larger' if spread > difference else 'not larger'} than the difference it would "
+                "be used to explain.",
+            )
+        )
+    latency_lines.append(
         _claim(
-            LOCAL_MEASUREMENT,
-            "the batched arm's own observations differed by more than the arm-to-arm difference "
-            "they would be used to explain, so latency here is reported as an observation and "
-            "never as a speedup.",
-        ),
+            LIMITATION,
+            "latency here is reported as an observation and never as a speedup: two cycles cannot "
+            "separate arm identity from request position, so no factor is attributed to batching.",
+        )
+    )
+    lines += latency_lines + [
         "",
         "**Core local finding.** Batching substantially reduced repeated-state input usage in this "
         "workload: the identical state and the identical question definitions cost materially "
@@ -958,12 +1067,22 @@ def _fanout(records: Sequence[Mapping[str, Any]]) -> list[str]:
         if entry.get("latency_direction")
     ]
     if directions:
+        # The per-pair directions were always read from the analysis; the sentence drawn from them
+        # was not. It now follows the same marker the fan-out chapter already computes, so a log
+        # where both pairs went the same way cannot keep the "inconsistent" wording.
+        inconsistent = FANOUT_LATENCY_DIRECTION_INCONSISTENT_ACROSS_PAIRS in analysis["markers"]
         lines.append(
             _claim(
                 LOCAL_MEASUREMENT,
                 "latency direction per pair: "
                 + ", ".join(f"{pair} `{direction}`" for pair, direction in directions)
-                + " — the direction is **inconsistent across pairs**, so no arm is faster here.",
+                + (
+                    " — the direction is **inconsistent across pairs**, so no arm is faster here."
+                    if inconsistent
+                    else " — the direction is **consistent across pairs** "
+                    f"({len(directions)} pair(s), one direction), which is one session's "
+                    "observation and still not a speedup measurement."
+                ),
             )
         )
     lines += [
@@ -1054,24 +1173,37 @@ def _composite(records: Sequence[Mapping[str, Any]]) -> list[str]:
             "tests the scenarios were written to separate, and is not an accuracy score.",
         )
     )
+    diagnostics = confidence_diagnostics(
+        [row for case in analysis["cases"] for row in case["rows"]]
+    )
     low = next((case for case in scored if case["case_id"] == "low_risk"), None)
     if low:
         ranked = _ranked_contributions(low)
         if ranked:
             top = ranked[0]
+            # "The lowest confidence recorded anywhere" is a claim about the whole run, so it is
+            # only made when the run's own computed minimum agrees. Otherwise the number is still
+            # reported, without the superlative attached to it.
+            is_lowest = (
+                diagnostics.get("available")
+                and diagnostics.get("min") is not None
+                and float(top["confidence"]) == float(diagnostics["min"])
+            )
             lines.append(
                 _claim(
                     LOCAL_MEASUREMENT,
                     f"in the lowest-risk state the largest single contribution came from "
-                    f"`{top['dimension']}` at confidence **{_number(top['confidence'])}** — the "
-                    "lowest confidence recorded anywhere in this experiment — and carried "
+                    f"`{top['dimension']}` at confidence **{_number(top['confidence'])}**"
+                    + (
+                        " — the lowest confidence recorded anywhere in this experiment —"
+                        if is_lowest
+                        else ","
+                    )
+                    + " and carried "
                     f"{_percent(top['weighted_contribution'], low['composite_risk'])} of that "
                     "state's composite.",
                 )
             )
-    diagnostics = confidence_diagnostics(
-        [row for case in analysis["cases"] for row in case["rows"]]
-    )
     if diagnostics.get("available"):
         lines.append(
             _claim(
@@ -1220,19 +1352,38 @@ def _routing(records: Sequence[Mapping[str, Any]]) -> list[str]:
                 "the allowed-route branch was never entered under a live answer.",
             )
         )
-    lines.append(
-        _claim(
-            LOCAL_MEASUREMENT,
-            "`FAIL_CLOSED_SUPPRESSION_REALIZED` — suppression happened and no handler ran for any "
-            "suppressed route; nothing was substituted for a withheld route.",
+    if FAIL_CLOSED_SUPPRESSION_REALIZED in markers:
+        lines.append(
+            _claim(
+                LOCAL_MEASUREMENT,
+                f"`{FAIL_CLOSED_SUPPRESSION_REALIZED}` — {analysis['suppressed_count']} route(s) "
+                "were withheld and no handler ran for any of them; nothing was substituted for a "
+                "withheld route.",
+            )
         )
-    )
+    else:
+        lines.append(
+            _claim(
+                LOCAL_MEASUREMENT,
+                f"`{FAIL_CLOSED_SUPPRESSION_REALIZED}` is **not** carried on these records: either "
+                "no route was suppressed, or a suppressed route reached a handler. The marker "
+                "follows the records and is not asserted here.",
+            )
+        )
+    resolved = analysis["resolved_count"]
+    if resolved and analysis["matched_count"] == resolved == analysis["argument_matched_count"]:
+        matched = "produced the intended function and argument in every resolved case"
+    else:
+        matched = (
+            f"produced the intended function in {analysis['matched_count']} of {resolved} resolved "
+            f"case(s), and the intended argument in {analysis['argument_matched_count']}"
+        )
     lines += [
         "",
         "**Architectural conclusion.** Semantic routing is not execution authorization. The model "
-        "produced the intended function and argument in every case, and the code still refused to "
-        "act — correctly, under the frozen policy. A system that treats a confident route as "
-        "permission to act has removed the layer that produced this result.",
+        f"{matched}, and the code still refused to act — correctly, under the frozen policy. A "
+        "system that treats a confident route as permission to act has removed the layer that "
+        "produced this result.",
         "",
         _claim(
             LIMITATION,
