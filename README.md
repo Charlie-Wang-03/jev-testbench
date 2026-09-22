@@ -66,7 +66,7 @@ Because the interesting question about a probabilistic decision primitive is not
 
 ## 4. What did we test?
 
-Fifteen experiments are registered; ten have been run. Two tiers:
+15 experiments are registered; 10 have been run. Two tiers:
 
 **`core` — the foundational mechanics**
 
