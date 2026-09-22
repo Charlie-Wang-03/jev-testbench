@@ -8,6 +8,10 @@ Most public-facing documents exist in **English and Simplified Chinese**. The ev
 only** — deliberately, so that the evidence layer has one textual source rather than two that can
 drift apart.
 
+> **No license has been chosen yet.** This repository is not published under an open-source
+> license, so all rights are reserved by the author and outside contributions cannot be merged
+> under clear terms. See the [license decision](OPEN_SOURCE_LICENSE_DECISION.md).
+
 ---
 
 ## Start here
@@ -36,7 +40,7 @@ drift apart.
 |---|---|
 | [Methodology](methodology/evaluation.md) · [中文](methodology/evaluation.zh-CN.md) | Claim labelling, experiment design rules, and what the A/B arms do and do not establish. |
 | [Credentials](guides/credentials.md) · [中文](guides/credentials.zh-CN.md) | How the API key is resolved, and the honest limits of that scheme. |
-| [Contributing](../CONTRIBUTING.md) | Setup, the offline-first rule, and what a change here has to preserve. |
+| [Contributing](../CONTRIBUTING.md) | Setup, the license gate, and the rules a change here has to preserve. |
 | [Security](../SECURITY.md) | The real risks in this project, and how to report a problem. |
 
 ## Reference

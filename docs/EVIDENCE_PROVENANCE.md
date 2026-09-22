@@ -173,7 +173,7 @@ git rev-list --count main                       # commit count
 git diff e20fad5 bdcb637 --stat -- results/usage.jsonl     # empty: the log never changed
 
 uv run python -m jev_lab final-report           # rebuild the derived report from the log
-uv run pytest                                   # 975 tests, including the P3 invariance check
+uv run pytest                                   # 1044 tests, including the P3 invariance check
 ```
 
 Hashing the canonical logs will reproduce the two SHA-256 values above exactly. That property is

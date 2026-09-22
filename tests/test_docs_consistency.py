@@ -11,6 +11,7 @@ properties a reader would rely on:
 * every English public document has its translated counterpart, and the two link to each other;
 * every fact that must not differ -- hashes, status strings, filenames, experiment names, and the
   headline figures -- appears on both sides;
+* every relative link points at a file that exists;
 * no public document ships a placeholder.
 
 The evidence artifacts (audits, preregistration, result, source registry) are deliberately **not**
@@ -20,6 +21,7 @@ deliberate act rather than an accident.
 """
 
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -72,7 +74,7 @@ SHARED_FACTS = [
     "12",
     "15",
     "10",
-    "975",
+    "1044",
     "21,767",
     "3,594",
     "816",
@@ -105,14 +107,42 @@ def read(relative_path: str) -> str:
     return (REPO_ROOT / relative_path).read_text(encoding="utf-8")
 
 
-def all_markdown() -> list[Path]:
-    """Every tracked markdown file, excluding the virtualenv and git's own directories."""
-    skip = {".git", ".venv", ".pytest-tmp", ".pytest_cache", "node_modules"}
+# Markdown about code contains code-shaped text, and `HANDLERS[name](argument)` in a code span is
+# not a broken link. A checker that cannot tell the difference is a checker people learn to ignore,
+# so code is stripped before links are read.
+FENCED_CODE = re.compile(r"^```.*?^```", re.DOTALL | re.MULTILINE)
+INLINE_CODE = re.compile(r"`[^`\n]*`")
+MARKDOWN_LINK = re.compile(r"\[[^\]]*\]\((?P<target>[^)\s]+)(?:\s+\"[^\"]*\")?\)")
+NON_FILE_SCHEMES = ("http://", "https://", "mailto:", "#")
+
+
+def relative_links_in(relative_path: str) -> list[str]:
+    """Link targets in one document that are supposed to name a path in this repository."""
+    text = INLINE_CODE.sub("", FENCED_CODE.sub("", read(relative_path)))
+    targets = (match.group("target") for match in MARKDOWN_LINK.finditer(text))
     return [
-        path
-        for path in REPO_ROOT.rglob("*.md")
-        if not skip & set(path.relative_to(REPO_ROOT).parts)
+        target.split("#", 1)[0]
+        for target in targets
+        if not target.startswith(NON_FILE_SCHEMES) and target.split("#", 1)[0]
     ]
+
+
+def all_markdown() -> list[Path]:
+    """Every markdown file git tracks, in a stable order.
+
+    Tracked, not every ``.md`` on disk. ``results/summary.md`` and ``results/capability_snapshot.md``
+    are ignored, machine-written views, so globbing the working copy would make this check depend on
+    whether someone had run the report commands -- and a document-quality gate is about the
+    documents the repository actually ships.
+    """
+    listing = subprocess.run(
+        ["git", "ls-files", "-z", "*.md"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    return sorted(REPO_ROOT / name for name in listing.split("\0") if name)
 
 
 class TestPairsExist:
@@ -169,6 +199,28 @@ class TestPairsAgree:
                     f"{name} contains the digest {digest[:12]}... but not as a contiguous "
                     "64-character run; it has been split or hyphenated"
                 )
+
+
+class TestLinksResolve:
+    """A relative link is a promise that a file is there. Promises are cheap; this checks them."""
+
+    @pytest.mark.parametrize(
+        "document",
+        [path.relative_to(REPO_ROOT).as_posix() for path in all_markdown()],
+    )
+    def test_every_relative_link_points_at_a_file_that_exists(self, document):
+        # Fragments are dropped: an anchor is checked against nothing here, and a wrong one is a
+        # markdownlint warning rather than a reader who cannot find the file.
+        missing = [
+            target
+            for target in relative_links_in(document)
+            if not (REPO_ROOT / document).parent.joinpath(target).resolve().exists()
+        ]
+        assert not missing, (
+            f"{document} links to {missing}, which do not exist. Evidence documents are read by "
+            "people deciding whether to trust this repository; a dead link is a small, visible "
+            "piece of that judgment."
+        )
 
 
 class TestPublicDocumentsAreFinished:

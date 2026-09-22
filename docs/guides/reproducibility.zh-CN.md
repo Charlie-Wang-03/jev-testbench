@@ -29,7 +29,7 @@ uv sync --locked
 uv run pytest
 ```
 
-**975 个测试通过，且不打开任何 socket。** 测试套件直接封锁 socket，因此一次意外的 API 调用会大声失败，
+**1044 个测试通过，且不打开任何 socket。** 测试套件直接封锁 socket，因此一次意外的 API 调用会大声失败，
 而不是悄悄花掉你的钱。在需要真正驱动客户端的地方，测试使用 `httpx2.MockTransport` 对接真实 SDK。
 
 ### 重建派生文件
