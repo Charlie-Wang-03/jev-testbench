@@ -1,16 +1,20 @@
-"""P3 offline invariants: the frozen design, and the analyzer's decision rule.
+"""P3 offline invariants: the frozen design, the analyzer's decision rule, and the real log.
 
 No network. The only P3 entry point that would make a call is `run`, and the tests that touch it
-exercise its fail-closed guard, which raises before any credential is resolved.
+exercise its fail-closed guard, which raises before any credential is resolved. The tests that read
+the published twelve records read a file; they never reach the API and never write to the log.
 """
 
+import hashlib
 import inspect
+import re
 
 import pytest
 
 from jev_lab import p3_boundary_locus as p3
+from jev_lab.client import repo_root
 from jev_lab.experiments import EXPERIMENTS, get_experiment
-from jev_lab.recorder import DEFAULT_RESULTS_DIR
+from jev_lab.recorder import DEFAULT_RESULTS_DIR, read_records
 
 # The strings the 07 experiment sent, written out here so the test fails if either side of the
 # comparison is edited to match the other.
@@ -547,3 +551,291 @@ class TestVerdictVocabulary:
             "P3_MODEL_VERSION_MISMATCH",
             "P3_EXECUTION_INCOMPLETE",
         }
+
+
+# --------------------------------------------------------------------------------------
+# GO-1 / GO-2 are two conditions, not one
+# --------------------------------------------------------------------------------------
+
+# The shape the twelve published records actually have, as values a synthetic log can carry: both
+# single-field arms land under the GO-1 line, and neither leaves the other inside the GO-2 band. The
+# frozen analyzer derived both flags from a single conjunction, so it reported this as (FAIL, FAIL).
+REAL_SHAPE = {
+    "N": (0.77, 0.76, 0.75),
+    "I": (0.31, 0.33, 0.29),
+    "C": (0.37, 0.36, 0.33),
+    "B": (0.20, 0.21, 0.20),
+}
+
+
+class TestGo1AndGo2AreIndependent:
+    """The regression the original suite could not fail on: (GO-1 PASS, GO-2 FAIL)."""
+
+    def test_both_arms_can_pass_go1_while_go2_fails(self):
+        analysis = p3.analyze(synthetic_log(REAL_SHAPE))
+        assert analysis.go1 is True
+        assert analysis.go2 is False
+        assert analysis.go3 is True
+        assert analysis.go1_arms == ("I", "C")
+        assert analysis.moved_arm is None and analysis.flat_arm is None
+        assert abs(analysis.arms["I"].median - analysis.arms["C"].median) < p3.K1_MIN_SEPARATION
+        assert analysis.verdict == p3.KILL_NO_SINGLE_FIELD_ATTRIBUTION
+
+    def test_the_note_states_the_pair_instead_of_denying_go1(self):
+        analysis = p3.analyze(synthetic_log(REAL_SHAPE))
+        note = next(note for note in analysis.notes if "GO-1" in note)
+        assert "both single-field arms satisfy GO-1" in note
+        assert "I_med=0.31" in note and "C_med=0.36" in note
+        # The old wording asserted something this data contradicts, and it must not come back.
+        assert "neither single-field arm" not in note
+        assert all("neither single-field arm" not in note for note in analysis.notes)
+
+    def test_one_arm_qualifying_alone_still_fails_go2(self):
+        analysis = p3.analyze(
+            synthetic_log(ENDPOINTS | {"I": (0.24, 0.25, 0.26), "C": (0.58, 0.60, 0.62)})
+        )
+        assert analysis.go1 is True and analysis.go1_arms == ("I",)
+        assert analysis.go2 is False
+        assert analysis.kill is False  # so the outcome is genuinely decided by GO-2
+        assert analysis.verdict == p3.INCONCLUSIVE_AND_STOP
+        assert "I is the only single-field arm that satisfies GO-1" in " ".join(analysis.notes)
+
+    def test_no_arm_qualifying_keeps_the_accurate_note(self):
+        analysis = p3.analyze(
+            synthetic_log(ENDPOINTS | {"I": (0.50, 0.50, 0.50), "C": (0.55, 0.55, 0.55)})
+        )
+        assert analysis.go1 is False and analysis.go1_arms == ()
+        assert analysis.go2 is False
+        assert analysis.moved_arm is None and analysis.flat_arm is None
+        assert "neither single-field arm reached the GO-1 median" in " ".join(analysis.notes)
+
+    def test_go2_never_holds_without_go1(self):
+        """GO-2's *other* arm is the counterpart of a GO-1 arm, so GO-2 implies GO-1, never the reverse."""
+        for i_median in (0.25, 0.50, 0.75):
+            for c_median in (0.25, 0.36, 0.60, 0.75, 0.86):
+                analysis = p3.analyze(
+                    synthetic_log(ENDPOINTS | {
+                        "I": (i_median - 0.01, i_median, i_median + 0.01),
+                        "C": (c_median - 0.01, c_median, c_median + 0.01),
+                    })
+                )
+                assert not (analysis.go2 and not analysis.go1)
+                # and the pairing is named exactly when GO-2 holds
+                assert analysis.go2 == (analysis.moved_arm is not None)
+                if analysis.moved_arm is not None:
+                    assert analysis.moved_arm in analysis.go1_arms
+                    assert analysis.flat_arm in p3.SINGLE_FIELD_ARMS
+
+    def test_go2_cannot_hold_when_both_arms_clear_the_go1_line(self):
+        """Why (PASS, FAIL) is the only pair the real data could have produced.
+
+        The GO-1 line (0.475) sits below the floor of the GO-2 band (0.64), so when both
+        single-field arms reach it, neither can be the near-baseline counterpart the other needs.
+        """
+        assert p3.GO1_MEDIAN_AT_MOST < p3.GO2_MEDIAN_AT_LEAST
+        for c_median in (0.20, 0.31, 0.36, p3.GO1_MEDIAN_AT_MOST):
+            analysis = p3.analyze(
+                synthetic_log(ENDPOINTS | {
+                    "I": (0.24, 0.25, 0.26),
+                    "C": (c_median - 0.01, c_median, c_median + 0.01),
+                })
+            )
+            assert analysis.go1_arms == ("I", "C")
+            assert analysis.go1 is True and analysis.go2 is False
+            assert analysis.moved_arm is None and analysis.flat_arm is None
+
+    def test_the_full_go_path_still_names_the_assignment(self):
+        analysis = p3.analyze(
+            synthetic_log(ENDPOINTS | {"I": (0.22, 0.25, 0.27), "C": (0.73, 0.75, 0.77)})
+        )
+        assert (analysis.go1, analysis.go2, analysis.go3) == (True, True, True)
+        assert analysis.go1_arms == ("I",)
+        assert (analysis.moved_arm, analysis.flat_arm) == ("I", "C")
+        assert analysis.notes == ()
+        assert analysis.verdict == p3.GO_LOCAL_LOCUS_SIGNAL
+
+    def test_the_symmetric_go_path_still_names_the_assignment(self):
+        analysis = p3.analyze(
+            synthetic_log(ENDPOINTS | {"C": (0.22, 0.25, 0.27), "I": (0.73, 0.75, 0.77)})
+        )
+        assert (analysis.go1, analysis.go2, analysis.go3) == (True, True, True)
+        assert analysis.go1_arms == ("C",)
+        assert (analysis.moved_arm, analysis.flat_arm) == ("C", "I")
+        assert analysis.notes == ()
+        assert analysis.verdict == p3.GO_LOCAL_LOCUS_SIGNAL
+
+
+# --------------------------------------------------------------------------------------
+# The decision table's status vocabularies
+# --------------------------------------------------------------------------------------
+
+GO_ROWS = ("GO-1", "GO-2", "GO-3")
+KILL_ROWS = ("K1", "K2")
+GUARD_ROWS = ("E1", "E2")
+
+
+def decision_rows(text):
+    """The decision table as ``{condition: (rule, observed, status)}``.
+
+    Split on *unescaped* pipes only: several rules contain a literal ``|`` written as ``\\|``, and a
+    naive split would turn one row into two.
+    """
+    rows = {}
+    for line in text.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in re.split(r"(?<!\\)\|", line.strip())[1:-1]]
+        if len(cells) == 4 and cells[0] in GO_ROWS + KILL_ROWS + GUARD_ROWS:
+            rows[cells[0]] = (cells[1], cells[2], cells[3])
+    return rows
+
+
+class TestDecisionTableSemantics:
+    def real_report(self):
+        records = synthetic_log(REAL_SHAPE)
+        return p3.render_report(p3.analyze(records), records=records)
+
+    def test_the_condition_table_lists_every_condition_once(self):
+        rows = decision_rows(self.real_report())
+        assert set(rows) == set(GO_ROWS + KILL_ROWS + GUARD_ROWS)
+
+    def test_k1_is_stated_as_the_rule_that_fires(self):
+        rule, observed, status = decision_rows(self.real_report())["K1"]
+        assert "<" in rule and str(p3.K1_MIN_SEPARATION) in rule
+        assert "≥" not in rule  # never the complement, which would need a second negation to read
+        assert observed == "0.05"
+        assert status == "FIRES"
+
+    def test_k2_is_stated_as_the_rule_that_fires(self):
+        rule, _, status = decision_rows(self.real_report())["K2"]
+        assert rule.startswith("any arm's spread >")
+        assert status == "CLEAR"
+
+    def test_each_row_uses_its_own_vocabulary_and_no_row_mixes_two(self):
+        rows = decision_rows(self.real_report())
+        for condition, (_, _, status) in rows.items():
+            if condition in KILL_ROWS:
+                assert status in ("FIRES", "CLEAR"), condition
+            else:
+                assert status in ("PASS", "FAIL"), condition
+
+    def test_the_real_shape_renders_go1_pass_and_go2_fail(self):
+        rows = decision_rows(self.real_report())
+        assert [rows[c][2] for c in GO_ROWS] == ["PASS", "FAIL", "PASS"]
+        assert [rows[c][2] for c in GUARD_ROWS] == ["PASS", "PASS"]
+        # Both assignments were tried and both are shown, so the FAIL is legible from the table.
+        assert "moved I" in rows["GO-2"][1] and "moved C" in rows["GO-2"][1]
+
+    def test_an_unevaluated_log_claims_no_status_for_any_condition(self):
+        text = p3.render_report(p3.analyze([]))
+        rows = decision_rows(text)
+        assert set(rows) == set(GO_ROWS + KILL_ROWS + GUARD_ROWS)
+        for condition, (_, _, status) in rows.items():
+            assert status == p3.NOT_EVALUATED, condition
+        # "CLEAR" on a rule that was never read would be a false statement about the data.
+        for other in ("PASS", "FAIL", "FIRES", "CLEAR"):
+            assert other not in [status for _, _, status in rows.values()]
+
+
+# --------------------------------------------------------------------------------------
+# The published measurement: the correction moves a flag, not the verdict
+# --------------------------------------------------------------------------------------
+
+REAL_P3_LOG = repo_root() / p3.P3_RESULTS_DIR / "usage.jsonl"
+# The twelve records of the P3 run, as published. Recorded here so this suite fails if the log is
+# ever rewritten rather than re-measured -- the point of the freeze is that these bytes are the
+# measurement, and a test that silently analysed different bytes would be worse than no test.
+P3_LOG_SHA256 = "17f36f7551d598a4724f4557d8b235d810ec4fb259d8d4b842eabc8f34c5d78e"
+
+
+def frozen_order_verdict(flags):
+    """The preregistration §9 evaluation order, as a function of a flag set.
+
+    Written from the document and independently of `analyze`, so that comparing two flag sets
+    through it cannot inherit a mistake from the code under test. The flags are
+    ``(e1, e2, k1, k2, go1, go2, go3)``.
+    """
+    e1, e2, k1, k2, go1, go2, go3 = flags
+    if not (e1 and e2):
+        return p3.ATTRIBUTION_NOT_INTERPRETABLE
+    if k1 or k2:
+        return p3.KILL_NO_SINGLE_FIELD_ATTRIBUTION
+    if go1 and go2 and go3:
+        return p3.GO_LOCAL_LOCUS_SIGNAL
+    return p3.INCONCLUSIVE_AND_STOP
+
+
+class TestPublishedMeasurement:
+    """Reads the twelve published records. Offline: a file read, never a request."""
+
+    @pytest.fixture
+    def records(self):
+        if not REAL_P3_LOG.exists():
+            pytest.skip(f"{REAL_P3_LOG.as_posix()} is not present in this checkout")
+        return list(read_records(REAL_P3_LOG))
+
+    def test_the_log_is_the_published_twelve_records(self, records):
+        assert len(records) == 12 == p3.MAX_LOGICAL_CALLS
+        assert hashlib.sha256(REAL_P3_LOG.read_bytes()).hexdigest() == P3_LOG_SHA256
+
+    def test_the_published_medians_and_condition_flags(self, records):
+        analysis = p3.analyze(records)
+        assert [analysis.arms[arm].median for arm in p3.ARMS] == [0.76, 0.31, 0.36, 0.2]
+        assert analysis.separation == 0.05
+        assert (analysis.go1, analysis.go2, analysis.go3) == (True, False, True)
+        assert (analysis.k1, analysis.k2) == (True, False)
+        assert (analysis.e1, analysis.e2) == (True, True)
+
+    def test_the_corrected_verdict_is_the_published_verdict(self, records):
+        assert p3.analyze(records).verdict == p3.KILL_NO_SINGLE_FIELD_ATTRIBUTION
+
+    def test_the_go1_correction_moves_one_flag_and_not_the_verdict(self, records):
+        """The invariance, asserted rather than asserted-about-in-prose.
+
+        The pre-correction flags are recomputed from the published medians using the frozen
+        conjunction, so this compares two flag sets over the same arithmetic.
+        """
+        analysis = p3.analyze(records)
+        counterpart = {"I": "C", "C": "I"}
+        pairing_holds = any(
+            analysis.arms[arm].median <= p3.GO1_MEDIAN_AT_MOST
+            and p3.GO2_MEDIAN_AT_LEAST
+            <= analysis.arms[counterpart[arm]].median
+            <= p3.GO2_MEDIAN_AT_MOST
+            for arm in p3.SINGLE_FIELD_ARMS
+        )
+
+        # Both flags read off that one conjunction -- the defect, reproduced as arithmetic.
+        before = (analysis.e1, analysis.e2, analysis.k1, analysis.k2,
+                  pairing_holds, pairing_holds, analysis.go3)
+        after = (analysis.e1, analysis.e2, analysis.k1, analysis.k2,
+                 analysis.go1, analysis.go2, analysis.go3)
+
+        assert before[4] is False and before[5] is False
+        assert after[4] is True and after[5] is False
+        # Exactly one flag differs between the two analyses, and it is GO-1.
+        assert [index for index, (b, a) in enumerate(zip(before, after)) if b != a] == [4]
+        assert frozen_order_verdict(before) == frozen_order_verdict(after)
+        assert frozen_order_verdict(after) == analysis.verdict == p3.KILL_NO_SINGLE_FIELD_ATTRIBUTION
+
+    def test_rendering_the_published_log_twice_gives_the_same_bytes(self, records):
+        first = p3.render_report(p3.analyze(records), records=records)
+        second = p3.render_report(p3.analyze(records), records=records)
+        assert first == second
+        assert p3.KILL_NO_SINGLE_FIELD_ATTRIBUTION in first
+
+    def test_the_report_generator_is_byte_stable(self, tmp_path, records):
+        written = [tmp_path / f"report_{index}.md" for index in (1, 2)]
+        for path in written:
+            p3.report_command(results_dir=REAL_P3_LOG.parent, report_path=path, echo=lambda *_: None)
+        assert written[0].read_bytes() == written[1].read_bytes()
+        assert "## Post-run analyzer correction provenance" in written[0].read_text(encoding="utf-8")
+
+    def test_the_committed_result_document_is_the_generated_one(self, tmp_path):
+        """The document on disk is the generator's output, not a hand edit beside it."""
+        committed = repo_root() / p3.RESULT_DOC_PATH
+        if not committed.exists():
+            pytest.skip(f"{committed.as_posix()} is not present in this checkout")
+        generated = tmp_path / committed.name
+        p3.report_command(results_dir=REAL_P3_LOG.parent, report_path=generated, echo=lambda *_: None)
+        assert generated.read_bytes() == committed.read_bytes()

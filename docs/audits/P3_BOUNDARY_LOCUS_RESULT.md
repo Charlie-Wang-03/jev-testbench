@@ -41,18 +41,24 @@ replacement for them.
 
 ## 3. Derived calculation — the pre-registered decision rule
 
-| condition | rule | value | outcome |
-| --------- | ---- | ----- | ------- |
-| GO-1 | some single-field arm median ≤ 0.475 | moved arm: none | FAIL |
-| GO-2 | the other within [0.64, 0.86] | flat arm: none | FAIL |
-| GO-3 | both spreads ≤ 0.05 | I=0.04, C=0.04 | PASS |
-| K1 | \|I_med − C_med\| ≥ 0.1 | 0.05 | FAIL |
-| K2 | every arm's spread ≤ \|I_med − C_med\| | tripped by: none | PASS |
-| E1 | N_med > B_med | N_med > B_med | PASS |
-| E2 | endpoint gap ≥ 0.275 | 0.56 | PASS |
+Each rule is stated in the direction the preregistration fixes it, and its status is
+reported in that rule's own vocabulary: the GO conditions and the two endpoint guards read
+PASS / FAIL, the KILL conditions read FIRES / CLEAR. A KILL condition is written as the rule
+that *fires*, never as its complement.
 
-KILL is reported as PASS when it did *not* fire. E1 and E2 are validity guards: they can
-block a claim, and they can never produce one.
+| condition | rule | observed | status |
+| --------- | ---- | -------- | ------ |
+| GO-1 | some single-field arm median ≤ 0.475 | I_med=0.31, C_med=0.36 | PASS |
+| GO-2 | that arm's counterpart inside [0.64, 0.86] | moved I → counterpart C=0.36; moved C → counterpart I=0.31 | FAIL |
+| GO-3 | both single-field spreads ≤ 0.05 | I_spread=0.04, C_spread=0.04 | PASS |
+| K1 | \|I_med − C_med\| < 0.1 | 0.05 | FIRES |
+| K2 | any arm's spread > \|I_med − C_med\| | largest spread 0.04 ≤ 0.05 | CLEAR |
+| E1 | N_med > B_med | 0.76 > 0.2 | PASS |
+| E2 | N_med − B_med ≥ 0.275 | 0.56 | PASS |
+
+GO assignment: none. `I` and `C` satisfy GO-1, but no pairing of a GO-1 arm with a counterpart inside the GO-2 band exists.
+
+E1 and E2 are validity guards: they can block a claim, and they can never produce one.
 
 ## 4. Endpoint replication sanity check
 
@@ -63,12 +69,22 @@ diagnostic only, and were never available to adjust a threshold after the fact.
 * this run: N median **0.76**, B median **0.2**, gap **0.56**
 * ordering preserved (E1): PASS; gap ≥ half the original move (E2): PASS
 
-## 5. Conditions and notes
+## 5. Descriptive context — not part of the decision rule
 
-* neither single-field arm reached the GO-1 median of <= 0.475: I_med=0.31, C_med=0.36
+* `I_med=0.31` sits 0.45 below `N_med=0.76`, recovering 80.4% of this run's 0.56 endpoint gap.
+* `C_med=0.36` sits 0.40 below `N_med=0.76`, recovering 71.4% of this run's 0.56 endpoint gap.
+* the two single-field arms are 0.05 apart, against a `N`-to-`B` gap of 0.56.
+
+These are arithmetic on the medians above, recorded because they describe what the twelve
+calls did. They are **not** inputs to the decision rule, no threshold was set from them, and
+the verdict is unchanged if they are ignored.
+
+## 6. Conditions and notes
+
+* both single-field arms satisfy GO-1 (median <= 0.475): I_med=0.31, C_med=0.36; GO-2 still fails, because no assignment of a GO-1 arm as the moved arm leaves its counterpart inside the vague-baseline band [0.64, 0.86]
 * |I_med - C_med| = 0.05 is below the K1 separation of 0.1
 
-## 6. Limitation
+## 7. Limitation
 
 * This is **one payload**, measured on one account, in one session, at one model version.
   It is a local measurement and supports no general statement about Jev.
@@ -84,90 +100,55 @@ diagnostic only, and were never available to adjust a threshold after the fact.
 *(analysis rendered from 12 log record(s))*
 
 ---
+## Post-run analyzer correction provenance
 
-## POST-RUN AUDIT ADDENDUM
+Everything above was rendered mechanically from `results/p3_boundary_locus/usage.jsonl` by the
+corrected analyzer. This section records how the artifact reached that state. It is the one part of
+this file that is not derived from the log, and no measurement changed while it was written.
 
-Everything above this line is the unedited output of the frozen analyzer committed in
-`Preregister P3 boundary locus experiment` (`db7d06f`), regenerable with:
+**The sequence.**
+
+* **Commit A** (`db7d06f`, *Preregister P3 boundary locus experiment*) froze the design, the payload,
+  the thresholds, and the first version of this analyzer — before the first request was sent.
+* **Commit B** (`c0fc9cc`, *Record P3 boundary locus measurements*) added the twelve measurements and
+  disclosed, after the fact, a defect in that analyzer. The analysis those twelve calls produced is
+  preserved unedited at that commit.
+* **Commit C**, *Repair P3 analyzer against frozen preregistration* — the commit that carries this
+  file — corrected the analyzer and re-rendered this document from the unchanged log. Commit C's own
+  SHA is not written here because a file cannot name the commit that contains it; it is the third
+  commit on this chain, and `git log --follow -- docs/audits/P3_BOUNDARY_LOCUS_RESULT.md` recovers it.
+
+**The defect.** In `analyze()`, GO-1 and GO-2 — two separate conditions in the preregistration (§9) —
+were evaluated as a single conjunction, and both flags were then read off that one result. The pair
+`(GO-1 PASS, GO-2 FAIL)` was therefore unrepresentable, and on this data that is the pair the frozen
+rule computes: both single-field arms reach the GO-1 line (`I_med = 0.31`, `C_med = 0.36`, against a
+line of 0.475), while no assignment of either as the moved arm leaves its counterpart inside the
+GO-2 band. The defect reported GO-1 as FAIL and printed the note *"neither single-field arm reached
+the GO-1 median of <= 0.475"*, which this data contradicts. Section 3 above is the corrected
+rendering; section 5 is the descriptive arithmetic that a hand-written audit addendum had carried,
+now generated from the log instead.
+
+**What did not change.**
+
+* **No call was made** while correcting this, and none was rerun. The twelve records in
+  `results/p3_boundary_locus/usage.jsonl` — their values, order, and SHA-256 — are identical before
+  and after.
+* **No threshold and no rule was altered.** The correction changes which flag the frozen rule
+  computes, not what the rule is. The preregistration is byte-identical to Commit A.
+* **The primary verdict is unchanged.** The original flags and the corrected flags both yield
+  `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION`: the endpoint guards pass, K1 is evaluated before the GO
+  block, and it fires. The only flag the correction moves is GO-1.
+  `tests/test_p3_boundary_locus.py` asserts this invariance mechanically against the real log rather
+  than leaving it as prose.
+
+**Where the pre-correction artifact is.** Commit B holds the complete earlier rendering, including
+the incorrect GO-1 row and the original audit addendum. It is recoverable from Git, not from this
+file:
 
 ```console
-uv run python -m jev_lab.p3_boundary_locus report
+git show c0fc9cc:docs/audits/P3_BOUNDARY_LOCUS_RESULT.md    # the 2026-09-22 analysis as recorded
+git show c0fc9cc:src/jev_lab/p3_boundary_locus.py           # the analyzer that produced it
 ```
 
-Everything below was written **after** the measurement, by a reader of it, and was **not**
-produced by that analyzer. It is recorded here rather than repaired in the code, so that the
-analysis which produced the published numbers stays byte-verifiable at its preregistration commit.
-
-### A1. Defect in the frozen analyzer
-
-`src/jev_lab/p3_boundary_locus.py`, in `analyze()`: the analyzer evaluates GO-1 and GO-2 as a
-single conjunction and then derives **both** flags from it, so the two can never differ:
-
-```python
-if moved <= GO1_MEDIAN_AT_MOST and GO2_MEDIAN_AT_LEAST <= flat <= GO2_MEDIAN_AT_MOST:
-    moved_arm, flat_arm = candidate, other
-...
-go1 = moved_arm is not None
-go2 = moved_arm is not None
-```
-
-The preregistration (`docs/experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md`, §9) defines GO-1 and
-GO-2 as **separate** conditions, and §25 requires reporting them item by item. The code does not
-implement the frozen rule as written.
-
-### A2. Visible consequence
-
-Section 3 above reports `GO-1 = FAIL` with the note *"neither single-field arm reached the GO-1
-median of <= 0.475: I_med=0.31, C_med=0.36"*. **That note is false on its face**: I_med 0.31 and
-C_med 0.36 are both well below 0.475. The correct GO-1 outcome on this data is PASS.
-
-### A3. Corrected evaluation, same frozen thresholds
-
-| condition | rule | value | frozen analyzer | corrected |
-| --------- | ---- | ----- | --------------- | --------- |
-| GO-1 | some single-field arm median ≤ 0.475 | I=0.31, C=0.36 — both qualify | FAIL | **PASS** |
-| GO-2 | the other arm within [0.64, 0.86] | counterpart is 0.31 / 0.36 | FAIL | FAIL |
-| GO-3 | both spreads ≤ 0.05 | 0.04, 0.04 | PASS | PASS |
-| K1 | \|I_med − C_med\| ≥ 0.10 | 0.05 | fires | fires |
-| K2 | any arm spread ≤ \|I_med − C_med\| | max spread 0.04 ≤ 0.05 | clear | clear |
-| E1 | N_med > B_med | 0.76 > 0.20 | PASS | PASS |
-| E2 | endpoint gap ≥ 0.275 | 0.56 | PASS | PASS |
-
-### A4. The primary verdict is invariant
-
-The corrected flags were fed through the frozen evaluation order (completeness → endpoint validity →
-KILL → GO → inconclusive):
-
-```text
-verdict from the frozen analyzer's flags : P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION
-verdict from the corrected flags         : P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION
-```
-
-The verdict does not depend on the defect. K1 is evaluated **before** the GO block, and GO-2 fails
-under every reading, so the GO flags never decide this outcome. **The primary verdict stands
-exactly as reported.**
-
-### A5. What the measurement actually shows
-
-Descriptive context only. These numbers are **not** part of the decision rule, they were not
-available to it, and no threshold was adjusted to accommodate them:
-
-* Making **either** field explicit moves the answer almost all the way: I recovers
-  `(0.76 − 0.31) / 0.56 = 80.4%` of the endpoint gap, C recovers `(0.76 − 0.36) / 0.56 = 71.4%`.
-* The two single-field arms land **0.05 apart** (0.31 vs 0.36) — far closer to each other than
-  either is to the vague baseline (0.76).
-* The endpoints replicated the original observation closely: N median 0.76 against the original
-  0.75; B median 0.20 against the original 0.20.
-
-So the 0.55 move is **not** carried by one field. Crossing either field reproduces most of it, and
-the residual difference between the two crossed arms (0.05) is smaller than the K1 separation the
-preregistration fixed in advance. This is a `FIELD_ALIGNMENT_CAVEAT` construction on one payload,
-and it supports no statement about where Jev "stores" a decision boundary.
-
-### A6. Outstanding
-
-The analyzer defect is **not repaired** as of this commit. It is a fidelity bug against the frozen
-preregistration with an invariant verdict, so the fix and its regression test belong in a separate
-follow-up commit — after this measurement, and clearly marked as such — rather than folded into the
-measurement commit.
-
+Nothing was amended, rebased, or force-pushed; both measurement commits are the ones originally
+pushed.

@@ -293,6 +293,7 @@ class P3Analysis:
     arms: dict[str, ArmResult]
     separation: float | None
     go1: bool
+    go1_arms: tuple[str, ...]
     go2: bool
     go3: bool
     k1: bool
@@ -427,6 +428,7 @@ def analyze(records: Sequence[Mapping[str, Any]]) -> P3Analysis:
             arms=arms,
             separation=None,
             go1=False,
+            go1_arms=(),
             go2=False,
             go3=False,
             k1=False,
@@ -460,27 +462,54 @@ def analyze(records: Sequence[Mapping[str, Any]]) -> P3Analysis:
             "so the arms are being compared against a baseline that no longer shows the effect"
         )
 
-    # GO-1 / GO-2 are symmetric in the two single-field arms: whichever one moved, the other has to
-    # have stayed near the vague baseline. Both assignments are tried, and the condition holds if
-    # either does.
+    # GO-1 and GO-2 are separate conditions in the preregistration (§9), and are computed
+    # separately here. GO-1 is existential over the two single-field arms: one of them has to reach
+    # the line, and which one is not part of the condition. GO-2 is the paired half -- *the other*
+    # arm, the counterpart of an arm that itself satisfies GO-1, has to sit inside the
+    # vague-baseline band. Both assignments are tried, in the frozen arm order.
+    #
+    # Reading both flags off one conjunction, as this analyzer used to, makes (GO-1 PASS,
+    # GO-2 FAIL) unrepresentable -- and that is a real shape: both single-field arms can reach the
+    # GO-1 line while neither leaves the other near the baseline. GO-2 implies GO-1 and never the
+    # reverse, so the flag pairs that can occur are (T, T), (T, F) and (F, F).
+    go1_arms = tuple(
+        arm
+        for arm in SINGLE_FIELD_ARMS
+        if arms[arm].median is not None and arms[arm].median <= GO1_MEDIAN_AT_MOST
+    )
+    go1 = bool(go1_arms)
+
     moved_arm: str | None = None
     flat_arm: str | None = None
-    for candidate in SINGLE_FIELD_ARMS:
+    for candidate in go1_arms:
         other = next(arm for arm in SINGLE_FIELD_ARMS if arm != candidate)
-        moved = arms[candidate].median
         flat = arms[other].median
-        assert moved is not None and flat is not None
-        if moved <= GO1_MEDIAN_AT_MOST and GO2_MEDIAN_AT_LEAST <= flat <= GO2_MEDIAN_AT_MOST:
+        assert flat is not None  # guaranteed by the completeness check above
+        if GO2_MEDIAN_AT_LEAST <= flat <= GO2_MEDIAN_AT_MOST:
             moved_arm, flat_arm = candidate, other
             break
-
-    go1 = moved_arm is not None
     go2 = moved_arm is not None
+
     go3 = all(arms[arm].spread is not None and arms[arm].spread <= GO3_SPREAD_AT_MOST for arm in SINGLE_FIELD_ARMS)
     if not go1:
         notes.append(
             f"neither single-field arm reached the GO-1 median of <= {GO1_MEDIAN_AT_MOST}: "
             f"I_med={i_median}, C_med={c_median}"
+        )
+    elif not go2:
+        # The failure the old conjunction could not describe, so the note is built from the arms
+        # rather than from a fixed sentence: which arms qualified, and what their medians were.
+        subject = (
+            "both single-field arms satisfy"
+            if len(go1_arms) == len(SINGLE_FIELD_ARMS)
+            else f"{go1_arms[0]} is the only single-field arm that satisfies"
+        )
+        notes.append(
+            f"{subject} GO-1 (median <= {GO1_MEDIAN_AT_MOST}): "
+            + ", ".join(f"{arm}_med={arms[arm].median}" for arm in SINGLE_FIELD_ARMS)
+            + "; GO-2 still fails, because no assignment of a GO-1 arm as the moved arm leaves its "
+            f"counterpart inside the vague-baseline band "
+            f"[{GO2_MEDIAN_AT_LEAST}, {GO2_MEDIAN_AT_MOST}]"
         )
 
     k1 = separation < K1_MIN_SEPARATION
@@ -512,6 +541,7 @@ def analyze(records: Sequence[Mapping[str, Any]]) -> P3Analysis:
         arms=arms,
         separation=separation,
         go1=go1,
+        go1_arms=go1_arms,
         go2=go2,
         go3=go3,
         k1=k1,
@@ -532,6 +562,67 @@ def analyze(records: Sequence[Mapping[str, Any]]) -> P3Analysis:
 # --------------------------------------------------------------------------------------
 
 RESULT_DOC_PATH = Path("docs") / "audits" / "P3_BOUNDARY_LOCUS_RESULT.md"
+
+# The history of the analyzer that produced the analysis above. No log record can express this, so it
+# is not derived from the measurement -- but it is emitted by the report generator all the same, so
+# that the committed document stays byte-for-byte reproducible instead of being a generated file with
+# a hand-appended tail. Commit C is named positionally rather than by SHA: a file cannot carry the
+# hash of the commit that contains it, and any SHA written here would be wrong one commit later.
+CORRECTION_PROVENANCE = """
+---
+## Post-run analyzer correction provenance
+
+Everything above was rendered mechanically from `results/p3_boundary_locus/usage.jsonl` by the
+corrected analyzer. This section records how the artifact reached that state. It is the one part of
+this file that is not derived from the log, and no measurement changed while it was written.
+
+**The sequence.**
+
+* **Commit A** (`db7d06f`, *Preregister P3 boundary locus experiment*) froze the design, the payload,
+  the thresholds, and the first version of this analyzer — before the first request was sent.
+* **Commit B** (`c0fc9cc`, *Record P3 boundary locus measurements*) added the twelve measurements and
+  disclosed, after the fact, a defect in that analyzer. The analysis those twelve calls produced is
+  preserved unedited at that commit.
+* **Commit C**, *Repair P3 analyzer against frozen preregistration* — the commit that carries this
+  file — corrected the analyzer and re-rendered this document from the unchanged log. Commit C's own
+  SHA is not written here because a file cannot name the commit that contains it; it is the third
+  commit on this chain, and `git log --follow -- docs/audits/P3_BOUNDARY_LOCUS_RESULT.md` recovers it.
+
+**The defect.** In `analyze()`, GO-1 and GO-2 — two separate conditions in the preregistration (§9) —
+were evaluated as a single conjunction, and both flags were then read off that one result. The pair
+`(GO-1 PASS, GO-2 FAIL)` was therefore unrepresentable, and on this data that is the pair the frozen
+rule computes: both single-field arms reach the GO-1 line (`I_med = 0.31`, `C_med = 0.36`, against a
+line of 0.475), while no assignment of either as the moved arm leaves its counterpart inside the
+GO-2 band. The defect reported GO-1 as FAIL and printed the note *"neither single-field arm reached
+the GO-1 median of <= 0.475"*, which this data contradicts. Section 3 above is the corrected
+rendering; section 5 is the descriptive arithmetic that a hand-written audit addendum had carried,
+now generated from the log instead.
+
+**What did not change.**
+
+* **No call was made** while correcting this, and none was rerun. The twelve records in
+  `results/p3_boundary_locus/usage.jsonl` — their values, order, and SHA-256 — are identical before
+  and after.
+* **No threshold and no rule was altered.** The correction changes which flag the frozen rule
+  computes, not what the rule is. The preregistration is byte-identical to Commit A.
+* **The primary verdict is unchanged.** The original flags and the corrected flags both yield
+  `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION`: the endpoint guards pass, K1 is evaluated before the GO
+  block, and it fires. The only flag the correction moves is GO-1.
+  `tests/test_p3_boundary_locus.py` asserts this invariance mechanically against the real log rather
+  than leaving it as prose.
+
+**Where the pre-correction artifact is.** Commit B holds the complete earlier rendering, including
+the incorrect GO-1 row and the original audit addendum. It is recoverable from Git, not from this
+file:
+
+```console
+git show c0fc9cc:docs/audits/P3_BOUNDARY_LOCUS_RESULT.md    # the 2026-09-22 analysis as recorded
+git show c0fc9cc:src/jev_lab/p3_boundary_locus.py           # the analyzer that produced it
+```
+
+Nothing was amended, rebased, or force-pushed; both measurement commits are the ones originally
+pushed.
+"""
 
 _VERDICT_SENTENCES: dict[str, str] = {
     GO_LOCAL_LOCUS_SIGNAL: (
@@ -561,8 +652,74 @@ _VERDICT_SENTENCES: dict[str, str] = {
 
 
 def _pass(value: bool) -> str:
-    """PASS / FAIL, spelled the same way for every condition."""
+    """PASS / FAIL, for the GO conditions and the two endpoint guards."""
     return "PASS" if value else "FAIL"
+
+
+def _kill(value: bool) -> str:
+    """FIRES / CLEAR, for the KILL conditions, each of which is stated as a rule that fires."""
+    return "FIRES" if value else "CLEAR"
+
+
+# What a condition reads when the decision rule never reached it. Distinct from all three status
+# vocabularies on purpose: a rule that was not evaluated did not pass, did not fail, and did not fire.
+NOT_EVALUATED = "not evaluated"
+
+
+def _assignment_trials(analysis: P3Analysis) -> str:
+    """The pairings the GO rule tried, as ``moved X → counterpart Y=value``.
+
+    GO-2 is only tried from an arm that already satisfies GO-1, so this is empty exactly when GO-1
+    fails. Rendered from the arms rather than retyped, so it cannot disagree with the flags.
+    """
+    trials: list[str] = []
+    for arm in analysis.go1_arms:
+        other = next(candidate for candidate in SINGLE_FIELD_ARMS if candidate != arm)
+        trials.append(f"moved {arm} → counterpart {other}={analysis.arms[other].median}")
+    return "; ".join(trials) if trials else "no arm satisfies GO-1, so no pairing is tried"
+
+
+def _assignment_summary(analysis: P3Analysis) -> str:
+    """Which arm the GO path would have called moved, and which flat -- or why it named none."""
+    if analysis.moved_arm is not None and analysis.flat_arm is not None:
+        return f"GO assignment: moved `{analysis.moved_arm}`, flat `{analysis.flat_arm}`."
+    if not analysis.go1_arms:
+        return "GO assignment: none. No single-field arm satisfies GO-1."
+    named = " and ".join(f"`{arm}`" for arm in analysis.go1_arms)
+    verb = "satisfies" if len(analysis.go1_arms) == 1 else "satisfy"
+    return (
+        f"GO assignment: none. {named} {verb} GO-1, but no pairing of a GO-1 arm with a counterpart "
+        "inside the GO-2 band exists."
+    )
+
+
+def _descriptive_context(analysis: P3Analysis) -> list[str]:
+    """Arithmetic on the medians that describes what the twelve calls did.
+
+    Deliberately outside the decision rule: these numbers were not available to it, no threshold was
+    set from them, and the verdict is the same if they are ignored. They are rendered rather than
+    written by hand so the document cannot drift from the log it describes.
+    """
+    gap = analysis.endpoint_gap
+    baseline = analysis.arms["N"].median
+    lines: list[str] = []
+    if not gap or baseline is None:
+        return lines
+    for arm in SINGLE_FIELD_ARMS:
+        median = analysis.arms[arm].median
+        if median is None:
+            continue
+        recovery = round(100 * (baseline - median) / gap, 1)
+        lines.append(
+            f"* `{arm}_med={median:g}` sits {baseline - median:.2f} below `N_med={baseline:g}`, "
+            f"recovering {recovery:.1f}% of this run's {gap:.2f} endpoint gap."
+        )
+    if analysis.separation is not None:
+        lines.append(
+            f"* the two single-field arms are {analysis.separation:.2f} apart, against a `N`-to-`B` "
+            f"gap of {gap:.2f}."
+        )
+    return lines
 
 
 def render_report(analysis: P3Analysis, *, records: Sequence[Mapping[str, Any]] = ()) -> str:
@@ -618,6 +775,35 @@ def render_report(analysis: P3Analysis, *, records: Sequence[Mapping[str, Any]] 
         spread = "n/a" if result.spread is None else f"{result.spread:g}"
         lines.append(f"| `{arm}` | {raw} | {median} | {spread} |")
 
+    # Status cells for the decision table. A rule the analyzer never reached -- the only case being
+    # a log too incomplete to evaluate at all -- has no PASS, FAIL, FIRES or CLEAR to report, and
+    # saying "CLEAR" for a condition that was never read would be a false statement about the data.
+    evaluated = analysis.verdict != EXECUTION_INCOMPLETE
+
+    def status(rendered: str) -> str:
+        return rendered if evaluated else NOT_EVALUATED
+
+    go1_status = status(_pass(analysis.go1))
+    go2_status = status(_pass(analysis.go2))
+    go3_status = status(_pass(analysis.go3))
+    k1_status = status(_kill(analysis.k1))
+    k2_status = status(_kill(analysis.k2))
+    e1_status = status(_pass(analysis.e1))
+    e2_status = status(_pass(analysis.e2))
+
+    largest_spread = max(
+        (analysis.arms[arm].spread for arm in ARMS if analysis.arms[arm].spread is not None),
+        default=None,
+    )
+    if analysis.k2_arms:
+        k2_observed = "tripped by " + ", ".join(
+            f"{arm}={analysis.arms[arm].spread}" for arm in analysis.k2_arms
+        )
+    elif evaluated and largest_spread is not None:
+        k2_observed = f"largest spread {largest_spread:g} ≤ {analysis.separation}"
+    else:
+        k2_observed = "n/a"
+
     lines += [
         "",
         "All three raw values are reported for every arm; the median is a summary of them, not a",
@@ -625,27 +811,31 @@ def render_report(analysis: P3Analysis, *, records: Sequence[Mapping[str, Any]] 
         "",
         "## 3. Derived calculation — the pre-registered decision rule",
         "",
-        "| condition | rule | value | outcome |",
-        "| --------- | ---- | ----- | ------- |",
-        f"| GO-1 | some single-field arm median ≤ {GO1_MEDIAN_AT_MOST} | moved arm: "
-        f"{analysis.moved_arm or 'none'} | {_pass(analysis.go1)} |",
-        f"| GO-2 | the other within [{GO2_MEDIAN_AT_LEAST}, {GO2_MEDIAN_AT_MOST}] | flat arm: "
-        f"{analysis.flat_arm or 'none'} | {_pass(analysis.go2)} |",
-        f"| GO-3 | both spreads ≤ {GO3_SPREAD_AT_MOST} | "
-        + ", ".join(
-            f"{arm}={analysis.arms[arm].spread}" for arm in SINGLE_FIELD_ARMS
-        )
-        + f" | {_pass(analysis.go3)} |",
-        f"| K1 | \\|I_med − C_med\\| ≥ {K1_MIN_SEPARATION} | "
-        f"{analysis.separation} | {_pass(not analysis.k1)} |",
-        f"| K2 | every arm's spread ≤ \\|I_med − C_med\\| | tripped by: "
-        + (", ".join(analysis.k2_arms) if analysis.k2_arms else "none")
-        + f" | {_pass(not analysis.k2)} |",
-        f"| E1 | N_med > B_med | {E1_REQUIRES} | {_pass(analysis.e1)} |",
-        f"| E2 | endpoint gap ≥ {E2_MIN_ENDPOINT_GAP} | {analysis.endpoint_gap} | {_pass(analysis.e2)} |",
+        "Each rule is stated in the direction the preregistration fixes it, and its status is",
+        "reported in that rule's own vocabulary: the GO conditions and the two endpoint guards read",
+        "PASS / FAIL, the KILL conditions read FIRES / CLEAR. A KILL condition is written as the rule",
+        "that *fires*, never as its complement.",
         "",
-        "KILL is reported as PASS when it did *not* fire. E1 and E2 are validity guards: they can",
-        "block a claim, and they can never produce one.",
+        "| condition | rule | observed | status |",
+        "| --------- | ---- | -------- | ------ |",
+        f"| GO-1 | some single-field arm median ≤ {GO1_MEDIAN_AT_MOST} | "
+        + ", ".join(f"{arm}_med={analysis.arms[arm].median}" for arm in SINGLE_FIELD_ARMS)
+        + f" | {go1_status} |",
+        f"| GO-2 | that arm's counterpart inside [{GO2_MEDIAN_AT_LEAST}, {GO2_MEDIAN_AT_MOST}] | "
+        + _assignment_trials(analysis)
+        + f" | {go2_status} |",
+        f"| GO-3 | both single-field spreads ≤ {GO3_SPREAD_AT_MOST} | "
+        + ", ".join(f"{arm}_spread={analysis.arms[arm].spread}" for arm in SINGLE_FIELD_ARMS)
+        + f" | {go3_status} |",
+        f"| K1 | \\|I_med − C_med\\| < {K1_MIN_SEPARATION} | {analysis.separation} | {k1_status} |",
+        f"| K2 | any arm's spread > \\|I_med − C_med\\| | {k2_observed} | {k2_status} |",
+        f"| E1 | N_med > B_med | "
+        f"{analysis.arms['N'].median} > {analysis.arms['B'].median} | {e1_status} |",
+        f"| E2 | N_med − B_med ≥ {E2_MIN_ENDPOINT_GAP} | {analysis.endpoint_gap} | {e2_status} |",
+        "",
+        _assignment_summary(analysis),
+        "",
+        "E1 and E2 are validity guards: they can block a claim, and they can never produce one.",
         "",
         "## 4. Endpoint replication sanity check",
         "",
@@ -656,9 +846,21 @@ def render_report(analysis: P3Analysis, *, records: Sequence[Mapping[str, Any]] 
         f"(move **{OBSERVED_07_MOVE:g}**)",
         f"* this run: N median **{analysis.arms['N'].median}**, B median **{analysis.arms['B'].median}**, "
         f"gap **{analysis.endpoint_gap}**",
-        f"* ordering preserved (E1): {_pass(analysis.e1)}; gap ≥ half the original move (E2): {_pass(analysis.e2)}",
+        f"* ordering preserved (E1): {e1_status}; gap ≥ half the original move (E2): {e2_status}",
         "",
-        "## 5. Conditions and notes",
+        "## 5. Descriptive context — not part of the decision rule",
+        "",
+    ]
+    lines += _descriptive_context(analysis) or [
+        "* n/a — the log does not hold a complete set of values to describe."
+    ]
+    lines += [
+        "",
+        "These are arithmetic on the medians above, recorded because they describe what the twelve",
+        "calls did. They are **not** inputs to the decision rule, no threshold was set from them, and",
+        "the verdict is unchanged if they are ignored.",
+        "",
+        "## 6. Conditions and notes",
         "",
     ]
     if analysis.notes:
@@ -667,7 +869,7 @@ def render_report(analysis: P3Analysis, *, records: Sequence[Mapping[str, Any]] 
         lines.append("* No condition notes: nothing tripped.")
     lines += [
         "",
-        "## 6. Limitation",
+        "## 7. Limitation",
         "",
         "* This is **one payload**, measured on one account, in one session, at one model version.",
         "  It is a local measurement and supports no general statement about Jev.",
@@ -820,14 +1022,18 @@ def report_command(
     report_path: Path = RESULT_DOC_PATH,
     echo=print,
 ) -> int:
-    """Render the result document from the P3 log, mechanically."""
+    """Render the result document from the P3 log, mechanically.
+
+    The whole file is written here, provenance section included, so that regenerating it twice gives
+    the same bytes and no part of the committed document is a hand edit.
+    """
     records = list(read_records(p3_log_path(results_dir)))
     lines = [
         "<!-- Generated by `python -m jev_lab.p3_boundary_locus report` from the P3 log.",
         f"     Analyzer: {PREREGISTRATION_ID}. Do not hand-edit: the numbers are derived. -->",
         "",
     ]
-    text = "\n".join(lines) + render_report(analyze(records), records=records)
+    text = "\n".join(lines) + render_report(analyze(records), records=records) + CORRECTION_PROVENANCE
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(text, encoding="utf-8", newline="\n")
     echo(f"wrote {report_path.as_posix()}")
