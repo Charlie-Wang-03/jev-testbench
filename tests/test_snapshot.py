@@ -58,6 +58,13 @@ NOUL = lambda value: {"type": "noul", "noul": value}
 SCORE = lambda value, confidence: {"type": "score", "score": value, "confidence": confidence}
 
 
+def line_with(text, needle):
+    """The one line containing `needle`. Fails loudly if the snapshot says it twice or not at all."""
+    matches = [line for line in text.splitlines() if needle in line]
+    assert len(matches) == 1, f"expected one line containing {needle!r}, found {len(matches)}"
+    return matches[0]
+
+
 def addressing_records():
     return [
         record(ADDRESSING, "structured_addressing", input_tokens=493,
@@ -174,6 +181,122 @@ class TestConfidenceSection:
     def test_a_case_without_an_expected_label_is_not_given_one(self):
         text = build_snapshot(confidence_records())
         assert "no single label is correct for this case" in text
+
+
+def gate_records(*, ambiguous_confidence, ambiguous_decision=None, threshold=0.6):
+    """The `04_confidence` pair with the ambiguous arm placed wherever a test wants it.
+
+    `ambiguous_decision` is overridable so a record can be built that contradicts its own numbers.
+    Nothing else here does that, because the gate's whole point is that the stored decision and the
+    stored numbers agree.
+    """
+    def one(case_id, intent, confidence, decision):
+        return record(
+            CONFIDENCE,
+            case_id,
+            answers={"intent": CHOICE(intent, confidence), "specificity": SCORE(1.0, 0.9)},
+            notes={
+                "derived": {
+                    "intent": intent,
+                    "intent_confidence": confidence,
+                    "expected": None,
+                    "matches_expected": None,
+                    "specificity_score": 1.0,
+                    "specificity_confidence": 0.9,
+                    "gate": {
+                        "decision": decision,
+                        "threshold": threshold,
+                        "threshold_basis": "demo threshold",
+                    },
+                }
+            },
+        )
+
+    return [
+        one("specific_evidence", "release_transfer", 1.0, "accept"),
+        one(
+            "ambiguous_evidence",
+            "other",
+            ambiguous_confidence,
+            ambiguous_decision
+            if ambiguous_decision is not None
+            else ("accept" if ambiguous_confidence >= threshold else "escalate"),
+        ),
+    ]
+
+
+GATE_READING = "**Reading the gate.**"
+
+
+class TestTheGateReadingFollowsTheGateDecision:
+    """The gate paragraph described one direction on every log, whatever the gate had done.
+
+    It read "the ambiguous case lands just above the threshold, so this gate accepts it", which was
+    true of the frozen log and would have stayed on the page on a log where that case was refused.
+    Each test below moves the ambiguous record and holds the sentence to the move, in both
+    directions, so a generator that ignored the decision would fail half of every pair.
+    """
+
+    def reading(self, rows):
+        return line_with(build_snapshot(rows), GATE_READING)
+
+    def test_an_accepted_ambiguous_case_is_reported_as_accepted(self):
+        text = self.reading(gate_records(ambiguous_confidence=0.61))
+        assert "ambiguous_evidence" in text
+        assert "accepted" in text
+        assert "ambiguous_evidence did not clear" not in text
+
+    def test_an_escalated_ambiguous_case_is_not_reported_as_accepted(self):
+        text = self.reading(gate_records(ambiguous_confidence=0.59))
+        assert "ambiguous_evidence did not clear and was escalated" in text
+
+    def test_the_confidence_equal_to_the_threshold_clears(self):
+        # `04_confidence` gates on `>=`, so equality accepts. A snapshot reading the boundary the
+        # other way would describe different semantics than the run applied.
+        text = self.reading(gate_records(ambiguous_confidence=0.6))
+        assert "accepted" in text
+        assert "ambiguous_evidence did not clear" not in text
+
+    def test_the_sentence_follows_the_records_and_not_the_other_way_round(self):
+        accepted = self.reading(gate_records(ambiguous_confidence=0.61))
+        escalated = self.reading(gate_records(ambiguous_confidence=0.59))
+        assert accepted != escalated
+
+    def test_changing_a_record_changes_the_snapshot(self):
+        before = build_snapshot(gate_records(ambiguous_confidence=0.61))
+        after = build_snapshot(gate_records(ambiguous_confidence=0.59))
+        assert before != after
+
+    def test_both_cases_refused_is_not_reported_as_any_of_them_clearing(self):
+        rows = gate_records(ambiguous_confidence=0.59)
+        # Move the specific arm below the threshold too, so the gate refused both.
+        rows[0]["answers"]["intent"]["confidence"] = 0.5
+        rows[0]["notes"]["derived"]["intent_confidence"] = 0.5
+        rows[0]["notes"]["derived"]["gate"]["decision"] = "escalate"
+        text = self.reading(rows)
+        assert "no case cleared it (specific_evidence, ambiguous_evidence)" in text
+        assert "accepted" not in text
+
+    def test_a_record_whose_decision_contradicts_its_numbers_stops_the_build(self):
+        # Fail closed: the snapshot declines to choose between the stored decision and the stored
+        # numbers rather than printing one of them as if it had been checked.
+        rows = gate_records(ambiguous_confidence=0.59, ambiguous_decision="accept")
+        with pytest.raises(ValueError, match="recomputes to"):
+            build_snapshot(rows)
+
+    def test_a_stored_decision_with_nothing_to_check_it_against_stops_the_build(self):
+        rows = gate_records(ambiguous_confidence=0.61)
+        rows[1]["answers"] = {}
+        with pytest.raises(ValueError, match="no Choice confidence"):
+            build_snapshot(rows)
+
+    def test_a_case_with_no_gate_at_all_is_not_an_error(self):
+        rows = gate_records(ambiguous_confidence=0.61)
+        for row in rows:
+            row["notes"] = {}
+        text = build_snapshot(rows)
+        assert "gate: not recorded for this case." in text
+        assert "no case carries a checkable gate" in text
 
 
 class TestInstructionSection:

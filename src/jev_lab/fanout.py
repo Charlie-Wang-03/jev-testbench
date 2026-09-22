@@ -497,10 +497,12 @@ def _output_lines(
 ) -> list[str]:
     """Section E: the output side of the trade, kept separate from the cost claim.
 
-    Output tokens are the half of the trade that the input ratio does not show, and on these
-    records they run the other way. Whether that costs anything is a property of the price table
-    for the resolved model on the day of the run, not a property of output tokens, so the price is
-    read out of that table rather than asserted.
+    Output tokens are the half of the trade that the input ratio does not show, and which way they
+    run is read off the two arms here rather than written into the sentence: a price table or a
+    payload that moved the other way would make a fixed direction wrong, and this section is not
+    exempt from that. Whether the difference costs anything is a property of the price table for
+    the resolved model on the day of the run, not a property of output tokens, so the price is read
+    out of that table rather than asserted.
     """
     fanout = analysis["fanout_output_tokens"]
     staged = analysis["staged_output_tokens"]
@@ -528,9 +530,16 @@ def _output_lines(
         "",
         f"- fanout **{fanout:.0f}**, staged **{staged:.0f}** — a difference of "
         f"**{difference:+.0f}** tokens, `fanout/staged` = **{_ratio(fanout, staged)}x**.",
-        f"- On these records the fanout arm produced **materially more output tokens** than the "
-        "staged arm did: it answered every question it carried, including the ones Python never "
-        "read, and answers are what output tokens are.",
+        f"- On these records the fanout arm spent "
+        + (
+            "**materially more output tokens** than the staged arm did: it answered every question "
+            "it carried, including the ones Python never read, and answers are what output tokens "
+            "are."
+            if difference > 0
+            else "**materially fewer output tokens** than the staged arm did."
+            if difference < 0
+            else "**the same number of output tokens** as the staged arm did."
+        ),
         f"- {cost_note}",
         "- **Output tokens are not free in general.** They are free under this project's price "
         "table for this resolved model. A different model, or a change to that table, can price "

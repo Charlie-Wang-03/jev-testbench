@@ -9,13 +9,18 @@ says what the records do not support, because on a sample this small the unsuppo
 usually the tempting one.
 """
 
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
 from .ambiguous import AMBIGUOUS, REFERENCE, build_ambiguous_block
 from .composite import COMPOSITE, build_composite_block
 from .fanout import FANOUT, build_fanout_block
+# The gate check is imported rather than restated. `final_report` recomputes a stored gate decision
+# from the confidence and threshold stored beside it and refuses a record where the two disagree;
+# a second copy of that rule here would be a second thing to drift from the first. The dependency
+# runs one way only -- `final_report` does not import this module -- and must stay that way.
+from .final_report import confidence_gate
 from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
 from .repeatability import REPEATABILITY, build_repeatability_block
 from .report import _plain_decimal
@@ -186,19 +191,63 @@ def _addressing_block(records: list[Mapping[str, Any]]) -> list[str]:
     return lines
 
 
+def _checked_gate(record: Mapping[str, Any]) -> dict[str, Any] | None:
+    """This record's gate, checked against the confidence and threshold stored beside it.
+
+    The check itself is `confidence_gate`, which recomputes the decision from the confidence the
+    answer carried and stops the build on a record whose stored decision and stored numbers
+    disagree. A record that stores a decision with nothing to check it against is refused here for
+    the same reason: the alternative is printing a direction this snapshot cannot verify.
+    """
+    checked = confidence_gate(record)
+    if checked is not None:
+        return checked
+    stored = ((record.get("notes") or {}).get("derived") or {}).get("gate") or {}
+    if stored.get("decision") is not None:
+        raise ValueError(
+            f"record {record.get('case_id')!r} stores gate decision {stored['decision']!r} but "
+            "carries no Choice confidence to recompute it from; the snapshot does not print a gate "
+            "direction it cannot check"
+        )
+    return None
+
+
+def _gate_behaviour(decisions: Sequence[tuple[str, Mapping[str, Any]]]) -> str:
+    """What the gate did, written from the decisions the records actually stored.
+
+    A fixed sentence used to sit here describing one direction -- the ambiguous case landing just
+    above the threshold and being accepted. It happened to be true of the frozen log, and it would
+    have kept saying so on a log where the gate refused that case. The direction is now read, never
+    assumed, so which case cleared and which did not comes from the records themselves.
+    """
+    cleared = [label for label, gate in decisions if gate["cleared"]]
+    withheld = [label for label, gate in decisions if not gate["cleared"]]
+    if not withheld:
+        return f"every case cleared it ({', '.join(cleared)}), so the gate accepted each one"
+    if not cleared:
+        return f"no case cleared it ({', '.join(withheld)}), so the gate escalated each one"
+    return (
+        f"{', '.join(cleared)} cleared it and was accepted, and {', '.join(withheld)} did not "
+        "clear and was escalated"
+    )
+
+
 def _confidence_block(records: list[Mapping[str, Any]]) -> list[str]:
     """`04_confidence`: the gate's actual decision, and the confidence misreading to avoid."""
     by_case = {str(record.get("case_id")): record for record in records}
     specific = by_case.get("specific_evidence")
     ambiguous = by_case.get("ambiguous_evidence")
     lines = [f"## `{CONFIDENCE}`", "", "**Observed, in this one pair of cases.**", ""]
+    decisions: list[tuple[str, Mapping[str, Any]]] = []
     for record in (specific, ambiguous):
         if record is None:
             continue
         derived = (record.get("notes") or {}).get("derived") or {}
-        gate = derived.get("gate") or {}
         expected = derived.get("expected")
         matched = derived.get("matches_expected")
+        gate = _checked_gate(record)
+        if gate is not None:
+            decisions.append((str(record.get("case_id")), gate))
         lines.append(
             f"- `{record.get('case_id')}`: intent **{derived.get('intent')}** at confidence "
             f"**{derived.get('intent_confidence')}**."
@@ -213,16 +262,25 @@ def _confidence_block(records: list[Mapping[str, Any]]) -> list[str]:
             f"  - specificity Score **{derived.get('specificity_score')}** at confidence "
             f"**{derived.get('specificity_confidence')}**."
         )
-        lines.append(
-            f"  - gate: **{gate.get('decision')}** at threshold {gate.get('threshold')} "
-            f"({gate.get('threshold_basis')})."
-        )
+        if gate is None:
+            lines.append("  - gate: not recorded for this case.")
+        else:
+            lines.append(
+                f"  - gate: **{gate['decision']}** at confidence {gate['confidence']} against "
+                f"threshold {gate['threshold']} "
+                f"({(derived.get('gate') or {}).get('threshold_basis')})."
+            )
+    behaviour = _gate_behaviour(decisions)
     lines += [
         "",
         "**Reading the gate.** The demo threshold is a demonstration parameter, not a tuned or "
         "optimal value, and a passing gate is not evidence that the underlying answer was right. "
-        "The ambiguous case lands just above the threshold, so this gate accepts it — that is the "
-        "gate's behaviour on this input, not a verdict on the answer.",
+        + (
+            f"Here {behaviour} — that is the gate's behaviour on these records, not a verdict on "
+            "any answer."
+            if decisions
+            else "Here no case carries a checkable gate, so no direction is reported for it."
+        ),
         "",
         "**Reading the Score confidence.** A low specificity Score with a high confidence is not a "
         "contradiction. The confidence is confidence *in the stated judgment*; it does not measure "

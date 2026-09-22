@@ -25,12 +25,15 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **DERIVED CALCULATION** — estimated cost **$0.000914214**, from the local price table keyed by the resolved model. Console billing is authoritative.
 - **LOCAL MEASUREMENT** — experiments actually run: 10 — `01_primitives` (1), `02_structured_addressing` (2), `03_parallel_questions` (12), `04_confidence` (2), `05_speculative_fanout` (6), `06_composite_scoring` (3), `07_instruction_precision` (2), `12_function_routing` (4), `13_repeatability` (5), `13b_ambiguous_repeatability` (5).
 
-**CORE_CAPABILITY_EXPLORATION_CLOSED.** The core-capability questions this bench was built to ask have each produced a local measurement, and every measurement is in the canonical log. Nothing was adjusted after seeing an answer.
+**CORE_CAPABILITY_EXPLORATION_CLOSED**
 
-**ACTUAL_HANDLER_EXECUTION_UNTESTED** is carried forward as an explicit boundary, **not** as a blocker:
+- **LOCAL MEASUREMENT** — 10 of 15 registered experiment(s) have at least one canonical record, and every number this report states was recomputed from those records.
+- **DESIGN ASSUMPTION** — **nothing was adjusted after seeing an answer.** The thresholds, the weights, the expected labels, and the case lists were fixed before the runs; a report that moved one of them would be a fit rather than a measurement.
+
+**ACTUAL_HANDLER_EXECUTION_UNTESTED**
 
 - **LOCAL MEASUREMENT** — in the function-routing run, every resolved route was withheld by the frozen policy, so the branch that calls an allowed handler was never entered under a live answer.
-- **LIMITATION** — that branch is Python-side plumbing rather than an open question about the model, and the offline suite exercises it; no threshold was moved and no state was chosen to make it execute, because either would have replaced a measurement with a fit.
+- **LIMITATION** — that branch is carried forward as an explicit boundary, **not** as a blocker: it is Python-side plumbing rather than an open question about the model, and the offline suite exercises it. No threshold was moved and no state was chosen to make it execute, because either would have replaced a measurement with a fit.
 
 ## 2. Primitive behaviour — `01_primitives`
 
@@ -69,15 +72,15 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 ## 6. Batching — `03_parallel_questions`
 
 - **LOCAL MEASUREMENT** — 2 batched request(s) carried **816 input / 194 output** tokens; the 10 separate request(s) carrying the same questions carried **3480 input / 226 output**.
-- **DERIVED CALCULATION** — pooled input ratio **4.2647x** (separate over batched); the batching saved **76.55%** of the input tokens the separate arm spent.
+- **DERIVED CALCULATION** — pooled input ratio **4.2647x** (separate over batched); a saving of **76.55%** of the input tokens the separate arm spent.
 - **DERIVED CALCULATION** — estimated cost $0.000034272 against $0.00014616, a ratio of 4.2647x. The cost ratio equals the input ratio here because the encoded price for this model charges input only.
 - **LOCAL MEASUREMENT** — of 10 question(s) asked in both arms across the two cycles, **10** returned the same selected value; this compares labels, not distributions.
 - **LOCAL MEASUREMENT** — transport attempts recorded on 12 of 12 call(s): 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 — no HTTP retry was locally observed for them, which is all that count licenses.
 - **LOCAL MEASUREMENT** — the batched arm's own 2 observation(s) were spread by **2592.925 ms**, against an arm-to-arm mean difference of **1327.166 ms** — the within-arm spread is larger than the difference it would be used to explain.
 - **LIMITATION** — latency here is reported as an observation and never as a speedup: two cycles cannot separate arm identity from request position, so no factor is attributed to batching.
 
-**Core local finding.** Batching substantially reduced repeated-state input usage in this workload: the identical state and the identical question definitions cost materially fewer input tokens in one request than in five.
-
+- **DERIVED CALCULATION** — **core local finding.** Pooled over both cycles: 2 batched request(s) carried **2664 fewer** input tokens than the 10 separate request(s) carrying the same questions.
+- **DESIGN ASSUMPTION** — the two arms were built with identical state and identical question definitions, which is what makes the input-token difference track the request split rather than some other difference between them.
 - **OFFICIAL** — TypeSafe documents batching as a way to avoid re-sending shared state. That is a claim about their workload; the sentence above is about these two cycles of this payload.
 - **LIMITATION** — two cycles, five questions, one state, one session. This is not a universal batching ratio, and it does not extend to payloads whose questions are not all over the same state.
 
@@ -99,22 +102,21 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 
 - **LOCAL MEASUREMENT** — the variation differed by field between the two payloads: in `13_repeatability` the Choice margin did not move at all and the Noul moved by 0.01, while in `13b_ambiguous_repeatability` the Choice margin moved by 0.07 and the Noul did not move at all.
 
-**Stable label is not a fixed distribution.** The same winning label came back while the numbers under it moved: a reader who kept only the label would have seen a perfectly reproducible answer, and the exact top-probability tie observed in the ambiguous payload is the clearest case of a decided label sitting on an undecided distribution.
-
+- **LOCAL MEASUREMENT** — **a stable label is not a fixed distribution.** Across 10 byte-identical call(s) the winning Choice label never switched, so a reader who kept only the label would have seen a perfectly reproducible answer, while the top-2 margin underneath it moved over a range of up to 0.07.
+- **LOCAL MEASUREMENT** — the clearest case is `13b_ambiguous_repeatability`: its decided label sits on an exact top-probability tie, which is what a decided label on an undecided distribution looks like in these records.
 - **LIMITATION** — two payloads, five calls each, two sessions. There is **no global noise bound** here: nothing in these records says what variation a different payload would show, and a single observation of a tie is not a distribution over ties.
 
 ## 8. Speculative fan-out — `05_speculative_fanout`
 
 - **LOCAL MEASUREMENT** — fan-out: 2 request(s), **1412 input / 402 output** tokens; staged: 4 request(s), **1812 input / 273 output**.
-- **DERIVED CALCULATION** — pooled input ratio **1.2833x** (staged over fan-out), a saving of 22.08% of the staged arm's input; estimated cost $0.000059304 against $0.000076104, ratio 1.2833x.
-- **DERIVED CALCULATION** — output tokens ran the other way: fan-out spent **129 more** output tokens than staged, and at the encoded price for this model output is charged at $0/M, so this does not appear in the cost ratio above.
+- **DERIVED CALCULATION** — pooled input ratio **1.2833x** (staged over fan-out), a saving of **22.08%** of the staged arm's input; estimated cost $0.000059304 against $0.000076104, ratio 1.2833x.
+- **DERIVED CALCULATION** — output tokens moved separately: fan-out spent **129 more** output tokens than staged, and at the encoded price for this model output is charged at $0/M, so this does not appear in the cost ratio above.
 - **LOCAL MEASUREMENT** — of 12 question(s) asked in the fan-out requests, **8 were consumed** by the code and **4 were unused** — the speculative answers the second strategy never had to buy.
 - **LOCAL MEASUREMENT** — of the consumed answers compared field by field, **6 moved** between the two strategies — A `followup_urgency` (`confidence` 0.81 vs 0.78; P(`1`) 0.13 vs 0.14; P(`2`) 0.87 vs 0.86; `score` 1.87 vs 1.86); A `missing_detail` (`confidence` 0.74 vs 0.71; P(`nothing_specific`) 0.16 vs 0.18; P(`reproduction_context`) 0.83 vs 0.81); A `detail_is_blocking` (`noul` 0.42 vs 0.41); B `next_action` (P(`escalate_to_specialist`) 0.96 vs 0.97; P(`request_more_detail`) 0.04 vs 0.03); B `followup_urgency` (`confidence` 0.75 vs 0.76); B `is_unauthorised_change` (`noul` 0.98 vs 0.97).
 - **LIMITATION** — a difference here is not an error and neither strategy is the reference: the same question was asked in different company, and the log does not say which reading is correct.
 - **LOCAL MEASUREMENT** — latency direction per pair: A `fanout_slower`, B `fanout_faster` — the direction is **inconsistent across pairs**, so no arm is faster here.
 
-**Core local finding.** Fan-out used fewer input tokens in these two states despite producing unused speculative answers, and more output tokens.
-
+- **DERIVED CALCULATION** — **core local finding.** Fan-out carried **400 fewer** input tokens than staged and **129 more** output tokens than staged, while leaving 4 of 12 speculative answer(s) unconsumed by the code.
 - **LIMITATION** — two pairs, two states, one session, one branching shape. This is not a general batching-versus-staging rule; the trade depends on how much state is shared and how many branches are speculative.
 
 ## 9. Composite scoring — `06_composite_scoring`
@@ -150,7 +152,7 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **LOCAL MEASUREMENT** — function match: **4 of 4**; argument match: **4 of 4** resolved case(s).
 - **LIMITATION** — these are counts on four synthetic cases with one observation each. They are not an accuracy rate, and the expected labels are the scenario's intention rather than an independent truth, so nothing here estimates how the model would route a request it has not seen.
 
-**Classifications.** `FUNCTION_TARGET_REALIZED` — all 4 case(s) returned the pre-frozen expected function. `ARGUMENT_TARGET_REALIZED` — all 4 resolved case(s) returned the argument label frozen with their state.
+- **LOCAL MEASUREMENT** — **classifications.** `FUNCTION_TARGET_REALIZED` — all 4 case(s) returned the pre-frozen expected function. `ARGUMENT_TARGET_REALIZED` — all 4 resolved case(s) returned the argument label frozen with their state.
 
 - **LOCAL MEASUREMENT** — `oscillating_error`: confidence 0.76 (floor not cleared at 0.8), review signal 0.79 (not cleared at 0.5), execution withheld.
 - **LOCAL MEASUREMENT** — `refinement_difference`: confidence 0.58 (floor not cleared at 0.8), review signal 0.75 (not cleared at 0.5), execution withheld.
@@ -160,8 +162,8 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **LOCAL MEASUREMENT** — `ACTUAL_HANDLER_EXECUTION_UNTESTED` — no handler was called: every resolved route was withheld (4 of 4), so the allowed-route branch was never entered under a live answer.
 - **LOCAL MEASUREMENT** — `FAIL_CLOSED_SUPPRESSION_REALIZED` — 4 route(s) were withheld and no handler ran for any of them; nothing was substituted for a withheld route.
 
-**Architectural conclusion.** Semantic routing is not execution authorization. The model produced the intended function and argument in every resolved case, and the code still refused to act — correctly, under the frozen policy. A system that treats a confident route as permission to act has removed the layer that produced this result.
-
+- **LOCAL MEASUREMENT** — **the model produced the intended function and argument in every resolved case** — a function name from a registry frozen before the run and an argument from that function's own closed set.
+- **DESIGN ASSUMPTION** — **semantic routing is not execution authorization.** The model's route selected which code was eligible to act; whether anything acted was decided afterwards and elsewhere — the policy withheld every resolved route, so no handler ran. A system that treats a confident route as permission to act has removed the layer that produced this result.
 - **LIMITATION** — the execution path from an allowed route to the handler is **not** established by a live run here, and this report does not claim a full execution chain succeeded.
 
 ## 11. Token and cost ledger
@@ -204,13 +206,15 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 - **LOCAL MEASUREMENT** — `transport_attempt_count` is recorded on 35 of 42 record(s), and is 1 on 35 of them. `attempts == 1` licenses exactly one sentence — that call was not observed to retry — and says nothing about what the window contained.
 - **LIMITATION** — `retry_count` is `null` on every record because the SDK sets the retry header on the request rather than the response. `null` means **not reported**, never `no retries`, and nothing here backfills it.
 
-The window also contains DNS, TCP and TLS setup, connection-pool state, server-side queueing, upstream load, and local scheduling. Which of those moved a given call is not knowable from these records, and no decomposition is attempted.
+- **LIMITATION** — the window also contains DNS, TCP and TLS setup, connection-pool state, server-side queueing, upstream load, and local scheduling. Which of those moved a given call is not knowable from these records, and no decomposition is attempted.
 
-**LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK.** No stable speedup table is produced, no arm is called faster, and the first-call effect is a hypothesis these fields let you check rather than a rule about the model.
+**LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK**
+
+- **LIMITATION** — no speedup table is produced and no arm is called faster on this evidence. The first-call pattern is a hypothesis these fields let a reader check, not a rule about the model.
 
 ## 13. Agent-control architecture, distilled
 
-The pattern these measurements support, assembled from what was actually observed:
+- **DESIGN ASSUMPTION** — **the pattern below is a design this bench followed, not a result it proved.** Each stage is a choice made before the run; the experiments behind it are `01_primitives`, `02_structured_addressing`, `03_parallel_questions`, `04_confidence`, `05_speculative_fanout`, `06_composite_scoring`, `07_instruction_precision`, `12_function_routing`, `13_repeatability`, `13b_ambiguous_repeatability`.
 
 ```text
 unstructured state
@@ -240,8 +244,6 @@ ordinary code
 - **DESIGN ASSUMPTION** — **keep the whole distribution.** The winning label is the smallest part of an answer: a near-tie and a unanimous label are the same entry in a count and different facts about the state.
 - **DESIGN ASSUMPTION** — **fail closed.** A malformed, missing, or unavailable answer stops the case; it is never defaulted, matched to a neighbour, or filled in from the branch that would have been taken.
 
-This is a design this bench followed, not a result it proved. The experiments behind it: `01_primitives`, `02_structured_addressing`, `03_parallel_questions`, `04_confidence`, `05_speculative_fanout`, `06_composite_scoring`, `07_instruction_precision`, `12_function_routing`, `13_repeatability`, `13b_ambiguous_repeatability`.
-
 ## 14. What this evaluation did not establish
 
 - **LIMITATION** — **no general accuracy estimate.** There is no ground truth anywhere in this bench: expected labels are the design's intention, written alongside the states, and every count is over a handful of synthetic cases.
@@ -258,7 +260,9 @@ This is a design this bench followed, not a result it proved. The experiments be
 
 ## 15. Optional edge-coverage backlog
 
-**OPTIONAL_EDGE_COVERAGE_BACKLOG** — derived as the registered experiments with no canonical record: 5 of 15. This list is computed from the registry and the log, so it empties itself as records arrive.
+**OPTIONAL_EDGE_COVERAGE_BACKLOG**
+
+- **LOCAL MEASUREMENT** — 5 of 15 registered experiment(s) have no canonical record. The list is computed from the registry and the log, so it empties itself as records arrive.
 
 | experiment | tier | planned calls | what it would cover |
 | --- | --- | --- | --- |
@@ -284,9 +288,10 @@ fail closed: no key, no request
 
 - **DESIGN ASSUMPTION** — the credential has exactly two sources, resolved in that order by `jev_lab.client`. The environment wins when it is set, so an operator can override a stale file without editing it; there is no third source and no 'search a few likely places' fallback.
 - **DESIGN ASSUMPTION** — an absent, empty, malformed, duplicated, or unreadable source stops the run before a request is sent. Nothing proceeds on a guess.
-- **LOCAL MEASUREMENT** — the real function-routing run resolved its credential as `exists (source=local-secret-file)`: the persistent local file supplied the key in that invocation, with nothing set in the environment.
+- **LIMITATION** — which of those two sources supplied the key for a given historical invocation is **not recorded in the canonical log**, so this report cannot reconstruct it. No record carries a credential source, and no other committed artifact is canonical for it. The two sources and their order are design facts stated above; which one answered a particular call is not a fact these records carry, and it is not inferred here.
 - **LIMITATION** — the key is never printed, logged, hashed, fingerprinted, or measured here — not its value, length, prefix, suffix, or any derived identifier. Status reports `missing`, `exists (source=…)`, or `unusable (<kind>)` and nothing else.
-- **LOCAL MEASUREMENT** — the canonical log carries no credential material: it is scanned for authorization headers, the environment variable name, `sk-` prefixes, and token-shaped strings, and the test suite fails if any appears.
+- **LOCAL MEASUREMENT** — the canonical log carries no credential material: no record names a credential source, and none carries an authorization header, an `sk-` prefix, or a token-shaped string.
+- **DESIGN ASSUMPTION** — that absence is checked rather than assumed: the offline suite scans the canonical log for those patterns and fails if one appears.
 - **DESIGN ASSUMPTION** — `.secrets/` is excluded by `.gitignore`; the check that proves it is `git check-ignore -v .secrets/typesafe.env` and a `git add --dry-run`, both of which the test suite runs. This document is not itself a security boundary, and no comment in it should be read as one.
 - **LIMITATION** — the file's operating-system permissions are the platform's default and are not managed by this repository; on a shared or cloud-synced machine the directory may be readable by more than its owner.
 
@@ -303,7 +308,7 @@ fail closed: no key, no request
 | `tests/` | offline suite; sockets are blocked and no test may call the API | `uv run pytest` |
 
 - **LOCAL MEASUREMENT** — this report was derived from 42 record(s). A revision of it that does not match the log is a stale copy of a derived file, not a second measurement.
-- **LIMITATION** — the repository has no commit history yet, so no artifact here is pinned to a revision. The log's own hashes are the only fixity the records carry.
+- **LIMITATION** — nothing in this report is pinned to a revision, and the generator does not read the repository's version-control state: it is built from the log alone, so it cannot say which revision of the bench produced a record. The log's own hashes are the only fixity the records carry.
 
 ---
 

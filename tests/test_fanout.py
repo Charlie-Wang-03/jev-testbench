@@ -133,6 +133,15 @@ def run_offline(primary=None, max_requests=FANOUT_CALL_CEILING):
     return [json.loads(body) for body in bodies], records
 
 
+def _is_fanout(record):
+    return (record.get("notes") or {}).get("strategy") == "fanout"
+
+
+def _with_output_tokens(record, value):
+    """The same record with its output side moved. Nothing else about it is touched."""
+    return {**record, "output_tokens": value}
+
+
 def split_bodies(bodies):
     """The captured requests, separated into the three shapes this design can send.
 
@@ -770,6 +779,28 @@ class TestOutputTokenTradeoff:
             "staged_output_tokens"
         ]
         assert "materially more output tokens" in "\n".join(build_fanout_block(records))
+
+    def test_the_output_direction_follows_the_records(self):
+        # The sentence named one direction on any log at all. Swap which arm spends the output
+        # tokens and the reading has to swap with it.
+        _, records = run_offline()
+        analysis = analyze_fanout(records)
+        assert analysis["fanout_output_tokens"] > analysis["staged_output_tokens"]
+        swapped = [_with_output_tokens(record, 1 if _is_fanout(record) else 100) for record in records]
+        swapped_analysis = analyze_fanout(swapped)
+        assert swapped_analysis["fanout_output_tokens"] < swapped_analysis["staged_output_tokens"]
+        text = "\n".join(build_fanout_block(swapped))
+        assert "materially fewer output tokens" in text
+        assert "materially more output tokens" not in text
+        assert "the same number of output tokens" not in text
+
+    def test_a_tie_is_not_reported_as_a_direction(self):
+        _, records = run_offline()
+        tied = [_with_output_tokens(record, 0) for record in records]
+        text = "\n".join(build_fanout_block(tied))
+        assert "the same number of output tokens" in text
+        assert "materially more output tokens" not in text
+        assert "materially fewer output tokens" not in text
 
     def test_output_is_not_called_free_in_general(self):
         _, records = run_offline()

@@ -50,7 +50,7 @@ from .fanout import (
 )
 from .pricing import price_for
 from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
-from .repeatability import REPEATABILITY
+from .repeatability import EXACT_TOP_PROBABILITY_TIE_OBSERVED, REPEATABILITY
 from .repeatability import analyze as analyze_repeatability
 from .report import TOTAL_LABEL, _plain_decimal, build_summary
 from .routing import (
@@ -133,6 +133,36 @@ def _percent(part: float, whole: float) -> str:
     if not whole:
         return "n/a"
     return f"{100 * part / whole:.{PERCENT_DECIMALS}f}%"
+
+
+def _difference_phrase(value: float, other: float, noun: str) -> str:
+    """``value`` against ``other``, in whichever direction the two numbers actually went.
+
+    Written as a phrase so it can be dropped into a sentence about either arm. The direction is
+    chosen from the sign of the difference rather than fixed in the sentence around it: a log where
+    the speculative arm spent fewer output tokens would otherwise be described with the wrong
+    comparison word on a line that reported the right number.
+    """
+    if value == other:
+        return f"the same number of {noun} as"
+    return f"**{abs(value - other):.0f} {'fewer' if value < other else 'more'}** {noun} than"
+
+
+def _saving_phrase(baseline: float, other: float, noun: str) -> str:
+    """The gap between two measured totals, named in whichever direction it went.
+
+    ``baseline - other`` is a saving when it is positive and an increase when it is negative. The
+    wording follows the sign for the same reason `_difference_phrase` does: "a saving of -23.00%"
+    is a sentence that assumes an outcome it did not get.
+    """
+    if not baseline:
+        return f"no comparable baseline for the {noun}"
+    share = 100 * (baseline - other) / baseline
+    if share > 0:
+        return f"a saving of **{share:.{PERCENT_DECIMALS}f}%** of the {noun}"
+    if share < 0:
+        return f"an increase of **{abs(share):.{PERCENT_DECIMALS}f}%** over the {noun}"
+    return f"no change against the {noun}"
 
 
 def _number(value: Any) -> str:
@@ -367,9 +397,20 @@ def _executive_summary(records: Sequence[Mapping[str, Any]], summary: Mapping[st
     )
     lines.append("")
     lines += [
-        f"**{CORE_CAPABILITY_EXPLORATION_CLOSED}.** The core-capability questions this bench was "
-        "built to ask have each produced a local measurement, and every measurement is in the "
-        "canonical log. Nothing was adjusted after seeing an answer.",
+        f"**{CORE_CAPABILITY_EXPLORATION_CLOSED}**",
+        "",
+        _claim(
+            LOCAL_MEASUREMENT,
+            f"{len(measured)} of {len(experiment_names())} registered experiment(s) have at least "
+            "one canonical record, and every number this report states was recomputed from those "
+            "records.",
+        ),
+        _claim(
+            DESIGN_ASSUMPTION,
+            "**nothing was adjusted after seeing an answer.** The thresholds, the weights, the "
+            "expected labels, and the case lists were fixed before the runs; a report that moved "
+            "one of them would be a fit rather than a measurement.",
+        ),
         "",
     ]
     lines += _execution_boundary(records)
@@ -387,21 +428,21 @@ def _execution_boundary(records: Sequence[Mapping[str, Any]]) -> list[str]:
     group = [r for r in records if r.get("experiment") == ROUTING]
     if not group:
         return [
-            f"**{ACTUAL_HANDLER_EXECUTION_UNTESTED}** stands as an explicit boundary, **not** as a "
-            "blocker:",
+            f"**{ACTUAL_HANDLER_EXECUTION_UNTESTED}**",
             "",
             _claim(
                 LIMITATION,
                 "`12_function_routing` has no records in this log, so the branch that calls an "
-                "allowed handler has not been exercised under a live answer at all.",
+                "allowed handler has not been exercised under a live answer at all. That is an "
+                "explicit boundary in this report, **not** a blocker: it is one untested branch "
+                "rather than an open question about the model.",
             ),
             "",
         ]
     markers = set(analyze_routing(group)["markers"])
     if ACTUAL_HANDLER_EXECUTION_REALIZED in markers:
         return [
-            f"`{ACTUAL_HANDLER_EXECUTION_REALIZED}` — the allowed-handler branch **was** reached "
-            "under a live answer in this log:",
+            f"**{ACTUAL_HANDLER_EXECUTION_REALIZED}**",
             "",
             _claim(
                 LOCAL_MEASUREMENT,
@@ -417,8 +458,7 @@ def _execution_boundary(records: Sequence[Mapping[str, Any]]) -> list[str]:
             "",
         ]
     return [
-        f"**{ACTUAL_HANDLER_EXECUTION_UNTESTED}** is carried forward as an explicit boundary, "
-        "**not** as a blocker:",
+        f"**{ACTUAL_HANDLER_EXECUTION_UNTESTED}**",
         "",
         _claim(
             LOCAL_MEASUREMENT,
@@ -427,9 +467,10 @@ def _execution_boundary(records: Sequence[Mapping[str, Any]]) -> list[str]:
         ),
         _claim(
             LIMITATION,
-            "that branch is Python-side plumbing rather than an open question about the model, and "
-            "the offline suite exercises it; no threshold was moved and no state was chosen to make "
-            "it execute, because either would have replaced a measurement with a fit.",
+            "that branch is carried forward as an explicit boundary, **not** as a blocker: it is "
+            "Python-side plumbing rather than an open question about the model, and the offline "
+            "suite exercises it. No threshold was moved and no state was chosen to make it "
+            "execute, because either would have replaced a measurement with a fit.",
         ),
         "",
     ]
@@ -765,9 +806,8 @@ def _batching(records: Sequence[Mapping[str, Any]]) -> list[str]:
     lines.append(
         _claim(
             DERIVED_CALCULATION,
-            f"pooled input ratio **{_ratio(separate_in, batch_in)}** (separate over batched); the "
-            f"batching saved **{_percent(separate_in - batch_in, separate_in)}** of the input "
-            "tokens the separate arm spent.",
+            f"pooled input ratio **{_ratio(separate_in, batch_in)}** (separate over batched); "
+            f"{_saving_phrase(separate_in, batch_in, 'input tokens the separate arm spent')}.",
         )
     )
     batch_cost, separate_cost = _sum(batched, "estimated_cost_usd"), _sum(separate, "estimated_cost_usd")
@@ -852,10 +892,18 @@ def _batching(records: Sequence[Mapping[str, Any]]) -> list[str]:
     )
     lines += latency_lines + [
         "",
-        "**Core local finding.** Batching substantially reduced repeated-state input usage in this "
-        "workload: the identical state and the identical question definitions cost materially "
-        "fewer input tokens in one request than in five.",
-        "",
+        _claim(
+            DERIVED_CALCULATION,
+            f"**core local finding.** Pooled over both cycles: {len(batched)} batched request(s) "
+            f"carried {_difference_phrase(batch_in, separate_in, 'input tokens')} the "
+            f"{len(separate)} separate request(s) carrying the same questions.",
+        ),
+        _claim(
+            DESIGN_ASSUMPTION,
+            "the two arms were built with identical state and identical question definitions, "
+            "which is what makes the input-token difference track the request split rather than "
+            "some other difference between them.",
+        ),
         _claim(
             OFFICIAL,
             "TypeSafe documents batching as a way to avoid re-sending shared state. That is a claim "
@@ -974,11 +1022,11 @@ def _repeatability(records: Sequence[Mapping[str, Any]]) -> list[str]:
             lines.append(_claim(LOCAL_MEASUREMENT, comparison))
     lines += [
         "",
-        "**Stable label is not a fixed distribution.** The same winning label came back while the "
-        "numbers under it moved: a reader who kept only the label would have seen a perfectly "
-        "reproducible answer, and the exact top-probability tie observed in the ambiguous payload "
-        "is the clearest case of a decided label sitting on an undecided distribution.",
-        "",
+        *_stability_finding(
+            [(label, analyze_repeatability(group))
+             for label, group in ((REPEATABILITY, marked), (AMBIGUOUS, ambiguous))
+             if group]
+        ),
         _claim(
             LIMITATION,
             "two payloads, five calls each, two sessions. There is **no global noise bound** here: "
@@ -987,6 +1035,61 @@ def _repeatability(records: Sequence[Mapping[str, Any]]) -> list[str]:
         ),
     ]
     return lines + [""]
+
+
+def _stability_finding(analyses: Sequence[tuple[str, Mapping[str, Any]]]) -> list[str]:
+    """The reading this chapter exists to support, written from the stability numbers.
+
+    A fixed sentence sat here saying the label held while the numbers moved, and naming the
+    ambiguous payload's tie as the clearest case, on any log at all. Both are read back now: the
+    label clause from the leader switches, the margin clause from the ranges the analyses computed,
+    and the tie only when its marker was actually raised.
+    """
+    if not analyses:
+        return []
+    calls = sum(analysis["calls"] for _, analysis in analyses)
+    switches = sum(
+        int(analysis["choice"].get("leader_switches") or 0) for _, analysis in analyses
+    )
+    margins = [
+        analysis["choice"]["margin_summary"]["range"]
+        for _, analysis in analyses
+        if analysis["choice"].get("margin_summary") is not None
+    ]
+    stability = (
+        "never switched, so a reader who kept only the label would have seen a perfectly "
+        "reproducible answer"
+        if switches == 0
+        else f"switched {switches} time(s), so even the label was not fixed on these records"
+    )
+    margin_clause = (
+        "while the top-2 margin underneath it moved over a range of up to "
+        f"{_number(round(max(margins), 4))}"
+        if margins
+        else "and no top-2 margin was recorded to compare against it"
+    )
+    lines = [
+        _claim(
+            LOCAL_MEASUREMENT,
+            f"**a stable label is not a fixed distribution.** Across {calls} byte-identical call(s) "
+            f"the winning Choice label {stability}, {margin_clause}.",
+        )
+    ]
+    ties = [
+        label
+        for label, analysis in analyses
+        if EXACT_TOP_PROBABILITY_TIE_OBSERVED in analysis["markers"]
+    ]
+    if ties:
+        lines.append(
+            _claim(
+                LOCAL_MEASUREMENT,
+                f"the clearest case is `{ties[0]}`: its decided label sits on an exact "
+                "top-probability tie, which is what a decided label on an undecided distribution "
+                "looks like in these records.",
+            )
+        )
+    return lines
 
 
 def _fanout(records: Sequence[Mapping[str, Any]]) -> list[str]:
@@ -1005,13 +1108,15 @@ def _fanout(records: Sequence[Mapping[str, Any]]) -> list[str]:
             f"/ {analysis['staged_output_tokens']:.0f} output**.",
         )
     )
+    input_saving = _saving_phrase(
+        analysis["staged_input_tokens"], analysis["fanout_input_tokens"], "staged arm's input"
+    )
     lines.append(
         _claim(
             DERIVED_CALCULATION,
             f"pooled input ratio **{_ratio(analysis['staged_input_tokens'], analysis['fanout_input_tokens'])}** "
-            f"(staged over fan-out), a saving of "
-            f"{_percent(analysis['staged_input_tokens'] - analysis['fanout_input_tokens'], analysis['staged_input_tokens'])} "
-            f"of the staged arm's input; estimated cost {_usd(analysis['fanout_cost_usd'])} against "
+            f"(staged over fan-out), {input_saving}; estimated cost "
+            f"{_usd(analysis['fanout_cost_usd'])} against "
             f"{_usd(analysis['staged_cost_usd'])}, ratio "
             f"{_ratio(analysis['staged_cost_usd'], analysis['fanout_cost_usd'])}.",
         )
@@ -1019,10 +1124,10 @@ def _fanout(records: Sequence[Mapping[str, Any]]) -> list[str]:
     lines.append(
         _claim(
             DERIVED_CALCULATION,
-            f"output tokens ran the other way: fan-out spent "
-            f"**{analysis['fanout_output_tokens'] - analysis['staged_output_tokens']:.0f} more** "
-            "output tokens than staged, and at the encoded price for this model output is charged "
-            "at $0/M, so this does not appear in the cost ratio above.",
+            f"output tokens moved separately: fan-out spent "
+            f"{_difference_phrase(analysis['fanout_output_tokens'], analysis['staged_output_tokens'], 'output tokens')} "
+            "staged, and at the encoded price for this model output is charged at $0/M, so this "
+            "does not appear in the cost ratio above.",
         )
     )
     lines.append(
@@ -1087,9 +1192,15 @@ def _fanout(records: Sequence[Mapping[str, Any]]) -> list[str]:
         )
     lines += [
         "",
-        "**Core local finding.** Fan-out used fewer input tokens in these two states despite "
-        "producing unused speculative answers, and more output tokens.",
-        "",
+        _claim(
+            DERIVED_CALCULATION,
+            "**core local finding.** Fan-out carried "
+            f"{_difference_phrase(analysis['fanout_input_tokens'], analysis['staged_input_tokens'], 'input tokens')} "
+            "staged and "
+            f"{_difference_phrase(analysis['fanout_output_tokens'], analysis['staged_output_tokens'], 'output tokens')} "
+            f"staged, while leaving {analysis['fanout_questions_unused']} of "
+            f"{analysis['fanout_questions_asked']} speculative answer(s) unconsumed by the code.",
+        ),
         _claim(
             LIMITATION,
             "two pairs, two states, one session, one branching shape. This is not a general "
@@ -1242,6 +1353,41 @@ def _composite(records: Sequence[Mapping[str, Any]]) -> list[str]:
     return lines + [""]
 
 
+def _classification_sentence(analysis: Mapping[str, Any]) -> str:
+    """The two target classifications, each against the denominator it was actually measured on.
+
+    `FUNCTION_TARGET_REALIZED` is a statement about every case the run attempted, so its
+    denominator is the call count. `ARGUMENT_TARGET_REALIZED` is a statement about the cases that
+    resolved, so its denominator is the resolved count. Both used to print a *matched* count in
+    place of the denominator, which read as a complete result on a log where only some matched:
+    "all 3 case(s)" on a run of four. The conditions mirror the classification the routing module
+    computes, and the label names are its vocabulary, unchanged.
+    """
+    calls = analysis["calls"]
+    resolved = analysis["resolved_count"]
+    if calls and resolved == calls and analysis["matched_count"] == calls:
+        function_part = (
+            f"`FUNCTION_TARGET_REALIZED` — all {calls} case(s) returned the pre-frozen expected "
+            "function."
+        )
+    else:
+        function_part = (
+            f"`FUNCTION_TARGET_NOT_REALIZED` — {analysis['matched_count']} of {calls} case(s) "
+            "returned the pre-frozen expected function."
+        )
+    if resolved and analysis["argument_matched_count"] == resolved:
+        argument_part = (
+            f"`ARGUMENT_TARGET_REALIZED` — all {resolved} resolved case(s) returned the argument "
+            "label frozen with their state."
+        )
+    else:
+        argument_part = (
+            f"`ARGUMENT_TARGET_NOT_REALIZED` — {analysis['argument_matched_count']} of {resolved} "
+            "resolved case(s) returned the argument label frozen with their state."
+        )
+    return f"{function_part} {argument_part}"
+
+
 def _routing(records: Sequence[Mapping[str, Any]]) -> list[str]:
     group = [r for r in records if r.get("experiment") == ROUTING]
     if not group:
@@ -1293,11 +1439,10 @@ def _routing(records: Sequence[Mapping[str, Any]]) -> list[str]:
     )
     lines.append("")
     lines.append(
-        f"**Classifications.** "
-        f"`FUNCTION_TARGET_REALIZED` — all {analysis['matched_count']} case(s) returned the "
-        f"pre-frozen expected function. "
-        f"`ARGUMENT_TARGET_REALIZED` — all {analysis['argument_matched_count']} resolved case(s) "
-        "returned the argument label frozen with their state."
+        _claim(
+            LOCAL_MEASUREMENT,
+            "**classifications.** " + _classification_sentence(analysis),
+        )
     )
     lines.append("")
     for case in analysis["cases"]:
@@ -1371,25 +1516,49 @@ def _routing(records: Sequence[Mapping[str, Any]]) -> list[str]:
             )
         )
     resolved = analysis["resolved_count"]
-    if resolved and analysis["matched_count"] == resolved == analysis["argument_matched_count"]:
-        matched = "produced the intended function and argument in every resolved case"
+    matched_count = analysis["matched_count"]
+    argument_matched = analysis["argument_matched_count"]
+    if resolved and matched_count == resolved == argument_matched:
+        model_did = "produced the intended function and argument in every resolved case"
     else:
-        matched = (
-            f"produced the intended function in {analysis['matched_count']} of {resolved} resolved "
-            f"case(s), and the intended argument in {analysis['argument_matched_count']}"
+        model_did = (
+            f"produced the intended function in {matched_count} of {resolved} resolved case(s) and "
+            f"the intended argument in {argument_matched} of {resolved}"
+        )
+    # Which way the authorization went is read from the markers as well. The sentence used to end
+    # "and the code still refused to act" on any log at all, so a log where a route did reach its
+    # handler would have carried the opposite of what happened.
+    if ACTUAL_HANDLER_EXECUTION_REALIZED in markers:
+        policy_did = (
+            f"the policy let {analysis['executed_count']} resolved route(s) through to its inert "
+            "handler"
+        )
+        execution_note = (
+            "the execution path from an allowed route to the handler **was** reached here, on an "
+            "inert handler under a live answer; that is one route, and this report does not extend "
+            "it to a route it did not see."
+        )
+    else:
+        policy_did = "the policy withheld every resolved route, so no handler ran"
+        execution_note = (
+            "the execution path from an allowed route to the handler is **not** established by a "
+            "live run here, and this report does not claim a full execution chain succeeded."
         )
     lines += [
         "",
-        "**Architectural conclusion.** Semantic routing is not execution authorization. The model "
-        f"{matched}, and the code still refused to act — correctly, under the frozen policy. A "
-        "system that treats a confident route as permission to act has removed the layer that "
-        "produced this result.",
-        "",
         _claim(
-            LIMITATION,
-            "the execution path from an allowed route to the handler is **not** established by a "
-            "live run here, and this report does not claim a full execution chain succeeded.",
+            LOCAL_MEASUREMENT,
+            f"**the model {model_did}** — a function name from a registry frozen before the run and "
+            "an argument from that function's own closed set.",
         ),
+        _claim(
+            DESIGN_ASSUMPTION,
+            "**semantic routing is not execution authorization.** The model's route selected which "
+            "code was eligible to act; whether anything acted was decided afterwards and elsewhere "
+            f"— {policy_did}. A system that treats a confident route as permission to act has "
+            "removed the layer that produced this result.",
+        ),
+        _claim(LIMITATION, execution_note),
     ]
     return lines + [""]
 
@@ -1554,13 +1723,21 @@ def _latency(records: Sequence[Mapping[str, Any]]) -> list[str]:
     )
     lines += [
         "",
-        "The window also contains DNS, TCP and TLS setup, connection-pool state, server-side "
-        "queueing, upstream load, and local scheduling. Which of those moved a given call is not "
-        "knowable from these records, and no decomposition is attempted.",
+        _claim(
+            LIMITATION,
+            "the window also contains DNS, TCP and TLS setup, connection-pool state, server-side "
+            "queueing, upstream load, and local scheduling. Which of those moved a given call is "
+            "not knowable from these records, and no decomposition is attempted.",
+        ),
         "",
-        f"**{LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK}.** No stable speedup table is "
-        "produced, no arm is called faster, and the first-call effect is a hypothesis these fields "
-        "let you check rather than a rule about the model.",
+        f"**{LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK}**",
+        "",
+        _claim(
+            LIMITATION,
+            "no speedup table is produced and no arm is called faster on this evidence. The "
+            "first-call pattern is a hypothesis these fields let a reader check, not a rule about "
+            "the model.",
+        ),
         "",
     ]
     return lines
@@ -1571,7 +1748,12 @@ def _architecture(records: Sequence[Mapping[str, Any]]) -> list[str]:
     return [
         "## 13. Agent-control architecture, distilled",
         "",
-        "The pattern these measurements support, assembled from what was actually observed:",
+        _claim(
+            DESIGN_ASSUMPTION,
+            "**the pattern below is a design this bench followed, not a result it proved.** Each "
+            "stage is a choice made before the run; the experiments behind it are "
+            f"{', '.join(f'`{name}`' for name in measured) or 'none'}.",
+        ),
         "",
         "```text",
         "unstructured state",
@@ -1634,9 +1816,6 @@ def _architecture(records: Sequence[Mapping[str, Any]]) -> list[str]:
             "been taken.",
         ),
         "",
-        f"This is a design this bench followed, not a result it proved. The experiments behind it: "
-        f"{', '.join(f'`{name}`' for name in measured)}.",
-        "",
     ]
 
 
@@ -1698,17 +1877,23 @@ def _not_established(records: Sequence[Mapping[str, Any]]) -> list[str]:
 
 
 def _backlog(backlog: Sequence[Mapping[str, Any]]) -> list[str]:
-    lines = ["## 15. Optional edge-coverage backlog", ""]
+    lines = ["## 15. Optional edge-coverage backlog", "", f"**{OPTIONAL_EDGE_COVERAGE_BACKLOG}**", ""]
     if not backlog:
         return lines + [
-            "Every registered experiment has at least one canonical record, so nothing is "
-            "outstanding.",
+            _claim(
+                LOCAL_MEASUREMENT,
+                f"all {len(EXPERIMENTS)} registered experiment(s) have at least one canonical "
+                "record, so nothing is outstanding.",
+            ),
             "",
         ]
     lines.append(
-        f"**{OPTIONAL_EDGE_COVERAGE_BACKLOG}** — derived as the registered experiments with no "
-        f"canonical record: {len(backlog)} of {len(EXPERIMENTS)}. This list is computed from the "
-        "registry and the log, so it empties itself as records arrive.",
+        _claim(
+            LOCAL_MEASUREMENT,
+            f"{len(backlog)} of {len(EXPERIMENTS)} registered experiment(s) have no canonical "
+            "record. The list is computed from the registry and the log, so it empties itself as "
+            "records arrive.",
+        )
     )
     lines.append("")
     lines += _table(
@@ -1752,15 +1937,20 @@ def _secrets() -> list[str]:
                "'search a few likely places' fallback."),
         _claim(DESIGN_ASSUMPTION, "an absent, empty, malformed, duplicated, or unreadable source "
                "stops the run before a request is sent. Nothing proceeds on a guess."),
-        _claim(LOCAL_MEASUREMENT, "the real function-routing run resolved its credential as "
-               "`exists (source=local-secret-file)`: the persistent local file supplied the key in "
-               "that invocation, with nothing set in the environment."),
+        _claim(LIMITATION, "which of those two sources supplied the key for a given historical "
+               "invocation is **not recorded in the canonical log**, so this report cannot "
+               "reconstruct it. No record carries a credential source, and no other committed "
+               "artifact is canonical for it. The two sources and their order are design facts "
+               "stated above; which one answered a particular call is not a fact these records "
+               "carry, and it is not inferred here."),
         _claim(LIMITATION, "the key is never printed, logged, hashed, fingerprinted, or measured "
                "here — not its value, length, prefix, suffix, or any derived identifier. Status "
                "reports `missing`, `exists (source=…)`, or `unusable (<kind>)` and nothing else."),
-        _claim(LOCAL_MEASUREMENT, "the canonical log carries no credential material: it is scanned "
-               "for authorization headers, the environment variable name, `sk-` prefixes, and "
-               "token-shaped strings, and the test suite fails if any appears."),
+        _claim(LOCAL_MEASUREMENT, "the canonical log carries no credential material: no record "
+               "names a credential source, and none carries an authorization header, an `sk-` "
+               "prefix, or a token-shaped string."),
+        _claim(DESIGN_ASSUMPTION, "that absence is checked rather than assumed: the offline suite "
+               "scans the canonical log for those patterns and fails if one appears."),
         _claim(DESIGN_ASSUMPTION, "`.secrets/` is excluded by `.gitignore`; the check that proves "
                "it is `git check-ignore -v .secrets/typesafe.env` and a `git add --dry-run`, both "
                "of which the test suite runs. This document is not itself a security boundary, and "
@@ -1792,8 +1982,10 @@ def _reproducibility(records: Sequence[Mapping[str, Any]]) -> list[str]:
         _claim(LOCAL_MEASUREMENT, f"this report was derived from {len(records)} record(s). A "
                "revision of it that does not match the log is a stale copy of a derived file, not "
                "a second measurement."),
-        _claim(LIMITATION, "the repository has no commit history yet, so no artifact here is "
-               "pinned to a revision. The log's own hashes are the only fixity the records carry."),
+        _claim(LIMITATION, "nothing in this report is pinned to a revision, and the generator does "
+               "not read the repository's version-control state: it is built from the log alone, so "
+               "it cannot say which revision of the bench produced a record. The log's own hashes "
+               "are the only fixity the records carry."),
         "",
     ]
 

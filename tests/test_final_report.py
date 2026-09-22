@@ -35,7 +35,11 @@ from jev_lab.final_report import (
     CORE_CAPABILITY_EXPLORATION_CLOSED,
     FINAL_REPORT_NAME,
     LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK,
+    LIMITATION,
+    LOCAL_MEASUREMENT,
     OPTIONAL_EDGE_COVERAGE_BACKLOG,
+    _difference_phrase,
+    _saving_phrase,
     build_final_report,
     confidence_gate,
     measured_counts,
@@ -958,3 +962,254 @@ class TestTheRoutingMarkersAreChecked:
         text = build_final_report(rows)
         assert "produced the intended function and argument in every resolved case" not in text
         assert "produced the intended function in 1 of 2 resolved case(s)" in text
+
+
+# --------------------------------------------------------------------------------------
+# The claim-label contract, enforced over the whole document
+# --------------------------------------------------------------------------------------
+#
+# The header promises that every assertion below carries exactly one label. These patterns are what
+# "an assertion" means here: a prose line that is not a claim bullet, not a status marker, and not
+# a structural line. The framing allowlist is deliberately short and deliberately exact -- a new
+# unlabelled paragraph should fail this check rather than quietly join the list, and anything added
+# to it has to be a line that asserts nothing about the log, the bench, or the model.
+
+CLAIM_BULLET = re.compile(
+    r"^- \*\*(" + "|".join(re.escape(kind) for kind in CLAIM_KINDS) + r")\*\* — \S"
+)
+STATUS_MARKER = re.compile(r"^\*\*[A-Z][A-Z0-9_]*\*\*$")
+STRUCTURAL_LINE = re.compile(r"^(#|\||>|```|---$)")
+
+FRAMING_LINES: tuple[re.Pattern[str], ...] = (
+    # The lead-in to the label table. It introduces the taxonomy; it states no result.
+    re.compile(r"^\*\*Claim labels\.\*\* Every assertion below carries exactly one:$"),
+    # Provenance: which log this was built from, and how many records it had.
+    re.compile(r"^Generated from \d+ canonical record\(s\), \S+ to \S+\.$"),
+    re.compile(r"^Derived from `results/usage\.jsonl`, which remains the canonical record\.$"),
+    # The footer's marker list. The markers are the project's status vocabulary, and each one is
+    # explained by a labelled claim in the chapter that raises it.
+    re.compile(r"^`[A-Z][A-Z0-9_]*`(?: · `[A-Z][A-Z0-9_]*`)+$"),
+)
+
+
+def unlabelled_prose(text: str) -> list[str]:
+    """Prose lines in a generated report that assert something without carrying a claim label."""
+    found: list[str] = []
+    in_fence = False
+    for number, line in enumerate(text.splitlines(), 1):
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence or not stripped:
+            continue
+        if STRUCTURAL_LINE.match(stripped) or CLAIM_BULLET.match(stripped):
+            continue
+        if STATUS_MARKER.match(stripped) or any(p.match(stripped) for p in FRAMING_LINES):
+            continue
+        found.append(f"line {number}: {stripped}")
+    return found
+
+
+class TestTheClaimLabelContractHolds:
+    """The header says every assertion carries exactly one label; this is where that is checked.
+
+    A synthesis paragraph that is not a claim bullet is exactly how the unlabelled findings of the
+    previous round were written -- `**Core local finding.**` and `**Architectural conclusion.**`
+    each asserted a direction the generator had not computed, on a line that carried no label. The
+    contract is therefore asserted over the generated document rather than chapter by chapter.
+    """
+
+    def assert_contract(self, text: str) -> None:
+        assert unlabelled_prose(text) == []
+
+    def test_the_check_catches_an_unlabelled_finding(self):
+        # A guard on the guard: an allowlist that swallowed everything would pass every other test
+        # here while enforcing nothing.
+        assert unlabelled_prose("**Core local finding.** Batching reduced input usage.")
+        assert unlabelled_prose(f"- **{LOCAL_MEASUREMENT}** — batching reduced input usage.") == []
+        assert unlabelled_prose("**CORE_CAPABILITY_EXPLORATION_CLOSED**") == []
+
+    def test_the_canonical_report_carries_no_unlabelled_prose(self):
+        if not canonical_path().exists():
+            pytest.skip("no local log on this machine; results/usage.jsonl is not versioned")
+        self.assert_contract(build_final_report(list(read_records(canonical_path()))))
+
+    def test_a_run_where_a_handler_executed_carries_no_unlabelled_prose(self):
+        self.assert_contract(build_final_report(routing_records(suppress_everything=False)))
+
+    def test_a_log_with_no_backlog_left_carries_no_unlabelled_prose(self):
+        # The empty-backlog branch has prose of its own, and it is a claim like any other.
+        self.assert_contract(
+            build_final_report([record(name, "one_case") for name in experiment_names()])
+        )
+
+    def test_a_single_record_report_carries_no_unlabelled_prose(self):
+        self.assert_contract(build_final_report([record("01_primitives", "a")]))
+
+    def test_the_unlabelled_findings_are_gone(self):
+        text = build_final_report(routing_records(suppress_everything=True))
+        for phrase in ("**Core local finding.**", "**Architectural conclusion.**"):
+            assert phrase not in text
+
+
+class TestTheCredentialSourceIsNotReconstructed:
+    """No record carries a credential source, so the report cannot say which one answered."""
+
+    def report(self):
+        return build_final_report([record("01_primitives", "a")])
+
+    def test_the_source_is_stated_as_a_limitation(self):
+        line = line_with(self.report(), "supplied the key for a given historical invocation")
+        assert line.startswith(f"- **{LIMITATION}** —")
+
+    def test_no_line_claims_which_source_answered_a_run(self):
+        text = self.report()
+        assert "resolved its credential as" not in text
+        assert "source=local-secret-file" not in text
+        assert "supplied the key in that invocation" not in text
+
+    def test_the_design_facts_are_kept(self):
+        # Removing an unsupported measurement must not remove the architecture around it.
+        text = self.report()
+        assert "the credential has exactly two sources" in text
+        assert "stops the run before a request is sent" in text
+        assert "TYPESAFE_API_KEY (environment)" in text
+        assert ".secrets/typesafe.env" in text
+
+    def test_no_artifact_is_pinned_to_a_revision_it_never_read(self):
+        # The line here used to assert that the repository had no commit history, which the
+        # generator cannot know and which stopped being true.
+        text = self.report()
+        assert "no commit history" not in text
+        line = line_with(text, "nothing in this report is pinned to a revision")
+        assert line.startswith(f"- **{LIMITATION}** —")
+
+
+class TestTheRoutingDenominatorsAreCorrect:
+    """The classification line printed a matched count where a denominator belonged."""
+
+    def partial_function(self):
+        rows = routing_records(suppress_everything=True)
+        # Move one case's frozen expectation off the label the record actually answered, so the
+        # case still resolves but no longer matches. The answer itself is left alone.
+        rows[0]["notes"]["expected_function"] = "compare_runs"
+        return rows
+
+    def partial_argument(self):
+        rows = routing_records(suppress_everything=True)
+        rows[0]["notes"]["expected_argument"] = "seed"
+        return rows
+
+    def classifications(self, rows):
+        return line_with(build_final_report(rows), "**classifications.**")
+
+    def test_a_partial_function_match_names_both_counts(self):
+        text = self.classifications(self.partial_function())
+        assert "`FUNCTION_TARGET_NOT_REALIZED` — 1 of 2 case(s)" in text
+        assert "`FUNCTION_TARGET_REALIZED`" not in text
+        # The numerator was standing in for the denominator: "all 1 case(s)" on a run of two.
+        assert "all 1 case(s)" not in text
+
+    def test_a_partial_argument_match_names_both_counts(self):
+        text = self.classifications(self.partial_argument())
+        assert "`ARGUMENT_TARGET_NOT_REALIZED` — 1 of 2 resolved case(s)" in text
+        assert "all 1 resolved case(s)" not in text
+
+    def test_three_matched_of_four_resolved(self):
+        # The denominator defect in miniature: four calls, one route that never resolved, and all
+        # three that did resolve matching. The old line printed the numerator where the denominator
+        # belonged, so a partial run read as a whole one.
+        rows = [routing_record(row[0], confidence=0.9, review=0.9) for row in ROUTING_EXPECTED]
+        rows[0]["answers"][ROUTING_FUNCTION_QUESTION]["choice"] = "inspect_residual"
+        text = self.classifications(rows)
+        assert "`FUNCTION_TARGET_NOT_REALIZED` — 3 of 4 case(s)" in text
+        assert "`ARGUMENT_TARGET_REALIZED` — all 3 resolved case(s)" in text
+        assert "all 3 case(s)" not in text
+        assert "all 4 resolved case(s)" not in text
+
+    def test_a_full_match_still_reads_as_realized(self):
+        text = self.classifications(routing_records(suppress_everything=True))
+        assert (
+            "`FUNCTION_TARGET_REALIZED` — all 2 case(s) returned the pre-frozen expected function."
+            in text
+        )
+        assert "`ARGUMENT_TARGET_REALIZED` — all 2 resolved case(s)" in text
+
+    def test_the_line_follows_the_records_and_not_the_other_way_round(self):
+        full = self.classifications(routing_records(suppress_everything=True))
+        partial = self.classifications(self.partial_function())
+        assert full != partial
+
+
+class TestTheComparisonWordingFollowsTheNumbers:
+    """Two helpers choose their direction word from the sign rather than from the sentence."""
+
+    def test_the_difference_phrase_takes_its_direction_from_the_sign(self):
+        assert "2664 fewer" in _difference_phrase(816, 3480, "input tokens")
+        assert "2664 more" in _difference_phrase(3480, 816, "input tokens")
+        assert "the same number of" in _difference_phrase(100, 100, "input tokens")
+
+    def test_the_saving_phrase_does_not_call_an_increase_a_saving(self):
+        assert "a saving of **76.55%**" in _saving_phrase(3480, 816, "separate arm's input")
+        increased = _saving_phrase(816, 3480, "separate arm's input")
+        assert "a saving" not in increased
+        assert "an increase of" in increased
+        assert "no change against" in _saving_phrase(500, 500, "separate arm's input")
+
+    def batching(self, *, batched_input, separate_input):
+        return [
+            record(PARALLEL, "batched", input_tokens=batched_input, output_tokens=20,
+                   notes={"arm": "batched", "cycle": 1},
+                   answers={"q": {"type": "noul", "noul": 0.5}}),
+            record(PARALLEL, "separate", input_tokens=separate_input, output_tokens=20,
+                   notes={"arm": "separate", "cycle": 1},
+                   answers={"q": {"type": "noul", "noul": 0.5}}),
+        ]
+
+    def finding(self, rows):
+        return line_with(build_final_report(rows), "core local finding")
+
+    def test_the_batching_finding_is_a_labelled_claim(self):
+        assert CLAIM_BULLET.match(self.finding(self.batching(batched_input=100, separate_input=250)))
+
+    def test_the_batching_finding_follows_the_arms(self):
+        # The sentence named one direction on any log at all: "batching substantially reduced
+        # repeated-state input usage". It is now read off the two arms.
+        fewer = self.finding(self.batching(batched_input=100, separate_input=250))
+        assert "150 fewer" in fewer
+        more = self.finding(self.batching(batched_input=250, separate_input=100))
+        assert "150 more" in more
+        assert "fewer" not in more
+
+    def fanout(self, *, fanout_input, staged_input, fanout_output=10, staged_output=10):
+        return [
+            record(FANOUT, "A_fanout", input_tokens=fanout_input, output_tokens=fanout_output,
+                   notes={"pair": "A", "strategy": "fanout"},
+                   answers={"q": {"type": "noul", "noul": 0.5}}),
+            record(FANOUT, "A_staged", input_tokens=staged_input, output_tokens=staged_output,
+                   notes={"pair": "A", "strategy": "staged", "stage": 1},
+                   answers={"q": {"type": "noul", "noul": 0.5}}),
+        ]
+
+    def test_the_fanout_finding_follows_the_arms(self):
+        fewer = self.finding(self.fanout(fanout_input=100, staged_input=250))
+        assert "150 fewer" in fewer
+        more = self.finding(self.fanout(fanout_input=250, staged_input=100))
+        assert "150 more" in more
+        assert "fewer" not in more
+
+    def test_the_fanout_output_line_follows_the_arms(self):
+        # "output tokens ran the other way" was fixed prose, and the number beside it could have
+        # come out negative on a log where fan-out spent less.
+        text = build_final_report(
+            self.fanout(fanout_input=100, staged_input=250, fanout_output=5, staged_output=40)
+        )
+        line = line_with(text, "output tokens moved separately")
+        assert "35 fewer" in line
+
+    def test_the_fanout_input_saving_is_not_called_a_saving_when_it_is_an_increase(self):
+        text = build_final_report(self.fanout(fanout_input=250, staged_input=100))
+        line = line_with(text, "pooled input ratio")
+        assert "a saving" not in line
+        assert "an increase of" in line
