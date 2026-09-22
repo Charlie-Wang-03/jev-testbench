@@ -385,3 +385,24 @@ material to how "hallucination" should be scoped in any downstream writeup.
   ("Many of these will be fixed in later versions"; aliases move).
 - The `Accessed` column is the audit's own timestamp. Any claim below is only asserted **as of that
   retrieval**, not as a permanent property of TypeSafe's product.
+
+---
+
+## Re-verification log
+
+### R-1 — P2 re-fetch, 2026-09-22
+
+Before any P2 classification resting on a Tier-1 page, **every Tier-1 body in the table above was
+re-fetched and re-hashed**: 27 page bodies plus `llms.txt` (28 bodies total). All 28 SHA-256 values
+matched the ones recorded at P1, so **no official Tier-1 page is assumed to have drifted between P1
+and P2**. No Tier-2 or Tier-3 source was re-fetched during P2.
+
+This matters for how a P2 verdict may be read: a P2 judgment that a candidate is
+`N0_OFFICIALLY_DOCUMENTED` is made against the *same text* P1 audited, not against a page that may
+have been edited since. It does not extend the sources' validity beyond 2026-09-22, and it says
+nothing about pages that were never retrievable (the home-page and launch-post FAQ bodies) or about
+page content that changes without changing the retrieved body.
+
+Retrieval method: direct HTTPS `GET` of the public `*.md` page paths and `llms.txt`. **No TypeSafe
+inference endpoint was called, and no API key was read, during the P2 re-fetch or at any point in
+P2.**
