@@ -499,9 +499,10 @@ expected label changed.** `results/usage.jsonl` was read only.
 | Item | Value |
 | --- | --- |
 | Branch | `audit/p1-official-local-evidence` |
-| HEAD | `77357d96be081f2b521d753e3f0b1ce7708b5566` (branched from the promoted `main`) |
-| `main` | `77357d96be081f2b521d753e3f0b1ce7708b5566` — promoted, pushed |
-| Working tree | two new untracked files under `docs/`, nothing modified |
+| Branch point / `main` at P1 start | `77357d96be081f2b521d753e3f0b1ce7708b5566` (the `main` promoted at P0 close) |
+| P1 audit commit / branch HEAD | `ec04cb6f7ff3a03f25ca5feea89ad4c64322caa4` |
+| `main` | `77357d96be081f2b521d753e3f0b1ce7708b5566` — promoted and pushed at P0 close; **not moved by P1** |
+| Working tree | two new files under `docs/` (`docs/audits/**`, `docs/sources/**`), committed in the P1 audit commit above |
 | `main` merged into this branch? | No |
 
 Committed to `audit/p1-official-local-evidence` with the message
