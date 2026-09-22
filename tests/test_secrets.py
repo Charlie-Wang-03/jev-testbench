@@ -13,6 +13,7 @@ import subprocess
 import httpx2
 import pytest
 
+from jev_lab import __main__ as cli
 from jev_lab import client as client_module
 from jev_lab.client import (
     EXISTS,
@@ -20,6 +21,8 @@ from jev_lab.client import (
     SOURCE_ENVIRONMENT,
     SOURCE_LOCAL_SECRET_FILE,
     UNUSABLE,
+    MissingApiKeyError,
+    SecretFileError,
     TransportProbe,
     api_key,
     api_key_status,
@@ -29,12 +32,9 @@ from jev_lab.client import (
     require_api_key,
     scrub_secrets,
     secret_file_path,
-    SecretFileError,
-    MissingApiKeyError,
 )
 from jev_lab.experiments import get_experiment, run_experiment
 from jev_lab.recorder import UsageRecorder
-from jev_lab import __main__ as cli
 
 # Dummy credentials. Nothing here is, or resembles, a live key. The distinctive tails matter: a
 # test below asserts that no slice of a key appears in a status string, and a value ending in a

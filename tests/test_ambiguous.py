@@ -105,8 +105,8 @@ def captured_bodies(experiment_name):
         return httpx2.Response(200, json=REPLY, headers={"x-typesafe-request-id": "req-x"})
 
     client = TypeSafeClient(api_key=DUMMY_KEY, transport=httpx2.MockTransport(handler))
-    import tempfile
     import pathlib
+    import tempfile
 
     with tempfile.TemporaryDirectory() as directory:
         with client:

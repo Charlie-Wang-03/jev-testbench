@@ -273,7 +273,6 @@ class TestTheBranchIsChosenInPython:
     def test_a_fanout_case_schedules_nothing(self):
         from jev_lab.experiments import _05_follow_up
 
-        response = get_experiment(FANOUT)
         case = case_named("pairA_fanout")
         assert _05_follow_up(case, _response(ESCALATE)) == []
 

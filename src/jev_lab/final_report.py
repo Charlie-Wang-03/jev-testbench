@@ -30,7 +30,6 @@ from .composite import (
     COMPOSITE_SCALE_LEVELS,
     COMPOSITE_WEIGHTS,
     analyze_composite,
-    case_composite,
     confidence_diagnostics,
     contribution_shares,
 )
@@ -52,7 +51,7 @@ from .pricing import price_for
 from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
 from .repeatability import EXACT_TOP_PROBABILITY_TIE_OBSERVED, REPEATABILITY
 from .repeatability import analyze as analyze_repeatability
-from .report import TOTAL_LABEL, _plain_decimal, build_summary
+from .report import TOTAL_LABEL, build_summary, plain_decimal
 from .routing import (
     ACTUAL_HANDLER_EXECUTION_REALIZED,
     ACTUAL_HANDLER_EXECUTION_UNTESTED,
@@ -120,7 +119,7 @@ def _usd(value: float | None) -> str:
     """A cost, in plain decimal. Sub-cent values must not render as ``$0``."""
     if value is None:
         return "n/a"
-    return "$" + _plain_decimal(value, 6)
+    return "$" + plain_decimal(value, 6)
 
 
 def _ratio(part: float, whole: float) -> str:

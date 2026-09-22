@@ -376,7 +376,6 @@ def _pooled_markers(
 
 def _design_lines(records: Sequence[Mapping[str, Any]], analysis: Mapping[str, Any]) -> list[str]:
     """What was sent, described from the records rather than from the design's intent."""
-    pairs = analysis["pairs"]
     fanout_records = [r for r in records if _note(r, "strategy") == FANOUT_ARM]
     staged_records = [r for r in records if _note(r, "strategy") == STAGED_ARM]
     asked = sorted({len(_question_names(record)) for record in fanout_records})
@@ -530,7 +529,7 @@ def _output_lines(
         "",
         f"- fanout **{fanout:.0f}**, staged **{staged:.0f}** — a difference of "
         f"**{difference:+.0f}** tokens, `fanout/staged` = **{_ratio(fanout, staged)}x**.",
-        f"- On these records the fanout arm spent "
+        "- On these records the fanout arm spent "
         + (
             "**materially more output tokens** than the staged arm did: it answered every question "
             "it carried, including the ones Python never read, and answers are what output tokens "

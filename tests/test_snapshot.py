@@ -53,9 +53,16 @@ def record(experiment, case_id, *, input_tokens=100, output_tokens=10, answers=N
     }
 
 
-CHOICE = lambda label, confidence: {"type": "choice", "choice": label, "confidence": confidence}
-NOUL = lambda value: {"type": "noul", "noul": value}
-SCORE = lambda value, confidence: {"type": "score", "score": value, "confidence": confidence}
+def CHOICE(label, confidence):
+    return {"type": "choice", "choice": label, "confidence": confidence}
+
+
+def NOUL(value):
+    return {"type": "noul", "noul": value}
+
+
+def SCORE(value, confidence):
+    return {"type": "score", "score": value, "confidence": confidence}
 
 
 def line_with(text, needle):

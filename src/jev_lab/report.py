@@ -11,8 +11,8 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
-from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
 from .pricing import UNKNOWN_COST_BASIS
+from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
 
 SUMMARY_CSV_NAME = "summary.csv"
 SUMMARY_MD_NAME = "summary.md"
@@ -43,11 +43,15 @@ CSV_SIGNIFICANT_DIGITS = 12
 HUMAN_SIGNIFICANT_DIGITS = 4
 
 
-def _plain_decimal(value: float, significant: int) -> str:
+def plain_decimal(value: float, significant: int) -> str:
     """Render a float as plain decimal text, never in exponent form, trimmed of float noise.
 
     ``repr``-level tails are dropped: a computed ``2.1504e-05`` prints as ``0.0000215``, not
     ``0.000021504000000000003``. The raw value stays exact in ``usage.jsonl``; this is a view.
+
+    Public rather than private because ``snapshot`` and ``final_report`` render the same cost
+    column from their own modules; a shared formatter is what keeps one cost reading identical
+    across all three views.
     """
     text = f"{value:.{significant}g}"
     if "e" in text or "E" in text:
@@ -66,7 +70,7 @@ def _format_cell(value: Any) -> str:
     if value is None:
         return "n/a"
     if isinstance(value, float):
-        return _plain_decimal(value, CSV_SIGNIFICANT_DIGITS) if value else "0"
+        return plain_decimal(value, CSV_SIGNIFICANT_DIGITS) if value else "0"
     return str(value)
 
 
@@ -78,7 +82,7 @@ def _format_human(value: Any, *, column: str) -> str:
         if value == 0:
             return "0"
         if column == COST_COLUMN:
-            return f"${_plain_decimal(value, HUMAN_SIGNIFICANT_DIGITS)}"
+            return f"${plain_decimal(value, HUMAN_SIGNIFICANT_DIGITS)}"
         return f"{value:.4f}" if abs(value) < 1 else f"{value:.1f}"
     return str(value)
 

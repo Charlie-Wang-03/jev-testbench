@@ -47,8 +47,8 @@ from jev_lab.composite import (
     normalize,
     probability_diagnostics,
     risk_align,
-    weights_sum,
     weighted_contribution,
+    weights_sum,
 )
 from jev_lab.experiments import (
     COMPOSITE_STATES,

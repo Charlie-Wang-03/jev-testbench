@@ -28,7 +28,7 @@ from __future__ import annotations
 import argparse
 import statistics
 import sys
-from collections.abc import Iterator, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -734,7 +734,7 @@ def render_report(analysis: P3Analysis, *, records: Sequence[Mapping[str, Any]] 
         "# P3 — Boundary locus: instructions vs criteria",
         "",
         f"**Preregistration**: `{PREREGISTRATION_ID}`",
-        f"**Payload**: the `07_instruction_precision` state, byte-identical",
+        "**Payload**: the `07_instruction_precision` state, byte-identical",
         f"**Model requested**: `{P3_MODEL}`",
         f"**Primary verdict**: `{analysis.verdict}`",
         "",

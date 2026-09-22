@@ -264,10 +264,24 @@ def _cmd_final_report(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """Build the argument parser."""
+    """Build the argument parser.
+
+    The help text names which commands reach the network. `run` and `run-all` spend real money
+    against a real account, and someone who only skims `--help` should still come away knowing
+    that. Labels are ASCII: help goes to stdout, whose encoding on Windows is the locale's, not
+    UTF-8.
+    """
     parser = argparse.ArgumentParser(
         prog="jev_lab",
-        description="A minimal, auditable bench for measuring TypeSafe Jev locally.",
+        description=(
+            "A minimal, auditable bench for measuring TypeSafe Jev locally. Four commands are "
+            "offline: they read the committed log and open no socket. Two are live: they send "
+            "real API calls and spend real money."
+        ),
+        epilog=(
+            "Offline: list, report, snapshot, final-report.  "
+            "Live, and needs TYPESAFE_API_KEY: run, run-all."
+        ),
     )
     parser.add_argument(
         "--results-dir",
@@ -277,18 +291,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    subparsers.add_parser("list", help="List registered experiments and the credential status.")
-    subparsers.add_parser("report", help="Regenerate summary.csv and summary.md from the JSONL log.")
+    subparsers.add_parser(
+        "list",
+        help="OFFLINE. List registered experiments, their tiers, call ceilings, credential status.",
+    )
+    subparsers.add_parser(
+        "report", help="OFFLINE. Regenerate summary.csv and summary.md from the JSONL log."
+    )
     subparsers.add_parser(
         "snapshot",
-        help="Regenerate the derived capability_snapshot.md from the JSONL log (no API calls).",
+        help="OFFLINE. Regenerate the derived capability_snapshot.md from the JSONL log.",
     )
     subparsers.add_parser(
         "final-report",
-        help="Regenerate the derived JEV_LOCAL_EVALUATION_FINAL.md from the JSONL log (no API calls).",
+        help="OFFLINE. Regenerate the derived JEV_LOCAL_EVALUATION_FINAL.md from the JSONL log.",
     )
 
-    run = subparsers.add_parser("run", help="Run one experiment.")
+    run = subparsers.add_parser(
+        "run", help="LIVE. Run one experiment. Sends real API calls and spends real money."
+    )
     run.add_argument("experiment", help="Experiment name, as shown by `list`.")
     run.add_argument("--model", default=None, help="Model override; default is the SDK's jev-latest.")
     run.add_argument(
@@ -300,7 +321,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_all = subparsers.add_parser(
         "run-all",
-        help="Run every experiment in a tier. Requires an explicit budget; meant for deliberate runs.",
+        help=(
+            "LIVE. Run every experiment in a tier. Spends real money, and refuses to start "
+            "without an explicit budget that covers the tier."
+        ),
     )
     run_all.add_argument("--tier", required=True, choices=[lab.CORE, lab.EXTENDED])
     run_all.add_argument("--model", default=None, help="Model override; default is the SDK's jev-latest.")

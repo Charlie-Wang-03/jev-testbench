@@ -1,15 +1,48 @@
 [project]
 name = "jev-test"
 version = "0.1.0"
-description = "A reproducible local benchmark for evaluating TypeSafe Jev capabilities, stability, usage, and agent-control patterns."
+# The word "benchmark" is avoided on purpose: this repository has no ground truth, so it does not
+# produce an accuracy score, which is what the word promises. What it produces is a log and a set
+# of labelled claims about that log.
+description = "An auditable measurement bench for TypeSafe Jev: one append-only log record per real API call, and every claim labelled by kind."
 readme = "README.md"
 authors = [
     { name = "Yichuan Wang", email = "133667618+Charlie-Wang-03@users.noreply.github.com" }
 ]
 requires-python = ">=3.13"
+keywords = [
+    "typesafe",
+    "jev",
+    "llm",
+    "probabilistic-decision",
+    "evaluation",
+    "reproducibility",
+    "provenance",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+# No `license` or `license-files` field, deliberately. Choosing a license is a human decision and
+# none has been recorded yet: see docs/OPEN_SOURCE_LICENSE_DECISION.md. Declaring terms here
+# before that decision would publish a claim nobody has agreed to.
+#
+# No `py.typed` marker either, and therefore no `Typing :: Typed` classifier. The supported
+# interface is the CLI and the evidence files it writes, not `import jev_lab`; advertising the
+# modules as a typed library would promise a stability this package does not offer.
 dependencies = [
     "typesafe-sdk>=0.7.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Charlie-Wang-03/jev-test"
+Repository = "https://github.com/Charlie-Wang-03/jev-test"
+Issues = "https://github.com/Charlie-Wang-03/jev-test/issues"
+Documentation = "https://github.com/Charlie-Wang-03/jev-test/blob/main/docs/README.md"
 
 [build-system]
 requires = ["uv_build>=0.12.6,<0.13.0"]
@@ -23,7 +56,28 @@ module-name = "jev_lab"
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
+    # The same linter CI runs, installed here so `uv run ruff check .` is what a contributor and
+    # the workflow both execute. Exact versions come from uv.lock.
+    "ruff>=0.16.8",
 ]
+
+[tool.ruff]
+# `ruff format` is deliberately not adopted. Much of this codebase's prose is built by implicit
+# string concatenation across lines, and running the formatter once rewrote that idiom wholesale:
+# 3,249 insertions and 1,016 deletions across 29 of 39 files, at line-length 100 and 110 and 120
+# alike, so the churn is structural rather than a width setting. That diff would land across the
+# measurement modules with no behavioural change to show for it. A narrow check set is enforced
+# instead.
+target-version = "py313"
+
+[tool.ruff.lint]
+# E4/E7/E9 (import and statement-level errors), F (pyflakes), I (import order).
+#
+# Not the default rule set: `ISC004` alone fires 163 times here, and every one of those is this
+# codebase's deliberate multi-line string building. Enabling it would mean either 163 `# noqa`
+# comments or rewriting prose that carries the argument. A gate that forces a choice between noise
+# and suppression is not a gate.
+select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.pytest.ini_options]
 # Only `tests/` is collected. Scoping it here is what keeps a stray scratch script at the repo

@@ -3,8 +3,8 @@
 import inspect
 import json
 
-import pytest
 import httpx2
+import pytest
 from typesafe_sdk import (
     ChoiceAnswer,
     NoulAnswer,
@@ -19,8 +19,8 @@ from jev_lab.experiments import (
     ATOMIC_QUESTIONS,
     BATCH_ARM,
     CORE,
-    EXTENDED,
     EXPERIMENTS,
+    EXTENDED,
     MAX_REPEATS,
     PARALLEL_CYCLES,
     SEPARATE_ARM,
@@ -38,7 +38,7 @@ from jev_lab.experiments import (
     top_label,
     total_cases,
 )
-from jev_lab.recorder import read_records, UsageRecorder
+from jev_lab.recorder import UsageRecorder, read_records
 from jev_lab.routing import HANDLERS
 
 VALID_TYPES = {"choice", "score", "noul"}

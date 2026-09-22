@@ -43,7 +43,6 @@ from jev_lab.routing import (
     ACTUAL_HANDLER_EXECUTION_REALIZED,
     ACTUAL_HANDLER_EXECUTION_UNTESTED,
     FAIL_CLOSED_SUPPRESSION_REALIZED,
-    FUNCTION_EXECUTION_SUPPRESSED,
     FUNCTION_ROUTE_UNAVAILABLE,
     HANDLERS,
     OUTCOME_EXECUTED,
@@ -371,7 +370,6 @@ class TestTheFrozenRegistry:
 
     def test_argument_matching_is_exact(self):
         # No case folding, no prefix, no nearest neighbour: a label is in the set or the case stops.
-        allowed = ROUTING_ARGUMENTS["inspect_residuals"]
         assert argument_allowed("inspect_residuals", "global")
         for near in ("Global", "global ", " glob", "globals", "global_region", ""):
             assert not argument_allowed("inspect_residuals", near), near

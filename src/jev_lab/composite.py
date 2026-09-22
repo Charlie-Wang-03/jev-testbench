@@ -506,8 +506,8 @@ def _dimension_table(case: Mapping[str, Any]) -> list[str]:
         lines += [
             f"**composite_risk = {contributions} = {_value(case['composite_risk'])}**",
             "",
-            f"The stored aggregate is the sum of the stored contributions in this order, so it "
-            f"agrees with them exactly and not merely to the displayed precision.",
+            "The stored aggregate is the sum of the stored contributions in this order, so it "
+            "agrees with them exactly and not merely to the displayed precision.",
             "",
         ]
     else:

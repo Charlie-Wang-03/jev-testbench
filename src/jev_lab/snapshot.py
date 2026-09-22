@@ -16,6 +16,7 @@ from typing import Any
 from .ambiguous import AMBIGUOUS, REFERENCE, build_ambiguous_block
 from .composite import COMPOSITE, build_composite_block
 from .fanout import FANOUT, build_fanout_block
+
 # The gate check is imported rather than restated. `final_report` recomputes a stored gate decision
 # from the confidence and threshold stored beside it and refuses a record where the two disagree;
 # a second copy of that rule here would be a second thing to drift from the first. The dependency
@@ -23,7 +24,7 @@ from .fanout import FANOUT, build_fanout_block
 from .final_report import confidence_gate
 from .recorder import DEFAULT_RESULTS_DIR, read_records, summarize
 from .repeatability import REPEATABILITY, build_repeatability_block
-from .report import _plain_decimal
+from .report import plain_decimal
 from .routing import ROUTING, build_routing_block
 
 SNAPSHOT_NAME = "capability_snapshot.md"
@@ -49,7 +50,7 @@ PERCENT_DECIMALS = 2
 
 def _usd(value: float | None) -> str:
     """A dollar amount, never rendered as ``0`` when it is merely small."""
-    return "n/a" if value is None else f"${_plain_decimal(value, COST_SIGNIFICANT_DIGITS)}"
+    return "n/a" if value is None else f"${plain_decimal(value, COST_SIGNIFICANT_DIGITS)}"
 
 
 def _ms(value: Any) -> str:
@@ -618,7 +619,7 @@ def _other_experiments_block(grouped: Mapping[str, list[Mapping[str, Any]]]) -> 
 def build_snapshot(records: list[Mapping[str, Any]]) -> str:
     """Render the snapshot Markdown for a list of canonical records."""
     if not records:
-        return f"# Capability snapshot\n\nNo records in the log yet.\n"
+        return "# Capability snapshot\n\nNo records in the log yet.\n"
 
     grouped = _grouped(records)
     summary = summarize(list(records))

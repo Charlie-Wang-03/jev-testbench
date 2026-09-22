@@ -29,13 +29,8 @@ from typesafe_sdk import (
 
 from .client import ATTEMPT_COUNT_SOURCE, TransportProbe
 from .composite import (
-    COMPOSITE_ADVERSE,
-    COMPOSITE_BENEFICIAL,
     COMPOSITE_DIMENSIONS,
     COMPOSITE_EXPECTED_ORDER,
-    COMPOSITE_SCALE_LEVELS,
-    COMPOSITE_TOP_LEVEL,
-    COMPOSITE_WEIGHTS,
     composite_digest,
 )
 from .recorder import CallRecord, UsageRecorder
