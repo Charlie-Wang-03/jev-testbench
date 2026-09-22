@@ -48,3 +48,13 @@ wheels/
 results/*
 !results/usage.jsonl
 !results/JEV_LOCAL_EVALUATION_FINAL.md
+
+# P3 keeps a second canonical log, for the same reason the first one is tracked: a measurement is
+# only citable if the records are in the repository. It lives in its own directory rather than in the
+# root log because the 42 records there are frozen historical evidence, and appending to them would
+# invalidate a published SHA-256. The directory is re-included first, then everything inside it is
+# ignored again, then the log alone is tracked -- a negation cannot resurrect a file whose parent
+# directory is ignored, so the three lines have to come in this order.
+!results/p3_boundary_locus/
+results/p3_boundary_locus/*
+!results/p3_boundary_locus/usage.jsonl
