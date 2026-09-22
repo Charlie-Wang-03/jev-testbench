@@ -138,9 +138,9 @@ flowchart TD
 | `pricing` | The only price table in the repository, keyed by the **resolved** model. |
 | `recorder` | `UsageRecorder` — one append-only JSONL line per real API call. |
 | `report` | Per-experiment summaries (`summary.csv`, `summary.md`). |
-| `experiments` | The fifteen-experiment registry; cases, tiers, budgets, `run_experiment`. |
+| `experiments` | The ten-experiment registry; cases, tiers, budgets, `run_experiment`. Every entry has canonical records — see [the experiment registry](../experiments/EXPERIMENT_REGISTRY.md). |
 | `composite`, `routing`, `fanout`, `ambiguous` | Four behaviour-specific experiments, each with its own section builder. |
-| `p3_boundary_locus` | The P3 replication. **Not** in `EXPERIMENTS` — adding a sixteenth member would change the meaning of the frozen final report. |
+| `p3_boundary_locus` | The P3 replication. **Not** in `EXPERIMENTS` — adding a member would change the meaning of the frozen final report. |
 | `repeatability` | Run-to-run statistics for the repeated-payload experiments. |
 | `final_report`, `snapshot` | Derived views over the canonical log. |
 | `__main__` | Argument parsing and the six subcommands. |

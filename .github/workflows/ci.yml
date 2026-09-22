@@ -11,7 +11,13 @@ name: ci
 
 on:
   push:
-    branches: [main]
+    # `main` is the promoted branch. `release/**` is here so a release branch is verified at its own
+    # exact SHA before it is fast-forwarded onto `main`, rather than only after promotion. A
+    # `pull_request` trigger would not serve that purpose: it checks out the synthetic merge commit,
+    # so it would verify a tree that is never published. `workflow_dispatch` is unavailable until
+    # this file first reaches the default branch, which is why the push trigger is the one that has
+    # to work on the first run.
+    branches: [main, "release/**"]
   pull_request:
   workflow_dispatch:
 

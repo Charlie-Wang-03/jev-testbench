@@ -1,11 +1,13 @@
 # Contributing
 
-## Before anything else: there is no license yet
+## Before anything else: the license
 
-This repository has **no license**. Choosing one is a human decision that has not been made —
-see [docs/OPEN_SOURCE_LICENSE_DECISION.md](docs/OPEN_SOURCE_LICENSE_DECISION.md). Until it is,
-outside contributions cannot be merged under clear terms, so please open an issue rather than a
-pull request. This section will be replaced when the decision lands.
+This repository is **MIT** licensed — see [`LICENSE`](LICENSE). By contributing you agree that your
+contribution is licensed under the same terms, which is what the [license
+decision](docs/OPEN_SOURCE_LICENSE_DECISION.md) records.
+
+MIT imposes no contributor agreement and no copyright assignment. If your contribution is something
+you cannot license that way, say so in the issue before writing the patch.
 
 ## What this repository is
 

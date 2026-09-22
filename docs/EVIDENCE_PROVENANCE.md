@@ -156,13 +156,69 @@ Appending P3's twelve records to the core log would have changed a published SHA
 invalidated a freeze. A second file costs a little navigation and protects both artifacts. The
 existence of two logs is the correct outcome here, not a wart.
 
-P3 also keeps its analyzer **out of** the fifteen-experiment registry: that registry feeds the
-frozen final report and the backlog, and adding a sixteenth member would change the meaning of
-both.
+P3 also keeps its analyzer **out of** the experiment registry: that registry feeds the frozen final
+report and the backlog, and adding a member would change the meaning of both. The registry held
+fifteen designs when P3 was written; it holds **ten** at this revision, after the P3.6 retirement
+described in section 8. P3's exclusion is unaffected by that — it was never one of the fifteen.
 
 ---
 
-## 7. Verifying any of this
+## 7. The identifiers the records carry — `OWNER_DECISION_PUBLIC_OK`
+
+Each record carries three opaque identifiers alongside its measurement: `request_id` per call,
+`run_id` per CLI invocation, and `client_session_id` per connection pool. They were reviewed by the
+repository owner before publication, and the decision is that they **stay as they are**.
+
+The reasoning, in short:
+
+- **They are not credentials** and are not derived from the API key.
+- **They are opaque, not anonymous.** A `request_id` is a handle into TypeSafe's own request
+  history, so a published record can be correlated with the request that produced it by anyone with
+  backend access. That correlation is the field's purpose — it is what makes a record checkable
+  against the service — and it is why the field is kept rather than hashed away.
+- **A scan of both logs found no account ID, email address, IP address, username or local path**
+  in or alongside any of the three. The scan covers the committed log text only.
+
+**No historical identifier was hashed, redacted, rewritten, or removed.** The two SHA-256 digests in
+section 6 cover the logs exactly as published and as they remain. The full account is in
+[SECURITY.md § Opaque identifiers in the canonical logs](../SECURITY.md#opaque-identifiers-in-the-canonical-logs).
+
+Note what this does **not** say: it is not a claim that the logs are anonymous. They contain the
+full synthetic `state` of every request by design.
+
+---
+
+## 8. P3.6 — release closure and experiment retirement
+
+The last stage before publication was not a measurement. It recorded two owner decisions and
+closed the repository's registered-but-unrun experiment debt.
+
+**What changed at P3.6:**
+
+- **License settled.** The owner chose MIT; [`LICENSE`](../LICENSE) exists at the repository root
+  and `pyproject.toml` carries the matching SPDX expression. The former
+  `LICENSE_DECISION_REQUIRED_BEFORE_PUBLIC` gate is closed and its record is rewritten as a
+  decision rather than a question.
+- **Opaque identifiers retained** by owner decision, as recorded in section 7.
+- **Five unrun experiment designs were retired** from the active registry after an
+  information-gain review. They are listed, with the reason for each, in
+  [`docs/experiments/EXPERIMENT_REGISTRY.md`](experiments/EXPERIMENT_REGISTRY.md).
+
+**What did not change:** neither canonical log was touched. No record was added, altered, reordered
+or deleted, and both SHA-256 values in section 6 are the ones they had before this stage. P3.6 made
+**no API call at all** — the retirement review was conducted over the repository's own designs and
+the official documentation already recorded in
+[`docs/sources/TYPESAFE_OFFICIAL_SOURCES.md`](sources/TYPESAFE_OFFICIAL_SOURCES.md).
+
+That is also why the retirement is a *documentation* act and not a measurement one: deleting a
+design that was never run removes no evidence. The designs themselves remain recoverable from git
+history, which is where they belong.
+
+> **An experiment that was never run is an intention. Retiring it is not the loss of a result.**
+
+---
+
+## 9. Verifying any of this
 
 Every claim in this file is checkable from a clone, with no API key and no network:
 
@@ -173,7 +229,7 @@ git rev-list --count main                       # commit count
 git diff e20fad5 bdcb637 --stat -- results/usage.jsonl     # empty: the log never changed
 
 uv run python -m jev_lab final-report           # rebuild the derived report from the log
-uv run pytest                                   # 1044 tests, including the P3 invariance check
+uv run pytest                                   # 1053 tests, including the P3 invariance check
 ```
 
 Hashing the canonical logs will reproduce the two SHA-256 values above exactly. That property is

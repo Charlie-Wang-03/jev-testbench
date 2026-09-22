@@ -188,8 +188,15 @@ class TestFrozenDesign:
             assert case.notes["arm"] == arm
 
     def test_p3_is_not_registered_in_the_frozen_registry(self):
+        # P3 is excluded from the registry on purpose: it must not be reachable by `run-all`, and
+        # its own design document is the frozen one rather than the registry's.
+        #
+        # The size check is an incidental guard that the registry is the one P3 was excluded from,
+        # not a statement about P3. It read 15 when P3 was written; it reads 10 after the P3.6
+        # retirement of five never-run designs. P3's exclusion is unaffected either way -- it was
+        # never one of the fifteen.
         assert p3.EXPERIMENT_NAME not in EXPERIMENTS
-        assert len(EXPERIMENTS) == 15
+        assert len(EXPERIMENTS) == 10
 
     def test_building_cases_twice_yields_equal_but_independent_objects(self):
         first = p3.p3_cases()

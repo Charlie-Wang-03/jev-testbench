@@ -29,7 +29,7 @@ uv sync --locked
 uv run pytest
 ```
 
-**1044 个测试通过，且不打开任何 socket。** 测试套件直接封锁 socket，因此一次意外的 API 调用会大声失败，
+**1053 个测试通过，且不打开任何 socket。** 测试套件直接封锁 socket，因此一次意外的 API 调用会大声失败，
 而不是悄悄花掉你的钱。在需要真正驱动客户端的地方，测试使用 `httpx2.MockTransport` 对接真实 SDK。
 
 ### 重建派生文件
@@ -66,6 +66,20 @@ sha256sum results/p3_boundary_locus/usage.jsonl   # 17f36f7551d598...f34c5d78e  
 这些必须与 [FREEZE.md](../../FREEZE.md) 和[溯源记录](../EVIDENCE_PROVENANCE.md)中的值一致。
 `.gitattributes` 固定了 `eol=lf`，正是为了让 Windows 上的检出无法重写行尾、从而悄悄改变这些哈希所
 覆盖的字节。
+
+### 每条记录里的标识符
+
+每条记录都带有 `request_id`（每次调用）、`run_id`（每次 CLI 调用）和 `client_session_id`（每个连接池）。
+打开日志时，这些是最先看起来可能敏感的字段，所以这里说明它们是什么：
+
+- **它们不是凭据**，也不是由 API key 派生出来的。
+- **它们保留在日志中是仓库所有者的决定** —— `OWNER_DECISION_PUBLIC_OK`。没有任何标识符被哈希、
+  脱敏或删除，上面两个哈希覆盖的正是已发布的日志原文。
+- **它们是不透明的，不是匿名的。** `request_id` 是通向 TypeSafe 自身请求历史的句柄；保留它，是因为
+  正是它让一条已发布的记录可以被拿去与产生它的服务核对。所有者审阅并接受了这一取舍。
+
+完整说明（包括对两份日志的扫描发现了什么、没发现什么）见
+[SECURITY.md § Opaque identifiers in the canonical logs](../../SECURITY.md#opaque-identifiers-in-the-canonical-logs)。
 
 ### 不需要 key 就能检查的事
 

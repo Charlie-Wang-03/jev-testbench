@@ -20,7 +20,7 @@ the log rather than authored.
 | sha256 | `38e67630a7c345f1719795401ceaf7de43b1c5ec16da2adb568fb7ef8dc40b1b` |
 | resolved model | `jev-1.13.0` |
 | real API requests | 42 |
-| real-run experiments | 10 of 15 registered |
+| real-run experiments | 10 of the 15 registered at the freeze |
 | derived report | `results/JEV_LOCAL_EVALUATION_FINAL.md` |
 
 The canonical log is append-only. Nothing in it was rewritten, reordered, or deleted to reach this
@@ -35,8 +35,11 @@ These are retained boundaries, not open tasks:
 - `LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK` — latency is recorded, not benchmarked.
 - No general accuracy or calibration claim. Expected labels are the design's intention, not
   independent ground truth.
-- The optional edge-coverage backlog remains unrun: `00_model_info`, `08_literal_reading`,
-  `09_numeric_limits`, `10_state_length`, `11_language_pair`.
+- Five designs registered at the freeze were never run and have since been **retired**, not
+  carried forward as a backlog: `00_model_info`, `08_literal_reading`, `09_numeric_limits`,
+  `10_state_length`, `11_language_pair`. See
+  [the experiment registry](docs/experiments/EXPERIMENT_REGISTRY.md) for the reasoning. This file
+  is a historical pointer to the P0 freeze and is not updated to describe later stages.
 
 ## Secret policy
 

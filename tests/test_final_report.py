@@ -574,6 +574,23 @@ class TestTheCanonicalLog:
         backlog = [entry["name"] for entry in optional_backlog(records)]
         assert backlog == [name for name in experiment_names() if not measured_counts(records).get(name)]
 
+    def test_the_shipped_registry_has_no_unrun_experiment(self):
+        """`ACTIVE_REGISTRY_HAS_ZERO_UNRUN_EXPERIMENTS`, checked against the shipped pair.
+
+        The registry as published and the canonical log as published must leave nothing in the
+        backlog. This is the mechanical form of the P3.6 invariant: it is computed from the two
+        artifacts rather than asserted in prose, so adding a registered experiment without running
+        it -- or removing a record -- fails here.
+        """
+        records = self.records()
+        outstanding = [entry["name"] for entry in optional_backlog(records)]
+        assert outstanding == [], (
+            f"registered but never run: {outstanding}. Every experiment in the shipped registry "
+            "must either have a canonical record or be retired; see "
+            "docs/experiments/EXPERIMENT_REGISTRY.md"
+        )
+        assert "nothing is outstanding" in build_final_report(records)
+
     def test_the_file_on_disk_is_a_fresh_build_of_the_log(self):
         if not canonical_path().exists():
             pytest.skip("no local log on this machine; results/usage.jsonl is not versioned")

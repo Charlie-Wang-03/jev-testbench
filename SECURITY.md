@@ -100,6 +100,58 @@ change:
 | No printing path | The loader has no function that returns the key for display, status strings carry no derived identifier, and `scrub_secrets` covers error text that quotes a response. |
 | OS permissions | The file's ACL — which this repository does not manage. See risk 1. |
 
+## Opaque identifiers in the canonical logs
+
+**`OWNER_DECISION_PUBLIC_OK`** — the repository owner has reviewed the identifier fields in the two
+canonical logs and decided that they stay as they are. This section records what that decision
+covers and what it does not.
+
+Three fields identify a call:
+
+| Field | Shape | Unique per |
+|---|---|---|
+| `request_id` | `req_` + 32 lowercase hex characters | call (one per record) |
+| `run_id` | 12 lowercase hex characters | CLI invocation |
+| `client_session_id` | 12 lowercase hex characters | client session (one connection pool) |
+
+What these are, precisely:
+
+- **They are not credentials.** They grant nothing. They are not derived from the API key, they
+  carry no signature, and possessing one does not let anyone read, spend against, or administer
+  the account that produced it.
+- **A scan of both canonical logs found no account ID, email address, IP address, username, or
+  local filesystem path embedded in or carried alongside any of the three.** The scan is over the
+  committed log text: the `request_id` values have a uniform `req_` + hex shape, the other two are
+  plain hex, and no record in either log contains an `@`, a path separator, a drive letter, or a
+  hostname.
+
+What the decision accepts:
+
+- **A TypeSafe `request_id` is a handle into TypeSafe's own request history.** Anyone holding one
+  who also had access to that backend could correlate a published measurement with the request that
+  produced it. That correlation is the intended purpose of the field — it is what makes a published
+  record checkable against the service that produced it — and it is the reason the field is kept.
+- **The owner has accepted this tradeoff explicitly.** The alternative was to hash the identifiers
+  or drop them, and both were rejected: hashing would break the correlation that gives the field
+  its value while still leaving a stable per-call pseudonym, and dropping them would remove the
+  only link between a record and the request it describes.
+
+What the decision does **not** claim:
+
+- **These identifiers are not described here as anonymous.** They are opaque, which is a different
+  property. An opaque identifier is one whose meaning is not readable from its text; that is not
+  the same as one that cannot be linked to anything. The paragraph above says exactly what they can
+  be linked to.
+- **It is not a claim that the logs contain no identifying information at all.** They contain the
+  full synthetic `state` of every request by design, which is risk 3 above. This decision is about
+  the three identifier fields, not about the log as a whole.
+
+**No historical identifier was hashed, redacted, rewritten, or removed**, and none will be. The
+two canonical logs are append-only and their SHA-256 digests are published in
+[docs/EVIDENCE_PROVENANCE.md](docs/EVIDENCE_PROVENANCE.md); editing a field to make a record look
+more anonymous would invalidate a hash that other documents cite, and would destroy the property
+the logs exist to have.
+
 ## Git history audit
 
 The full history was scanned before this repository was assessed for publication: every commit

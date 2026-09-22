@@ -9,6 +9,8 @@ readme = "README.md"
 authors = [
     { name = "Yichuan Wang", email = "133667618+Charlie-Wang-03@users.noreply.github.com" }
 ]
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 keywords = [
     "typesafe",
@@ -27,9 +29,14 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-# No `license` or `license-files` field, deliberately. Choosing a license is a human decision and
-# none has been recorded yet: see docs/OPEN_SOURCE_LICENSE_DECISION.md. Declaring terms here
-# before that decision would publish a claim nobody has agreed to.
+# MIT, chosen by the copyright holder and recorded in docs/OPEN_SOURCE_LICENSE_DECISION.md. This is
+# the PEP 639 form: an SPDX expression in `license` plus `license-files`, which writes
+# `License-Expression: MIT` and `License-File: LICENSE` into the core metadata.
+#
+# No `License :: OSI Approved :: MIT License` classifier. PEP 639 deprecates the `License ::`
+# classifiers once an SPDX expression is present, and shipping both states the same term twice in
+# two vocabularies -- exactly the kind of duplication that drifts. The expression is the one that
+# is machine-checked; `tests/test_docs_consistency.py` asserts the file and the metadata agree.
 #
 # No `py.typed` marker either, and therefore no `Typing :: Typed` classifier. The supported
 # interface is the CLI and the evidence files it writes, not `import jev_lab`; advertising the

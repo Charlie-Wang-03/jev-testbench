@@ -11,7 +11,7 @@ Jev 不是聊天模型。它接收一段 `state` 和一组**类型化问题**，
 本仓库就是这个原语的测量台。每一次真实 API 调用都会向一个只追加的 JSONL 日志写入且仅写入一行，
 而所有文档里的每一句话都被标注为：厂商官方说法、设计假设、本地测量、本地推导，或局限性。
 
-**状态：** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **测试：** 1044 个全部通过，完全离线 ·
+**状态：** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **测试：** 1053 个全部通过，完全离线 ·
 **证据：** [42 条核心记录](results/usage.jsonl) + [12 条 P3 记录](results/p3_boundary_locus/usage.jsonl)
 
 ---
@@ -57,7 +57,7 @@ P3 出于同样的理由保留了自己的日志。详见[证据溯源](docs/EVI
 
 ## 4. 我们测了什么
 
-注册了 15 个实验，已运行 10 个。分两档：
+注册了 10 个实验，并且**这 10 个全部已运行** —— 注册表中没有未运行的设计。分两档：
 
 **`core` —— 基础机制**
 
@@ -85,9 +85,12 @@ P3 出于同样的理由保留了自己的日志。详见[证据溯源](docs/EVI
 哪一个字段造成了这个位移。P3 把这两个字段做成 2×2 交叉，每个臂重复三次、共十二次调用，设计与阈值
 在第一次请求之前就已冻结。
 
-另有五个实验（`00_model_info`、`08_literal_reading`、`09_numeric_limits`、`10_state_length`、
-`11_language_pair`）已注册但未运行。它们是一份可选的边界覆盖待办，不是阻塞项 —— `08` 和 `09` 的
-用途是在本地把已记录在案的失效模式观察一次，而不是给模型打分。
+另有五个实验为本仓库设计过，但在公开之前就**被退役**，而没有运行：`00_model_info`、
+`08_literal_reading`、`09_numeric_limits`、`10_state_length`、`11_language_pair`。每一个都按固定的
+六问评分表审过 —— 信息增益、公开价值、设计有效性、可解释性、维护成本、与官方文档的重叠 —— 没有一个
+过线。各自的理由见[实验注册表](docs/experiments/EXPERIMENT_REGISTRY.md)；它们的代码留在 git 历史里。
+
+未执行的实验只是意图，不是证据；本仓库不保留意图待办。因此这里**不存在「已注册但未运行」这一状态**。
 
 ## 5. 我们学到了什么
 
@@ -160,7 +163,7 @@ confidence 用例只是*说明*了这层限定，无法检验它。本地的警�
 
 ```console
 uv sync --locked
-uv run pytest                                    # 1044 个测试，socket 被封锁
+uv run pytest                                    # 1053 个测试，socket 被封锁
 uv run python -m jev_lab report                  # summary.csv, summary.md
 uv run python -m jev_lab snapshot                # capability_snapshot.md
 uv run python -m jev_lab final-report            # JEV_LOCAL_EVALUATION_FINAL.md
@@ -234,5 +237,5 @@ case 数时拒绝启动。见[凭据](docs/guides/credentials.zh-CN.md)与[复�
 
 ## 许可证
 
-**尚未选择任何许可证。** 本仓库目前没有以开源许可证发布；见[许可证决策](docs/OPEN_SOURCE_LICENSE_DECISION.md)。
-在该决定作出之前，全部权利由作者保留。
+**MIT。** 见 [`LICENSE`](LICENSE)，以及[许可证决策](docs/OPEN_SOURCE_LICENSE_DECISION.md)（其中有理由说明
+与被考虑过的替代方案）。一份许可证同时覆盖代码、两份 canonical 日志以及派生报告；不额外施加数据许可证。

@@ -15,7 +15,7 @@ This repository is a measurement bench for that primitive. Every real API call a
 line to an append-only JSONL log, and every claim in these documents is labelled as an official
 vendor claim, a design assumption, a local measurement, a derived calculation, or a limitation.
 
-**Status:** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **Tests:** 1044 passing, fully offline ·
+**Status:** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **Tests:** 1053 passing, fully offline ·
 **Evidence:** [42 core records](results/usage.jsonl) + [12 P3 records](results/p3_boundary_locus/usage.jsonl)
 
 ---
@@ -66,7 +66,8 @@ Because the interesting question about a probabilistic decision primitive is not
 
 ## 4. What did we test?
 
-15 experiments are registered; 10 have been run. Two tiers:
+10 experiments are registered, and **all 10 have been run** — the registry has no unrun design in
+it. Two tiers:
 
 **`core` — the foundational mechanics**
 
@@ -94,10 +95,15 @@ Experiment `07` moved a `Noul` from 0.75 to 0.20 by changing the *instructions* 
 together, so it could not say which field carried the move. P3 crossed the two fields 2×2, three
 repeats per arm, twelve calls, with the design and thresholds frozen before the first request.
 
-Five further experiments (`00_model_info`, `08_literal_reading`, `09_numeric_limits`,
-`10_state_length`, `11_language_pair`) are registered but unrun. They are an optional edge-coverage
-backlog, not blockers — `08` and `09` exist to observe documented failure modes once locally, not
-to grade the model.
+Five further experiments were designed for this bench and **retired before publication** rather
+than run: `00_model_info`, `08_literal_reading`, `09_numeric_limits`, `10_state_length` and
+`11_language_pair`. Each was reviewed against a fixed six-question rubric — information gain,
+public value, design validity, interpretability, maintenance cost, redundancy against the official
+documentation — and none cleared the bar. The reasoning for each is in
+[the experiment registry](docs/experiments/EXPERIMENT_REGISTRY.md); their code is in git history.
+
+An experiment that was never run is an intention, not evidence, and this repository does not keep
+a backlog of intentions. There is therefore **no "registered but not run" state** here.
 
 ## 5. What did we learn?
 
@@ -180,7 +186,7 @@ Full write-ups: [Findings](docs/findings/findings.md) ·
 
 ```console
 uv sync --locked
-uv run pytest                                    # 1044 tests, sockets blocked
+uv run pytest                                    # 1053 tests, sockets blocked
 uv run python -m jev_lab report                  # summary.csv, summary.md
 uv run python -m jev_lab snapshot                # capability_snapshot.md
 uv run python -m jev_lab final-report            # JEV_LOCAL_EVALUATION_FINAL.md
@@ -267,6 +273,6 @@ do: start here, understand the evidence, or reproduce and extend.
 
 ## License
 
-**No license has been chosen yet.** This repository is not yet published under an open-source
-license; see [the license decision](docs/OPEN_SOURCE_LICENSE_DECISION.md). Until that decision is
-made, all rights are reserved by the author.
+**MIT.** See [`LICENSE`](LICENSE), and [the license decision](docs/OPEN_SOURCE_LICENSE_DECISION.md)
+for the reasoning and the alternative that was considered. One license covers the code, the two
+canonical logs, and the derived reports; no separate data license is applied.

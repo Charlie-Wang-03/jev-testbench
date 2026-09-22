@@ -129,9 +129,9 @@ flowchart TD
 | `pricing` | 本仓库中唯一的价格表，按**实际解析**的模型索引。 |
 | `recorder` | `UsageRecorder` —— 每次真实 API 调用一行只追加的 JSONL。 |
 | `report` | 按实验的汇总（`summary.csv`、`summary.md`）。 |
-| `experiments` | 十五个实验的注册表；case、档位、预算、`run_experiment`。 |
+| `experiments` | 十个实验的注册表；case、档位、预算、`run_experiment`。每一项都有 canonical 记录 —— 见[实验注册表](../experiments/EXPERIMENT_REGISTRY.md)。 |
 | `composite`、`routing`、`fanout`、`ambiguous` | 四个特定行为的实验，各自带有自己的章节构造器。 |
-| `p3_boundary_locus` | P3 重复实验。**不**在 `EXPERIMENTS` 中 —— 加进第十六个成员会改变已冻结的最终报告的含义。 |
+| `p3_boundary_locus` | P3 重复实验。**不**在 `EXPERIMENTS` 中 —— 加进一个成员会改变已冻结的最终报告的含义。 |
 | `repeatability` | 重复 payload 实验的运行间统计。 |
 | `final_report`、`snapshot` | 基于权威日志的派生视图。 |
 | `__main__` | 参数解析与六个子命令。 |

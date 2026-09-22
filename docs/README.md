@@ -8,9 +8,9 @@ Most public-facing documents exist in **English and Simplified Chinese**. The ev
 only** — deliberately, so that the evidence layer has one textual source rather than two that can
 drift apart.
 
-> **No license has been chosen yet.** This repository is not published under an open-source
-> license, so all rights are reserved by the author and outside contributions cannot be merged
-> under clear terms. See the [license decision](OPEN_SOURCE_LICENSE_DECISION.md).
+> **License: MIT.** See [`LICENSE`](../LICENSE) and the [license
+> decision](OPEN_SOURCE_LICENSE_DECISION.md). One license covers the code, the two canonical logs,
+> and the derived reports.
 
 ---
 
@@ -32,6 +32,7 @@ drift apart.
 | [P2 — novelty triage](audits/P2_JEV_INSIGHT_TRIAGE.md) | The triage that retired seven candidates, including the two with the largest effect sizes. Verdict: `P2_TRIAGE_PASS`. |
 | [P3 — boundary locus result](audits/P3_BOUNDARY_LOCUS_RESULT.md) | The preregistered replication, and its null. Verdict: `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION`. |
 | [P3 — preregistration](experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md) | The design, order, thresholds and statistics, frozen before the first request. |
+| [Experiment registry](experiments/EXPERIMENT_REGISTRY.md) | The registry at the public-release revision: what ran, and what was retired before publication and why. |
 | [Evidence provenance](EVIDENCE_PROVENANCE.md) | The P0–P3 lineage: which commits measured, which analysed, which only documented. |
 
 ## Reproduce and extend
@@ -40,7 +41,7 @@ drift apart.
 |---|---|
 | [Methodology](methodology/evaluation.md) · [中文](methodology/evaluation.zh-CN.md) | Claim labelling, experiment design rules, and what the A/B arms do and do not establish. |
 | [Credentials](guides/credentials.md) · [中文](guides/credentials.zh-CN.md) | How the API key is resolved, and the honest limits of that scheme. |
-| [Contributing](../CONTRIBUTING.md) | Setup, the license gate, and the rules a change here has to preserve. |
+| [Contributing](../CONTRIBUTING.md) | Setup, the license, and the rules a change here has to preserve. |
 | [Security](../SECURITY.md) | The real risks in this project, and how to report a problem. |
 
 ## Reference
@@ -49,7 +50,7 @@ drift apart.
 |---|---|
 | [Official sources registry](sources/TYPESAFE_OFFICIAL_SOURCES.md) | Provenance for every TypeSafe document cited in this repository. |
 | [Core freeze](../FREEZE.md) | The original 42-record freeze — a historical pointer, scoped to the core evaluation. |
-| [License decision](OPEN_SOURCE_LICENSE_DECISION.md) | Why this repository currently has no open-source license. |
+| [License decision](OPEN_SOURCE_LICENSE_DECISION.md) | The recorded decision: MIT, and the alternative that was considered. |
 | [Agent rules](../CLAUDE.md) | The working rules for coding agents in this repository. **Not a security boundary.** |
 
 ---

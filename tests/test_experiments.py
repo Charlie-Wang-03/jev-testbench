@@ -81,8 +81,30 @@ class FakeClient:
 
 
 class TestRegistryShape:
-    def test_fifteen_experiments_are_registered(self):
-        assert len(EXPERIMENTS) == 15
+    def test_ten_experiments_are_registered(self):
+        assert len(EXPERIMENTS) == 10
+
+    def test_no_retired_experiment_is_still_runnable(self):
+        """The five designs retired in P3.6 must not come back without a new decision.
+
+        Their code is in git history, which is where a retired design belongs. Re-adding one here
+        would silently re-open a question the information-gain review closed, so the names are
+        pinned: bringing one back is a deliberate edit to this test, a registry entry, its cases,
+        and `docs/experiments/EXPERIMENT_REGISTRY.md`.
+        """
+        retired = [
+            "00_model_info",
+            "08_literal_reading",
+            "09_numeric_limits",
+            "10_state_length",
+            "11_language_pair",
+        ]
+        still_registered = [name for name in retired if name in EXPERIMENTS]
+        assert not still_registered, (
+            f"{still_registered} were retired before public release; see "
+            "docs/experiments/EXPERIMENT_REGISTRY.md for why, and re-open the decision rather "
+            "than restoring the entry"
+        )
 
     def test_names_are_sorted_and_consistent_with_their_keys(self):
         names = experiment_names()
@@ -275,16 +297,6 @@ class TestSpecificExperiments:
         cases = get_experiment("07_instruction_precision").cases()
         assert cases[0].state == cases[1].state
         assert {case.notes["boundary"] for case in cases} == {"vague", "explicit"}
-
-    def test_state_length_holds_core_evidence_fixed_across_tiers(self):
-        cases = get_experiment("10_state_length").cases()
-        assert [case.notes["tier"] for case in cases] == ["short", "medium", "longer"]
-        assert cases[0].state in cases[2].state
-        assert len(cases[0].state) < len(cases[2].state)
-
-    def test_language_pair_covers_both_languages(self):
-        cases = get_experiment("11_language_pair").cases()
-        assert {case.notes["language"] for case in cases} == {"en", "zh"}
 
     def test_function_routing_only_reaches_registered_handlers(self):
         cases = get_experiment("12_function_routing").cases()
@@ -494,10 +506,6 @@ class TestInstructionPrecisionDesign:
     def test_the_isolated_variable_is_documented_as_compound(self):
         source = __import__("inspect").getsource(lab)
         assert "isolate instruction wording from criteria wording" in source
-
-    def test_model_info_resolves_both_aliases(self):
-        cases = get_experiment("00_model_info").cases()
-        assert {case.notes["alias"] for case in cases} == {"jev-latest", "jev-preview"}
 
 
 class TestDerivedHelpers:

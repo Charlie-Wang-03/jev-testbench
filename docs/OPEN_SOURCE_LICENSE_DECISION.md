@@ -1,117 +1,87 @@
 # Open-source license decision
 
-**Status:** `LICENSE_DECISION_REQUIRED_BEFORE_PUBLIC`
+**Status:** `LICENSE_DECISION_RESOLVED_MIT`
 
-**This repository has no open-source license.** That is a deliberate stopping point, not an
-oversight. Choosing a license is the copyright holder's decision, and no tooling or agent should
-make it on their behalf.
+**Decision: MIT.** The copyright holder chose MIT for this repository. The full license text is in
+[`LICENSE`](../LICENSE) at the repository root, and `pyproject.toml` carries the matching SPDX
+expression. The repository is licensed under MIT as of 2026.
 
-Until a license is chosen, default copyright applies: **all rights reserved**. The repository can
-be read, but it is not legally reusable, and it must not be published under an open-source
-description. See [Before publishing](#before-publishing) below.
+The gate this file used to describe — **`LICENSE_DECISION_REQUIRED_BEFORE_PUBLIC`** — is closed.
+That string is retained here only so a reader who meets it in an older commit or a stale link can
+find where it went.
 
 ---
 
-## What needs deciding
+## What was decided
 
 | | |
 |---|---|
-| Decision required | Which open-source license, if any |
-| Decided by | The repository owner |
-| Blocks | Publishing the repository as open source; accepting outside contributions |
-| Does *not* block | The repository remaining private; internal use; local experiments |
-| Deliverable when decided | A `LICENSE` file at the repository root, plus a `license` field and classifier in `pyproject.toml` |
+| Decision | MIT |
+| Decided by | The repository owner (Yichuan Wang) |
+| Date recorded | 2026-09-23 |
+| Deliverable | [`LICENSE`](../LICENSE) at the repository root, plus `license = "MIT"` and `license-files = ["LICENSE"]` in `pyproject.toml` |
+| Supersedes | `LICENSE_DECISION_REQUIRED_BEFORE_PUBLIC`, the state in which no license had been chosen |
 
-## Candidates
+## What MIT means here
 
-Two are worth considering for a project of this shape.
-
-### MIT
-
-**Permissive, short, and the most widely understood.** Anyone may use, modify, and redistribute the
-code, including in closed-source products, provided the copyright notice and permission notice are
-preserved.
-
+- **Permissive, short, and the most widely understood.** Anyone may use, modify, and redistribute
+  the code, including in closed-source products, provided the copyright notice and permission
+  notice are preserved.
 - **Permissiveness:** maximal. No conditions beyond attribution.
-- **Patent grant:** **none.** MIT is silent on patents. A contributor who holds a patent reading on
-  the code has not explicitly licensed it. In practice this rarely matters for a measurement bench;
-  it matters more for a library that implements an algorithm.
+- **Patent grant:** **none.** MIT is silent on patents. This was weighed and accepted: the value of
+  this repository is in its *evidence and its discipline* rather than in a patentable algorithm, so
+  the explicit patent grant Apache-2.0 adds was judged not to change what a reader can do with it.
 - **Attribution:** the license text must be included in copies or substantial portions.
 - **Compatibility:** compatible with essentially everything, including Apache-2.0 and GPLv3
   projects consuming it.
-- **Best when:** you want the least friction for anyone who wants to use or adapt the code, and you
-  are not worried about patent exposure.
 
-### Apache-2.0
+### The alternative that was considered
 
-**Permissive, longer, and explicit about patents and trademarks.**
+**Apache-2.0** — permissive, longer, and explicit about patents and trademarks. Its substantive
+difference from MIT is Section 3's patent grant, which terminates for anyone who sues over the
+software; it also requires stating significant changes when you modify files. It is **not**
+compatible with GPLv2, which the patent clause forbids.
 
-- **Permissiveness:** high — same practical freedoms as MIT for most users.
-- **Patent grant:** **explicit.** Section 3 grants a patent license from contributors, and
-  terminates it for anyone who sues over the software. This is the substantive difference from MIT.
-- **Attribution:** requires preserving notices, and requires stating **significant changes** when
-  you modify files.
-- **Compatibility:** compatible with GPLv3; **not** compatible with GPLv2 (the patent clause adds
-  restrictions GPLv2 forbids).
-- **Best when:** contributors or downstream users may have patents in the area, or you want the
-  explicit patent grant and the clearer contribution terms.
+It was the recommended alternative and was not chosen. The reasoning is recorded rather than
+compressed to a preference: Apache-2.0 buys protection against a contributor patent reading on the
+code, and the expected audience here is someone copying a measurement pattern into their own bench,
+for whom the licence that adds the fewest obligations is the one that gets read.
 
-### Other options, briefly
+### Options that were not chosen, briefly
 
 - **BSD-2/3-Clause** — equivalent in spirit to MIT; the 3-clause version adds a non-endorsement
   clause. No patent grant.
-- **MPL-2.0** — file-level copyleft. Modifications to covered files must be shared, but you may
-  combine with closed code. Reasonable middle ground; more obligation than this project needs.
+- **MPL-2.0** — file-level copyleft. Reasonable middle ground; more obligation than this project
+  needs.
 - **GPL family** — strong copyleft. Would prevent this code from being used in closed products.
   Hard to justify for a measurement harness whose value is in its *evidence* rather than its code.
-- **No license / all rights reserved** — the current state. Readable, not reusable. Defensible if
-  the intent is to publish the findings as a writeup rather than to run an open-source project.
 
-## Recommendation
+## A note on the evidence files
 
-> **Recommended: MIT.**
-> **Alternative: Apache-2.0** if an explicit patent grant matters to you.
+The two canonical logs and the derived reports are **data**, not code. MIT covers them by default
+now that they sit in a licensed repository, and **no separate data license is applied** — one
+license, stated once, is the decision here rather than a code/data split.
 
-**Why MIT for this repository.** The value here is the *evidence and its discipline*, not the code.
-The code is a harness: it exists so the measurements can be inspected and re-run, and the most
-useful thing a reader can do with it is copy the pattern into their own bench. MIT maximises that
-with the fewest conditions attached.
+If you reuse the measurements elsewhere — in a blog post, a paper, a dataset — attribution is the
+only condition MIT imposes, and it is the same condition the repository already asks for in
+[`docs/EVIDENCE_PROVENANCE.md`](EVIDENCE_PROVENANCE.md).
 
-**Why you might prefer Apache-2.0 instead.** If you expect this to be used inside companies where
-patent exposure is a live question, or you want the explicit contribution terms and the
-"state significant changes" obligation, Apache-2.0 is the better choice. It costs the reader
-almost nothing in practice.
+## What this does not change
 
-Either is defensible. The difference is narrow, and it is a judgement about the audience rather
-than about the code.
+- **The repository's visibility is not set by this file.** The license is a terms decision; whether
+  the repository is public is a separate owner decision.
+- **No rights are granted retroactively that were not granted.** The canonical logs were published
+  in this repository and remain byte-identical; MIT applies to them as part of the repository.
+- **Nothing about the measurements or their interpretation changes.** The license settles what a
+  reader may *do* with the material, not what the material *says*.
 
-### A note on the evidence files
-
-The two canonical logs and the derived reports are **data**, not code. A code license covers them
-by default when they sit in a licensed repository, but if you intend to reuse the measurements
-elsewhere — in a blog post, a paper, a dataset — it is worth stating explicitly. A common shape is
-code under MIT and data/findings under **CC BY 4.0**, which requires attribution and nothing else.
-That is optional; it is mentioned here so the choice is visible rather than accidental.
-
-## Before publishing
-
-Do not describe this repository as open source, and do not publish it under an open-source
-description, until:
-
-1. The license is chosen by the copyright holder.
-2. A `LICENSE` file exists at the repository root with the full license text.
-3. `pyproject.toml` carries a matching `license` field and the corresponding Trove classifier.
-4. The [README](../README.md) license section is updated to name the chosen license.
-
-Until all four are done, the status string is
-**`LICENSE_DECISION_REQUIRED_BEFORE_PUBLIC`**, and the repository must stay private.
-
-## Why this is a gate and not a default
+## Why this was a gate and not a default
 
 Adding a license is easy. Removing one is not: a license, once granted, cannot be un-granted for
 copies already distributed. It is also the one decision in this repository that is genuinely the
 owner's rather than a technical judgement — it allocates rights, and rights allocation is not a
 thing to infer from context.
 
-So this repository does the only honest thing available: it records the options, records a
-recommendation, and **waits**.
+So the repository recorded the options, recorded a recommendation, and waited for the owner. That
+wait is now over, and the outcome is recorded above rather than inferred from the presence of a
+`LICENSE` file.

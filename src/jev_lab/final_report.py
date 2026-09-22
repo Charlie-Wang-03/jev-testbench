@@ -1876,7 +1876,11 @@ def _not_established(records: Sequence[Mapping[str, Any]]) -> list[str]:
 
 
 def _backlog(backlog: Sequence[Mapping[str, Any]]) -> list[str]:
-    lines = ["## 15. Optional edge-coverage backlog", "", f"**{OPTIONAL_EDGE_COVERAGE_BACKLOG}**", ""]
+    # The heading describes the section's subject, not its size: it reports the unrun experiments
+    # whether there are any or none. `OPTIONAL_EDGE_COVERAGE_BACKLOG` stays as the stated string --
+    # it is published and cited, and on the shipped registry its claim is that nothing is
+    # outstanding, which is the invariant this repository wants to be able to point at.
+    lines = ["## 15. Unrun experiments", "", f"**{OPTIONAL_EDGE_COVERAGE_BACKLOG}**", ""]
     if not backlog:
         return lines + [
             _claim(
@@ -1909,10 +1913,11 @@ def _backlog(backlog: Sequence[Mapping[str, Any]]) -> list[str]:
                "question left unanswered, and running one would start a new measurement rather "
                "than complete this one."),
         "",
-        _claim(DESIGN_ASSUMPTION, "the most load-bearing of them is `00_model_info`, a core-tier "
-               "experiment that was never run: the alias-to-version resolution it exists to record "
-               "is nevertheless in every record of the log, because every call records both the "
-               "model requested and the model resolved."),
+        _claim(DESIGN_ASSUMPTION, "a registered experiment exists in this repository only as an "
+               "intention until it has a record, and an intention is not evidence. Where a design "
+               "would have recorded something every record already carries -- alias-to-version "
+               "resolution is the standing example, since every call logs both the model requested "
+               "and the model resolved -- it adds a call without adding a fact."),
         "",
     ]
     return lines

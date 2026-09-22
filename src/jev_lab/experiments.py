@@ -180,47 +180,17 @@ TICKET_TEXT = (
 
 SHORT_STATE = "The export button crashes the settings page in Safari. It works in Chrome."
 
-# Core evidence held fixed across every length tier in `10_state_length`.
+# A second synthetic bug report. `03_parallel_questions` carries it alongside the ticket text so
+# the batched payload has more than one block of state to read.
 FIXED_EVIDENCE = (
     "Bug report: exporting a report to PDF fails with a spinner that never finishes. "
     "The same export works for CSV. It started after the 4.2 release."
 )
 
-FILLER_PARAGRAPHS = (
-    "The office coffee machine was serviced on Tuesday and the filter was replaced. ",
-    "Team offsite planning continues; the venue shortlist now has four candidates. ",
-    "The quarterly stationery order arrived, including 12 boxes of A4 paper. ",
-    "A reminder that the parking permit renewals are due at the end of the month. ",
-    "The internal wiki was reorganised and some page links may have moved. ",
-)
-
-
-def _pad(paragraphs: int) -> str:
-    """Deterministic irrelevant filler, used only to grow the state."""
-    return " ".join(FILLER_PARAGRAPHS[index % len(FILLER_PARAGRAPHS)] for index in range(paragraphs))
-
 
 # --------------------------------------------------------------------------------------
 # Experiment definitions
 # --------------------------------------------------------------------------------------
-
-
-def _00_model_info() -> list[Case]:
-    """Two tiny calls so we can see which model each alias actually resolves to."""
-    return [
-        Case(
-            case_id="resolve_jev_latest",
-            state="Ping.",
-            questions={"ok": Noul(instructions="Is the word `Ping` present in the state?")},
-            notes={"alias": "jev-latest", "endpoint": "/v1/systemone"},
-        ),
-        Case(
-            case_id="resolve_jev_preview",
-            state="Ping.",
-            questions={"ok": Noul(instructions="Is the word `Ping` present in the state?")},
-            notes={"alias": "jev-preview", "endpoint": "/v1/systemone"},
-        ),
-    ]
 
 
 # `01_primitives` and `13b_ambiguous_repeatability` send the *same* payload, so it is defined once
@@ -1012,163 +982,6 @@ def _07_instruction_precision() -> list[Case]:
     ]
 
 
-def _08_literal_reading() -> list[Case]:
-    """Three small probes of the documented 'literal reading' failure mode.
-
-    The docs say scoping words, negations, and implied conditions are taken at face value. Each
-    probe pairs a direct question with its inverted or scoped twin, so the comparison is the
-    finding. This is a probe of a documented behaviour, not an attempt to grade the model.
-    """
-    state = (
-        "The customer wrote: 'I do not want a refund. I only want the duplicate charge removed, "
-        "and please do not cancel the order.'"
-    )
-    return [
-        Case(
-            case_id="negation_direct",
-            state=state,
-            questions={"wants_refund": Noul(instructions="Does the customer want a refund?")},
-            notes={"probe": "negation", "polarity": "direct"},
-        ),
-        Case(
-            case_id="negation_inverted",
-            state=state,
-            questions={
-                "wants_refund": Noul(
-                    instructions="Is it true that the customer is asking for something other than a refund?"
-                )
-            },
-            notes={"probe": "negation", "polarity": "inverted"},
-        ),
-        Case(
-            case_id="implied_condition",
-            state="The order shipped on Monday. Delivery takes five business days.",
-            questions={
-                "arrives_by_friday": Noul(
-                    instructions="Will the order arrive by Friday of the same week?"
-                ),
-                "shipped": Noul(instructions="Has the order shipped?"),
-            },
-            notes={"probe": "implied_condition", "note": "weekday arithmetic belongs in code"},
-        ),
-        Case(
-            case_id="scope",
-            state="All contractors must submit timesheets weekly. Priya is a full-time employee.",
-            questions={
-                "priya_weekly_timesheet": Noul(
-                    instructions="Must Priya submit a timesheet every week?"
-                )
-            },
-            notes={"probe": "scope", "note": "applies a rule to someone outside its stated scope"},
-        ),
-    ]
-
-
-def _09_numeric_limits() -> list[Case]:
-    """A deliberately tiny demonstration of the documented counting and arithmetic limits.
-
-    Only three calls, because the docs already state the limitation and repeating it at scale
-    would burn budget to learn something already known. Each case also carries the correct
-    code-side answer, computed locally.
-    """
-    items = ["typesafe", "apple", "california", "banana", "likes", "calibration", "orange", "vertex"]
-    return [
-        Case(
-            case_id="counting_fruits",
-            state={"items": items},
-            questions={
-                f"item_{index}": Noul(instructions=f"Is `items[{index}]` the name of a fruit?")
-                for index in range(len(items))
-            },
-            notes={
-                "known_limit": "counting is unreliable; docs recommend one question per item",
-                "code_side": "sum the per-item answers in Python (this is the documented workaround)",
-            },
-        ),
-        Case(
-            case_id="counting_in_passage",
-            state=(
-                "The word 'risk' appears in the following sentence: 'We assessed the risk and "
-                "accepted it, because the risk was small.'"
-            ),
-            questions={"occurrences": Noul(instructions="Does the word `risk` appear exactly twice?")},
-            notes={
-                "known_limit": "counting occurrences is unreliable",
-                "code_side": "state.count('risk') == 2",
-            },
-        ),
-        Case(
-            case_id="numeric_comparison",
-            state="Invoice A is $1,240.00 and invoice B is $1,000.00.",
-            questions={"a_larger": Noul(instructions="Is invoice A larger than invoice B?")},
-            notes={
-                "known_limit": "numeric precision is a documented weakness",
-                "code_side": "1240.00 > 1000.00",
-            },
-        ),
-    ]
-
-
-def _10_state_length() -> list[Case]:
-    """Fixed core evidence, growing amounts of irrelevant filler.
-
-    The docs say accuracy falls as unrelated content accumulates and that Jev suffers from
-    context rot. The context limit is 64k tokens per request, with 32k for state plus the longest
-    question (docs.typesafe.ai/models, "Context length"); these tiers stay far below it on purpose.
-    """
-    questions: dict[str, Question] = {
-        "export_broken": Noul(instructions="Does the report claim that PDF export is broken?"),
-        "started_after_release": Noul(instructions="Did the problem start after a release?"),
-    }
-    tiers = {
-        "short": FIXED_EVIDENCE,
-        "medium": f"{FIXED_EVIDENCE}\n\n{_pad(8)}",
-        "longer": f"{FIXED_EVIDENCE}\n\n{_pad(40)}",
-    }
-    return [
-        Case(
-            case_id=f"length_{tier}",
-            state=text,
-            questions=questions,
-            notes={"tier": tier, "core_evidence": "fixed", "filler": "irrelevant"},
-        )
-        for tier, text in tiers.items()
-    ]
-
-
-def _11_language_pair() -> list[Case]:
-    """Semantically equivalent English and Chinese input and questions.
-
-    The models page states English is the primary training language and that other languages,
-    including CJK, are handled but not equally well. This measures that on our own content.
-    """
-    english = (
-        "The customer says they were charged twice for order #98423 and wants the duplicate "
-        "charge removed."
-    )
-    chinese = "客户表示订单 #98423 被重复扣款两次，希望删除重复收取的费用。"
-    return [
-        Case(
-            case_id="english",
-            state=english,
-            questions={
-                "charged_twice": Noul(instructions="Does the customer say they were charged twice?"),
-                "wants_refund": Noul(instructions="Is the customer asking for a refund?"),
-            },
-            notes={"language": "en"},
-        ),
-        Case(
-            case_id="chinese",
-            state=chinese,
-            questions={
-                "charged_twice": Noul(instructions="客户是否表示被重复扣款两次？"),
-                "wants_refund": Noul(instructions="客户是否要求退款？"),
-            },
-            notes={"language": "zh", "note": "semantically equivalent to the English case"},
-        ),
-    ]
-
-
 # `12_function_routing`: Jev picks a route, Python calls a handler that was registered in advance.
 #
 # The registry, the closed argument sets, the two policy thresholds and the expected routes all live
@@ -1450,12 +1263,6 @@ def _13b_ambiguous_repeatability() -> list[Case]:
 # --------------------------------------------------------------------------------------
 
 EXPERIMENTS: dict[str, Experiment] = {
-    "00_model_info": Experiment(
-        "00_model_info",
-        CORE,
-        "List accessible models and record which versioned ID each alias resolves to.",
-        _00_model_info,
-    ),
     "01_primitives": Experiment(
         "01_primitives",
         CORE,
@@ -1505,30 +1312,6 @@ EXPERIMENTS: dict[str, Experiment] = {
         EXTENDED,
         "Vague versus explicit decision boundaries on a byte-identical state; criteria in both arms.",
         _07_instruction_precision,
-    ),
-    "08_literal_reading": Experiment(
-        "08_literal_reading",
-        EXTENDED,
-        "Negation, implied conditions, and scope, following the documented jaggedness page.",
-        _08_literal_reading,
-    ),
-    "09_numeric_limits": Experiment(
-        "09_numeric_limits",
-        EXTENDED,
-        "A tiny demonstration of the documented counting and arithmetic limits.",
-        _09_numeric_limits,
-    ),
-    "10_state_length": Experiment(
-        "10_state_length",
-        EXTENDED,
-        "Fixed core evidence with growing irrelevant filler.",
-        _10_state_length,
-    ),
-    "11_language_pair": Experiment(
-        "11_language_pair",
-        EXTENDED,
-        "Equivalent English and Chinese input and questions.",
-        _11_language_pair,
     ),
     "12_function_routing": Experiment(
         "12_function_routing",

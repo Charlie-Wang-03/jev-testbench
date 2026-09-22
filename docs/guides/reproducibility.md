@@ -30,7 +30,7 @@ uv sync --locked
 uv run pytest
 ```
 
-**1044 tests pass and no socket is opened.** The suite blocks sockets outright, so an accidental API
+**1053 tests pass and no socket is opened.** The suite blocks sockets outright, so an accidental API
 call fails loudly rather than quietly spending your money. The tests use `httpx2.MockTransport`
 against the real SDK where they need to exercise the client.
 
@@ -69,6 +69,22 @@ sha256sum results/p3_boundary_locus/usage.jsonl  # 17f36f7551d598...f34c5d78e   
 These must match the values in [FREEZE.md](../../FREEZE.md) and the
 [provenance record](../EVIDENCE_PROVENANCE.md). `.gitattributes` pins `eol=lf` precisely so a
 Windows checkout cannot rewrite line endings and silently change the bytes these hashes cover.
+
+### The identifiers in each record
+
+Every record carries `request_id` (per call), `run_id` (per CLI invocation) and
+`client_session_id` (per connection pool). Opening the log, these are the first fields that look
+like they might be sensitive, so here is what they are:
+
+- **They are not credentials**, and they are not derived from the API key.
+- **They stay in the logs by owner decision** — `OWNER_DECISION_PUBLIC_OK`. No identifier was
+  hashed, redacted, or removed, and the two hashes above cover the logs exactly as published.
+- **They are opaque, not anonymous.** A `request_id` is a handle into TypeSafe's own request
+  history; it is kept because it is what lets a published record be checked against the service
+  that produced it. The owner reviewed that tradeoff and accepted it.
+
+The full account, including what a scan of both logs did and did not find, is in
+[SECURITY.md § Opaque identifiers in the canonical logs](../../SECURITY.md#opaque-identifiers-in-the-canonical-logs).
 
 ### What you can check without a key
 

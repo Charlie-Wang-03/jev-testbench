@@ -277,3 +277,18 @@ against the canonical log during P3.5, the correct count is **45 of 45** — P1 
 count with the record count. The claim itself is unaffected: every `Noul` answer in the log does
 lack the field. P1's frozen text was **not** edited, because it is a historical audit artifact.
 Recorded here rather than silently corrected.
+
+### The unrun experiment designs
+
+Five designs were registered at the P0 freeze and never run. P1 records them as
+`REGISTERED_BUT_NOT_RUN`, which was true when it was written and has not been edited.
+
+They were **retired before publication** rather than carried as a backlog. Each was reviewed for
+information gain, public value, design validity, interpretability, maintenance cost and redundancy
+against the official documentation, and none cleared the bar. The reasoning for each is in
+[the experiment registry](../experiments/EXPERIMENT_REGISTRY.md).
+
+The registry now holds **10** designs and all **10** have canonical records. There is no state in
+which a design is registered but unrun, because an intention with no record cannot be cited — and a
+repository whose entire value is the auditability of its evidence should not keep a list of things
+it might have measured.

@@ -27,7 +27,7 @@ Generated from 42 canonical record(s), 2026-09-20T15:29:51Z to 2026-09-21T14:20:
 
 **CORE_CAPABILITY_EXPLORATION_CLOSED**
 
-- **LOCAL MEASUREMENT** — 10 of 15 registered experiment(s) have at least one canonical record, and every number this report states was recomputed from those records.
+- **LOCAL MEASUREMENT** — 10 of 10 registered experiment(s) have at least one canonical record, and every number this report states was recomputed from those records.
 - **DESIGN ASSUMPTION** — **nothing was adjusted after seeing an answer.** The thresholds, the weights, the expected labels, and the case lists were fixed before the runs; a report that moved one of them would be a fit rather than a measurement.
 
 **ACTUAL_HANDLER_EXECUTION_UNTESTED**
@@ -258,23 +258,11 @@ ordinary code
 - **LIMITATION** — **the live allowed-handler execution path is untested.** `ACTUAL_HANDLER_EXECUTION_UNTESTED` stands: an allowed route has not been observed reaching `HANDLERS[name](argument)` under a real answer.
 - **LIMITATION** — **no production-safety certification.** Nothing here certifies this pattern as safe to run against real systems, real customer data, or real money.
 
-## 15. Optional edge-coverage backlog
+## 15. Unrun experiments
 
 **OPTIONAL_EDGE_COVERAGE_BACKLOG**
 
-- **LOCAL MEASUREMENT** — 5 of 15 registered experiment(s) have no canonical record. The list is computed from the registry and the log, so it empties itself as records arrive.
-
-| experiment | tier | planned calls | what it would cover |
-| --- | --- | --- | --- |
-| `00_model_info` | `core` | 2 | List accessible models and record which versioned ID each alias resolves to. |
-| `08_literal_reading` | `extended` | 4 | Negation, implied conditions, and scope, following the documented jaggedness page. |
-| `09_numeric_limits` | `extended` | 3 | A tiny demonstration of the documented counting and arithmetic limits. |
-| `10_state_length` | `extended` | 3 | Fixed core evidence with growing irrelevant filler. |
-| `11_language_pair` | `extended` | 2 | Equivalent English and Chinese input and questions. |
-
-- **LIMITATION** — these are **not** blockers for the freeze. They widen coverage of behaviour this bench already has a reading on; none of them is a core-capability question left unanswered, and running one would start a new measurement rather than complete this one.
-
-- **DESIGN ASSUMPTION** — the most load-bearing of them is `00_model_info`, a core-tier experiment that was never run: the alias-to-version resolution it exists to record is nevertheless in every record of the log, because every call records both the model requested and the model resolved.
+- **LOCAL MEASUREMENT** — all 10 registered experiment(s) have at least one canonical record, so nothing is outstanding.
 
 ## 16. Secret architecture
 

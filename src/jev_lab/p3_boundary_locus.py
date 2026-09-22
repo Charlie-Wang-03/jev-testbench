@@ -8,9 +8,9 @@ boundary texts, crossed 2x2, three repeats per arm, twelve logical calls and no 
 
 What this module is deliberately *not*:
 
-* it is not registered in `EXPERIMENTS`. The fifteen-experiment registry feeds the frozen final
-  report and the backlog, and adding a sixteenth member would change the meaning of both. P3 keeps
-  its own log, its own entry point, and its own result document.
+* it is not registered in `EXPERIMENTS`. That registry feeds the frozen final report and its
+  backlog, and adding a member would change the meaning of both. P3 keeps its own log, its own
+  entry point, and its own result document.
 * it does not write to `results/usage.jsonl`. The 42 records there are frozen historical evidence;
   appending to them would invalidate a published SHA-256. P3 records into
   ``results/p3_boundary_locus/`` instead.
@@ -251,7 +251,7 @@ def experiment() -> Experiment:
 
     It is built on demand rather than held as a module global, and it is never added to
     `EXPERIMENTS`: the registry is what the frozen final report reads, and P3 must not change what
-    those fifteen experiments mean.
+    those experiments mean.
     """
     return Experiment(
         name=EXPERIMENT_NAME,

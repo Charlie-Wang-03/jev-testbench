@@ -22,6 +22,7 @@ deliberate act rather than an accident.
 
 import re
 import subprocess
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -50,6 +51,7 @@ ENGLISH_ONLY_EVIDENCE = [
     "docs/audits/P2_JEV_INSIGHT_TRIAGE.md",
     "docs/audits/P3_BOUNDARY_LOCUS_RESULT.md",
     "docs/experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md",
+    "docs/experiments/EXPERIMENT_REGISTRY.md",
     "docs/sources/TYPESAFE_OFFICIAL_SOURCES.md",
     "docs/EVIDENCE_PROVENANCE.md",
 ]
@@ -72,9 +74,8 @@ SHARED_FACTS = [
     # Counts and headline figures.
     "42",
     "12",
-    "15",
     "10",
-    "1044",
+    "1053",
     "21,767",
     "3,594",
     "816",
@@ -236,18 +237,122 @@ class TestPublicDocumentsAreFinished:
         found = [word for word in PLACEHOLDERS if word in text]
         assert not found, f"{path} contains placeholder text: {found}"
 
-    def test_the_license_gate_is_stated_not_glossed(self):
-        """The repository has no license. Every public entry point has to say so plainly."""
-        for path in ("README.md", "README.zh-CN.md"):
-            text = read(path).lower()
-            assert "license" in text, f"{path} does not mention the license state"
-        assert "LICENSE_DECISION_REQUIRED_BEFORE_PUBLIC" in read(
-            "docs/OPEN_SOURCE_LICENSE_DECISION.md"
+class TestLicenseIsResolved:
+    """The owner chose MIT. These assert the choice is stated once and agrees with itself.
+
+    The predecessor of this class guarded the opposite state -- no `LICENSE` file, because no
+    decision had been recorded. That gate is closed, and a test that still asserted its absence
+    would now be asserting that the repository is unlicensed. What replaces it is the same
+    discipline pointed the other way: the file, the packaging metadata, and both READMEs must say
+    the *same* thing, because a license stated in two vocabularies is a license that can drift.
+    """
+
+    def test_a_license_file_exists(self):
+        licence = REPO_ROOT / "LICENSE"
+        assert licence.is_file(), (
+            "no LICENSE file, but docs/OPEN_SOURCE_LICENSE_DECISION.md records that the owner "
+            "chose MIT"
         )
 
-    def test_there_is_no_license_file_yet(self):
-        """Guards the human gate: a LICENSE file may only appear once the owner has chosen one."""
-        assert not (REPO_ROOT / "LICENSE").exists(), (
-            "a LICENSE file exists, but no license decision has been recorded; "
-            "see docs/OPEN_SOURCE_LICENSE_DECISION.md"
+    def test_the_license_file_is_the_mit_text_not_a_pointer(self):
+        """A file that says 'see the project page' grants nothing. The grant has to be in it."""
+        text = read("LICENSE")
+        assert text.splitlines()[0].strip() == "MIT License"
+        assert "Permission is hereby granted, free of charge" in text
+        assert 'THE SOFTWARE IS PROVIDED "AS IS"' in text
+        # The two operative clauses of MIT. Without the second, the grant is unconditional.
+        assert "The above copyright notice and this permission notice shall be included" in text
+
+    def test_the_copyright_line_names_the_packaging_author(self):
+        """One author identity in the repository, not a second one invented for the license."""
+        author = tomllib.loads(read("pyproject.toml"))["project"]["authors"][0]["name"]
+        assert f"Copyright (c) 2026 {author}" in read("LICENSE"), (
+            "the LICENSE copyright line does not name the author recorded in pyproject.toml"
         )
+
+    def test_packaging_metadata_declares_the_same_license(self):
+        project = tomllib.loads(read("pyproject.toml"))["project"]
+        assert project["license"] == "MIT"
+        assert project["license-files"] == ["LICENSE"]
+
+    def test_the_license_is_not_also_declared_as_a_classifier(self):
+        """PEP 639 deprecates `License ::` classifiers beside an SPDX expression.
+
+        Shipping both states the same term in two vocabularies. The expression is the one the
+        build backend turns into `License-Expression`, so it is the one that stays.
+        """
+        classifiers = tomllib.loads(read("pyproject.toml"))["project"]["classifiers"]
+        licences = [entry for entry in classifiers if entry.startswith("License ::")]
+        assert not licences, f"SPDX expression and licence classifiers both present: {licences}"
+
+    def test_no_second_license_is_applied_to_the_evidence(self):
+        """One licence, stated once. A data licence here would need its own decision record."""
+        root_files = {path.name for path in REPO_ROOT.iterdir() if path.is_file()}
+        for alternative in ("LICENSE-CC", "LICENSE-DATA", "LICENSE-APACHE", "COPYING"):
+            assert alternative not in root_files, f"{alternative} was added without a decision"
+
+    def test_the_decision_document_records_the_outcome(self):
+        text = read("docs/OPEN_SOURCE_LICENSE_DECISION.md")
+        assert "LICENSE_DECISION_RESOLVED_MIT" in text
+        assert "**Decision: MIT.**" in text
+
+    @pytest.mark.parametrize(("english", "chinese"), PAIRED_DOCUMENTS[:1])
+    def test_both_readmes_name_the_chosen_license(self, english, chinese):
+        """The README is the entry point. 'A license exists' is not the same as naming it."""
+        for path in (english, chinese):
+            assert "MIT" in read(path), f"{path} does not name the chosen license"
+
+
+class TestTheRegistryHasNoUnrunExperiment:
+    """`ACTIVE_REGISTRY_HAS_ZERO_UNRUN_EXPERIMENTS`, as a documentation invariant.
+
+    The list of retired designs is stated in the README, in the experiment registry, and in the
+    repository's own registry code. Three copies of one list is three chances to drift, so the
+    README is checked against the code here, and the documentation set is checked against both.
+    """
+
+    RETIRED = [
+        "00_model_info",
+        "08_literal_reading",
+        "09_numeric_limits",
+        "10_state_length",
+        "11_language_pair",
+    ]
+
+    def test_the_readmes_do_not_offer_a_retired_experiment_as_runnable(self):
+        """`list` would not run these. The README must not imply otherwise."""
+        for path in ("README.md", "README.zh-CN.md"):
+            text = read(path)
+            for name in self.RETIRED:
+                assert name in text, (
+                    f"{path} does not mention the retired design {name}. A reader who meets the "
+                    "name in the P1 audit needs the README to say what happened to it."
+                )
+            assert "retired" in text.lower() or "退役" in text, (
+                f"{path} names the retired designs without saying they were retired"
+            )
+
+    def test_the_registry_document_has_exactly_two_categories(self):
+        """The document is the current registry, so it must not grow a third column.
+
+        Every retired design carries an explicit retire decision rather than a "later" marker:
+        an intention with no record cannot be cited, so there is no state in which one is
+        parked.
+        """
+        text = read("docs/experiments/EXPERIMENT_REGISTRY.md")
+        for name in self.RETIRED:
+            assert name in text, f"EXPERIMENT_REGISTRY.md does not account for {name}"
+        assert "Executed / evidence-bearing" in text
+        assert "Retired before public release" in text
+        assert "DELETE_FROM_ACTIVE_REGISTRY" in text
+        assert "ACTIVE_REGISTRY_HAS_ZERO_UNRUN_EXPERIMENTS" in text
+        for deferred in ("KEEP_FOR_LATER", "BACKLOG", "MAYBE"):
+            assert deferred not in text, (
+                f"{deferred} is a deferred state; a design is run or retired, never parked"
+            )
+
+    def test_every_retired_design_is_absent_from_the_code(self):
+        """The doc and the registry must agree, so this reads the source rather than a copy."""
+        from jev_lab.experiments import EXPERIMENTS
+
+        assert not [name for name in self.RETIRED if name in EXPERIMENTS]
