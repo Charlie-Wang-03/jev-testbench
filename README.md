@@ -15,7 +15,7 @@ This repository is a measurement bench for that primitive. Every real API call a
 line to an append-only JSONL log, and every claim in these documents is labelled as an official
 vendor claim, a design assumption, a local measurement, a derived calculation, or a limitation.
 
-**Status:** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **Tests:** 1053 passing, fully offline ·
+**Status:** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **Tests:** 1054 passing, fully offline ·
 **Evidence:** [42 core records](results/usage.jsonl) + [12 P3 records](results/p3_boundary_locus/usage.jsonl)
 
 ---
@@ -186,7 +186,7 @@ Full write-ups: [Findings](docs/findings/findings.md) ·
 
 ```console
 uv sync --locked
-uv run pytest                                    # 1053 tests, sockets blocked
+uv run pytest                                    # 1054 tests, sockets blocked
 uv run python -m jev_lab report                  # summary.csv, summary.md
 uv run python -m jev_lab snapshot                # capability_snapshot.md
 uv run python -m jev_lab final-report            # JEV_LOCAL_EVALUATION_FINAL.md
