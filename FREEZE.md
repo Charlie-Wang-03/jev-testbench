@@ -1,5 +1,12 @@
 # Freeze
 
+> **Scope note.** This file is the historical pointer to the **P0 core freeze** — the 42-record
+> evaluation described below — and it is scoped to that freeze alone. The repository has since
+> grown past it: P1 audited official claims, P2 triaged the findings for novelty, and P3 ran a
+> preregistered replication in its own log. Those stages are **not** described here and did not
+> alter anything below. For the complete lineage, see
+> [docs/EVIDENCE_PROVENANCE.md](docs/EVIDENCE_PROVENANCE.md).
+
 **`JEV_CORE_EXPLORATION_FROZEN`**
 
 This repository holds a frozen local evaluation of TypeSafe's Jev model. The pointer below is
@@ -52,4 +59,6 @@ uv run python -m jev_lab final-report  # JEV_LOCAL_EVALUATION_FINAL.md
 ```
 
 None of them calls the API, and none of them writes to the log. The full command set, the record
-schema, and the measurement ground rules are in `README.md`.
+schema, and the measurement ground rules are in
+[docs/methodology/evaluation.md](docs/methodology/evaluation.md) and
+[docs/guides/reproducibility.md](docs/guides/reproducibility.md).

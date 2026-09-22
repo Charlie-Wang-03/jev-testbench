@@ -1,514 +1,272 @@
-# jev-test — a TypeSafe Jev local bench
+# jev-test
 
-A minimal, auditable bench for measuring what TypeSafe's **Jev** model actually does on this
-machine: what it can decide, where it breaks, and what each call costs in tokens, latency, and
-dollars.
+**English** | [简体中文](README.zh-CN.md)
 
-This is an **experiment bench, not a production application**. It has no database, no Docker, no
-web UI, and no dependencies beyond the TypeSafe SDK. Its output is a JSONL log of real
-measurements you can read line by line.
+An auditable experimental harness for studying **TypeSafe Jev** as a typed probabilistic decision
+primitive for LLM and agent workflows.
 
----
+Jev is not a chat model. It takes a `state` and a set of **typed questions**, and returns
+**structured answers with probabilities** — a `Choice` label with a distribution, a `Score`
+position on an ordered rubric, or a `Noul` scalar probability. It does not generate prose, hold a
+conversation, or remember anything between requests. See
+[What is Jev?](#1-what-is-jev) for sources.
 
-## 1. What this is for
+This repository is a measurement bench for that primitive. Every real API call appends exactly one
+line to an append-only JSONL log, and every claim in these documents is labelled as an official
+vendor claim, a design assumption, a local measurement, a derived calculation, or a limitation.
 
-Three questions, answered with local evidence rather than vendor claims:
-
-1. **Capability** — which kinds of judgment does Jev handle well?
-2. **Boundaries** — how do the failure modes the docs already admit to behave on our own inputs?
-3. **Cost** — what do those calls cost in tokens, wall-clock latency, and US dollars?
-
-Each experiment is a small fixed set of cases: one synthetic state plus typed questions. Every
-real API call appends exactly one line to `results/usage.jsonl`.
-
-**Official claims and local measurements are kept separate.** The TypeSafe docs make performance
-claims (for example, that batching questions is "12.2x cheaper and 10.0x faster" on their GDPR
-cookbook workload). Those are recorded in this project as *claims*. Anything labelled a
-*measurement* was produced by a run in this repository and is in the JSONL.
+**Status:** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **Tests:** 975 passing, fully offline ·
+**Evidence:** [42 core records](results/usage.jsonl) + [12 P3 records](results/p3_boundary_locus/usage.jsonl)
 
 ---
 
-## 2. Environment
+## 1. What is Jev?
+
+**TypeSafe's own description** (not this repository's conclusion):
+
+> Jev is a typed probabilistic decision model — a "System One" model that turns unstructured state
+> into typed probabilistic decisions.
+
+Sources: <https://docs.typesafe.ai/llms.txt> · <https://typesafe.ai>
+
+This bench measures what that primitive does **on this machine, with this account, on our
+inputs**. A performance or accuracy statement from TypeSafe is recorded here as an
+**OFFICIAL CLAIM** about *their* workload. It is never presented as something we verified.
+
+## 2. What is this repository?
+
+An experimental harness — not an API demo, not a leaderboard, and not a general accuracy
+benchmark. Its value comes from the trustworthiness of one artifact:
 
 | | |
 |---|---|
-| OS | Windows 11 |
-| Python | 3.13 (`.python-version`: `3.13`) |
-| Package manager | [uv](https://docs.astral.sh/uv/) |
-| SDK | `typesafe-sdk` (pinned in `pyproject.toml`; 0.7.0 at the time of writing) |
-| Tests | `pytest` (dev dependency) |
+| Core canonical log | [`results/usage.jsonl`](results/usage.jsonl) — 42 records |
+| Core log SHA-256 | `38e67630a7c345f1719795401ceaf7de43b1c5ec16da2adb568fb7ef8dc40b1b` |
+| P3 canonical log | [`results/p3_boundary_locus/usage.jsonl`](results/p3_boundary_locus/usage.jsonl) — 12 records |
+| P3 log SHA-256 | `17f36f7551d598a4724f4557d8b235d810ec4fb259d8d4b842eabc8f34c5d78e` |
+| Resolved model | `jev-1.13.0` on 42 of 42 records (requested as `jev-latest`) |
+| Tokens | 21,767 input / 3,594 output — as returned by the API, never estimated |
 
-Set up:
+Two canonical logs, deliberately not merged: the 42-record core evaluation is frozen historical
+evidence, and appending to it would invalidate a published hash. P3 kept its own log for the same
+reason. See [Evidence provenance](docs/EVIDENCE_PROVENANCE.md).
 
-```powershell
-uv sync
-uv run pytest
-```
+## 3. Why does it exist?
 
-**Platform note:** pytest is configured with a project-local basetemp (`--basetemp=.pytest-tmp`),
-because the system `%TEMP%` directory is not writable in every environment this project runs in.
-`.pytest-tmp/` is gitignored.
+Because the interesting question about a probabilistic decision primitive is not "is it good?" but
+**"what exactly did it do, and what can I actually conclude from that?"**
 
-The initial `uv init` scaffolding (`src/jev_test/`, a root `test_jev.py` that called the live API
-on import, and the matching `[project.scripts]` entry) has been removed. The bench is
-`src/jev_lab/`, it is used as `uv run python -m jev_lab ...`, and there is no console script.
+- **Not an API demo.** Nothing here is written to show the product at its best.
+- **Not a leaderboard.** There is no ground truth anywhere in this bench, so there is no accuracy
+  score to rank.
+- **Not a general benchmark.** Every number describes one payload, one account, one session, at one
+  model version.
+- **Evidence-oriented.** Failed calls are records. Negative results are kept. A finding that turns
+  out to be neither novel nor supported is written up as *killed*, not quietly dropped.
 
----
+## 4. What did we test?
 
-## 3. Setting the API key
+Fifteen experiments are registered; ten have been run. Two tiers:
 
-The key is read from exactly two places, in this order:
+**`core` — the foundational mechanics**
 
-1. the environment variable `TYPESAFE_API_KEY`, when it holds a non-blank value;
-2. `<repo>/.secrets/typesafe.env`, a local file that is git-ignored;
-3. neither — and every command that needs the API stops before spending anything.
+| Experiment | Calls | What it measures |
+|---|---|---|
+| `01_primitives` | 1 | `Choice` + `Score` + `Noul` in one request against one state. |
+| `02_structured_addressing` | 2 | Field-path addressing over structured state vs. described addressing over prose state. |
+| `03_parallel_questions` | 12 | One batched request vs. the same questions sent separately, in two order-balanced cycles. |
+| `04_confidence` | 2 | Specific vs. ambiguous evidence, routed in code on confidence alone. |
 
-The environment wins, so a rotated or one-off key can be set for one terminal without touching the
-file. When it is set, the file is not opened at all.
+**`extended` — specific behaviours and documented limits**
 
-No command ever prints the key, its length, a prefix, a suffix, or a hash of it. Every command that
-touches credentials reports one of:
+| Experiment | Calls | What it measures |
+|---|---|---|
+| `05_speculative_fanout` | 6 | One request carrying both branches' follow-ups vs. a second request staged on the first answer. |
+| `06_composite_scoring` | 3 | Four atomic `Score` questions composed into one risk **in Python**, weights frozen before the run. |
+| `07_instruction_precision` | 2 | Vague vs. explicit decision boundaries on a byte-identical 82-byte state. |
+| `12_function_routing` | 4 | Route a state to a name in a registry frozen before the run, then to a closed-set argument. |
+| `13_repeatability` | 5 | One byte-identical request sent five times. |
+| `13b_ambiguous_repeatability` | 5 | A payload known to land mid-scale, sent five times. |
 
-```text
-TYPESAFE_API_KEY: missing
-TYPESAFE_API_KEY: exists (source=environment)
-TYPESAFE_API_KEY: exists (source=local-secret-file)
-TYPESAFE_API_KEY: unusable (malformed | duplicate-key | unreadable)
-```
+**P3 — a preregistered replication** ([design](docs/experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md) · [result](docs/audits/P3_BOUNDARY_LOCUS_RESULT.md))
 
-For a single session, without leaving the key in your shell history:
+Experiment `07` moved a `Noul` from 0.75 to 0.20 by changing the *instructions* and the *criteria*
+together, so it could not say which field carried the move. P3 crossed the two fields 2×2, three
+repeats per arm, twelve calls, with the design and thresholds frozen before the first request.
 
-```powershell
-$secureKey = Read-Host "Paste TypeSafe API key" -AsSecureString
-$env:TYPESAFE_API_KEY = [System.Net.NetworkCredential]::new("", $secureKey).Password
-Remove-Variable secureKey
-```
+Five further experiments (`00_model_info`, `08_literal_reading`, `09_numeric_limits`,
+`10_state_length`, `11_language_pair`) are registered but unrun. They are an optional edge-coverage
+backlog, not blockers — `08` and `09` exist to observe documented failure modes once locally, not
+to grade the model.
 
-### Persistent local API key
+## 5. What did we learn?
 
-A session variable is gone when the terminal closes. If you would rather not re-paste a key every
-time, put it in `.secrets/typesafe.env` — inside the working directory, and outside version control.
+The most robust results. Every one is a **local measurement** unless marked otherwise.
 
-The format is one line, no quoting, no shell syntax:
+**Typed output semantics reproduce cleanly here.** All 42 responses were schema-valid and typed
+only — no free-text field anywhere. Across 45 `Choice` answers the returned label was always the
+highest-probability option; across 29 `Score` answers, 24 reproduced the probability-weighted mean
+within 0.006. `Noul` answers carry no separate `confidence` field, because with only two outcomes
+the one number already describes the whole distribution. *(This is the weakest kind of support for
+a type-safety claim: it shows schema conformance on benign payloads, not factual correctness.)*
 
-```text
-# Local credentials for this machine. Never commit this file.
+**Same-state batching materially reduces repeated-state input usage in this workload.** Sending 5
+questions over one state in a single request cost **816 input tokens**; sending the same 5
+questions separately cost **3,480** — a **4.26× pooled input ratio, 76.55% fewer input tokens**,
+with **10 of 10** selected values identical across the two arms. *This is one payload where every
+question reads the same state. It is not a universal batching ratio, and it is not comparable to
+the vendor's own published multiplier, which describes a different workload.*
 
-TYPESAFE_API_KEY=<your-key>
-```
+**Confidence is useful as a policy input, but it is not a per-answer correctness guarantee.** The
+official docs scope calibration to *groups* of predictions and state that confidence "describes
+the model's answer, not a guarantee that the answer is correct" — this repo's two confidence cases
+*illustrate* that scoping and cannot test it. The local cautionary example: in `06`, a dimension
+scored 1.62 against a confidence of **0.24**, and that dimension carried 97.4% of that state's
+composite risk.
 
-Create the file if it is not there yet. Blank lines and `#` comments
-are ignored; the value is everything after the `=` with surrounding whitespace removed. Nothing in
-the file is expanded, substituted, or executed — `$(...)`, `${VAR}`, backticks, and quotes are
-ordinary characters, and there is no inline-comment syntax (a trailing `# comment` becomes part of
-the value). Two `TYPESAFE_API_KEY` lines, an unexpected name, or a line that is not an assignment
-is an error rather than a silent choice, and the loader stops. An empty value means *missing*.
+**Instruction and criteria specificity materially moved one payload.** On a **byte-identical**
+82-byte state, a vague decision boundary returned `Noul` **0.75** and an explicit one returned
+**0.20** — a move of **0.55** on a 0–1 probability. Neither arm is ground truth, and one pair is
+not a dose–response curve.
 
-`.secrets.example/typesafe.env` is the committed template. `.secrets/` is not:
+**P3 could not attribute that move to either field.** Verdict:
+**`P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION`**. Instruction-only reached a median of 0.31 and
+criteria-only 0.36 — both clear of the vague baseline (0.76), and only **0.05 apart from each
+other**, against a 0.56 end-to-end gap. The pre-registered rule killed the attribution: no
+assignment of a single-field arm left its counterpart near the vague baseline. Descriptive only:
+instruction-only recovered 80.4% of the gap and criteria-only 71.4%. **A null result is a result.**
+
+**Repeating an identical request moves the distribution underneath a stable label.** Across ten
+byte-identical calls the winning `Choice` label never switched, while the top-2 margin underneath
+it moved by up to 0.07 and one repeat produced an exact tie. The *effect* is real; it is not a
+novel finding, and P2 killed it as one — see below.
+
+**Routing and authorization are separate engineering layers.** In `12_function_routing` the model
+matched the intended function 4 of 4 times and the intended argument 4 of 4 times — and a policy
+frozen before the run withheld **every** route, so no handler ran at all. Whether to act was
+decided in Python, after the model answered. A system that treats a confident route as permission
+to act has removed the layer that produced this result.
+
+**And — the part that matters most — several good-looking findings were deliberately killed.** P2
+triaged every candidate against the standard: *is this both novel relative to TypeSafe's public
+material, and supported by our own data?* Seven candidates were retired, including the two with the
+largest local effect sizes:
+
+| Killed candidate | Why |
+|---|---|
+| "Stable label, moving distribution" | Not novel — officially entailed and already publicly reproduced with more data than ours. |
+| Batching cuts input tokens | Expected shared-state amortisation; public measurements go further (they varied batch size). |
+| The 0.75 → 0.20 instruction effect | A direct instance of a documented failure mode with a documented remedy. |
+| The ambiguous case clearing a 0.60 gate | Pure threshold arithmetic on **our own** constant — the expression reproduces 0.61 exactly. |
+| Fan-out trades input for output | Generic speculative-execution tradeoff — and on this product the "wasted" resource is output tokens, which the price card rates at zero. |
+| `confidence` not recomputable from logged `probabilities` | An artifact of 2-decimal API rounding — a limit of our *record*, not a behaviour of the model. |
+| Every correct route was suppressed | Our own Python policy, and the source comments say so. |
+
+> **No candidate was killed for being unflattering, and no candidate was preserved for being
+> interesting.**
+
+The one candidate that survived triage was the P3 question above — and P3 then returned a null.
+**This repository currently reports no Jev-specific finding that is both novel and supported by its
+own data.** That is the honest state of the evidence, and it is the point of the exercise.
+
+Full write-ups: [Findings](docs/findings/findings.md) ·
+[P1 official-claims audit](docs/audits/P1_OFFICIAL_CLAIMS_LOCAL_EVIDENCE.md) ·
+[P2 novelty triage](docs/audits/P2_JEV_INSIGHT_TRIAGE.md) ·
+[P3 result](docs/audits/P3_BOUNDARY_LOCUS_RESULT.md).
+
+## 6. What can you reproduce?
+
+### Fully offline — no API key needed
 
 ```console
-$ git check-ignore -v .secrets/typesafe.env
-.gitignore:28:.secrets/    .secrets/typesafe.env
+uv sync --locked
+uv run pytest                                    # 975 tests, sockets blocked
+uv run python -m jev_lab report                  # summary.csv, summary.md
+uv run python -m jev_lab snapshot                # capability_snapshot.md
+uv run python -m jev_lab final-report            # JEV_LOCAL_EVALUATION_FINAL.md
 ```
 
-`git add --dry-run .secrets/typesafe.env` is refused for the same reason, and
-`git add --dry-run .secrets.example/typesafe.env` succeeds — the template is meant to be committed.
+The tests never touch the network — the suite blocks sockets outright, so an accidental API call
+fails rather than spends. Every derived report is rebuilt from the committed canonical logs, so the
+numbers in them cannot drift from the records they describe.
 
-**What this scheme does and does not buy you.** It keeps the key out of Git, out of the diff, and
-out of the chat transcript. It is still a plaintext file on disk. Be clear-eyed about that:
+### Live reproduction — needs a TypeSafe account
 
-- it is only appropriate for a personal experiment repository on a machine you control;
-- it is readable by anything running as you, and by backup, indexing, and cloud-sync tools that
-  watch the directory — OneDrive, Dropbox, and Windows Search included, if the repo is inside a
-  synced folder;
-- the default Windows ACL on the file inherits from its parent: `Administrators`, `SYSTEM`,
-  `Authenticated Users`, and `BUILTIN\Users` (read). On a single-user machine that is roughly "you
-  and anything running as an administrator", but it is not a per-user lock, and a second local
-  account can read the file. Tightening it is optional, and if you do it, do it on the file — not
-  on the repository directory, and not in a way that drops `SYSTEM` or your own account;
-- an agent with file access can read it. `CLAUDE.md` asks agents not to, and that instruction is a
-  convention, not a mechanism.
-
-**If you suspect the key was exposed** — committed, pasted, synced, screenshotted — revoke it in
-the TypeSafe Console and issue a new one. Do it first; rewriting history afterwards does not undo
-the exposure. Then update `.secrets/typesafe.env` (or the session variable).
-
-Committing the file is the failure this scheme is built to prevent, but the ignore rule is not the
-only line: the loader fails closed, the tests never read the real file (see `tests/conftest.py`),
-and no code path prints a value.
-
----
-
-## 4. Commands
-
-```powershell
-uv run python -m jev_lab list                     # experiments, tiers, case counts, key status
-uv run python -m jev_lab run 01_primitives        # run one experiment
-uv run python -m jev_lab run-all --tier core      # run a whole tier (needs an explicit budget)
-uv run python -m jev_lab report                   # rebuild summary.csv and summary.md
-uv run python -m jev_lab snapshot                 # rebuild the derived capability_snapshot.md
-uv run python -m jev_lab final-report             # rebuild the derived JEV_LOCAL_EVALUATION_FINAL.md
+```console
+uv run python -m jev_lab list                    # experiments, call ceilings, credential status
+uv run python -m jev_lab run 01_primitives       # one experiment, ceiling of 8 calls
+uv run python -m jev_lab run-all --tier core     # a whole tier; refuses without an explicit budget
 ```
 
-`list`, `report`, `snapshot`, and `final-report` never call the API and work without a key. All
-four read the log and never write to it.
+**These commands spend real money.** `run` defaults to a hard ceiling of 8 API calls; `run-all`
+refuses to start unless `--max-requests` covers the tier. See
+[Credentials](docs/guides/credentials.md) and [Reproducibility](docs/guides/reproducibility.md).
 
-### Budgets and safety
+> **Frozen measurements are historical measurements, not golden outputs.** A fresh live run will
+> not necessarily reproduce these numbers. The model alias `jev-latest` can move, the account and
+> session differ, and this is a probabilistic model — byte-identical requests returned
+> differently-shaped distributions here. Reproducing the *method* is the goal; reproducing the
+> *digits* is not something this design can promise.
 
-- `run` defaults to a ceiling of **8** API calls. Override with `--max-requests N`.
-- `run-all` **refuses to start** unless `--max-requests` is at least the tier's case count. This is
-  deliberate: a bulk run must be an explicit human decision, never an accident.
-- Every experiment declares its cases up front, so the cost of a run is knowable before it starts.
-- One experiment has a real **control flow**: in `05_speculative_fanout` the next request depends on
-  the previous answer, so its declared four cases can become six calls. It states that ceiling
-  explicitly (`call_ceiling`) and the budget check uses the ceiling, never the case count. Its
-  branch rule is frozen before the run: a primary answer naming no known branch sends **no** second
-  request, because no offline-audited payload exists for a branch chosen at run time.
-- One experiment **executes** something: `12_function_routing` calls a handler after a route is
-  selected. Every handler is registered in `jev_lab/routing.py` before the run and is inert — no
-  file, network, subprocess, shell, or change to this project — and the model can only select a name
-  from that registry, never supply code. A label outside it, a missing argument, or an argument
-  outside the selected function's frozen set all **fail closed**: the case reports
-  `FUNCTION_ROUTE_UNAVAILABLE` and nothing is called. Its four cases carry no control flow, so it
-  spends exactly four calls.
-- There are **no unbounded loops**. The two repeating experiments (`13_repeatability` and
-  `13b_ambiguous_repeatability`) are each capped at 5 repeats; any loop that would call the API is
-  bounded by the case list and by `--max-requests`.
-- An authentication failure aborts a run immediately rather than spending the rest of the budget.
-- A failed case records its error and the run continues, so a partial result still has provenance.
+## 7. What you can NOT conclude from this repository
 
-### Model selection
+Stated plainly, because it is the most important section here:
 
-`--model` overrides the model for a run. The default is the SDK's own default, `jev-latest`.
-Every record stores both the model **requested** and the model **resolved** by the API, because an
-alias can move underneath you.
+- **No general accuracy.** There is no ground truth anywhere in this bench. "4 of 4" is a count on
+  synthetic cases, never a rate.
+- **No calibration validation — in either direction.** No outcome rate exists here, so this repo
+  must never be cited as validating *or* falsifying calibration.
+- **No model latency benchmark.** Latency is recorded, not benchmarked. No speedup is claimed, and
+  no arm is called faster.
+- **No determinism guarantee — and no non-determinism guarantee.** A handful of repeats on two
+  payloads is not a determinism verdict.
+- **No universal batching ratio.** The 4.26× figure is a property of one payload where all
+  questions share one state.
+- **No broad hallucination benchmark.** Nothing here probes factual correctness; "can't
+  hallucinate" carries the vendor's own "not empirical" qualifier.
+- **No production-safety certification.** Every handler is inert. Nothing here certifies any
+  pattern as safe against real systems, real customer data, or real money.
+- **No vendor-claim adjudication.** Official figures are recorded as claims about TypeSafe's
+  workload and are never restated as things we measured.
 
-Current target: `jev-1.13.0`, which is what both `jev-latest` and `jev-preview` resolve to today.
-The ability to ask for a model is not evidence about which one answered — the response's `model`
-field is.
+Cost figures are **local estimates** from one price table. TypeSafe Console billing is
+authoritative.
 
 ---
 
-## 5. `results/usage.jsonl` is the canonical local record
+## Documentation
 
-Every call appends one JSON object per line:
+**[docs/README.md](docs/README.md)** is the documentation index, grouped by what you are trying to
+do: start here, understand the evidence, or reproduce and extend.
 
-```json
-{
-  "timestamp_utc": "2026-09-20T15:04:05Z",
-  "run_id": "a1b2c3d4e5f6",
-  "experiment": "01_primitives",
-  "case_id": "ticket_all_primitives",
-  "model_requested": "jev-latest",
-  "model_resolved": "jev-1.13.0",
-  "request_id": "…",
-  "latency_ms": 812.5,
-  "question_count": 3,
-  "question_types": ["choice", "noul", "score"],
-  "state_chars": 187,
-  "state_utf8_bytes": 187,
-  "input_tokens": 328,
-  "output_tokens": 34,
-  "total_tokens": 362,
-  "estimated_cost_usd": 0.00001378,
-  "cost_basis": "jev-1.13.0: input $0.042/M tokens, output $0.0/M tokens",
-  "status": "ok",
-  "error_type": null,
-  "retry_count": null,
-  "case_sequence_index": 0,
-  "logical_request_index_in_run": 0,
-  "client_session_id": "…",
-  "is_first_request_in_client_session": true,
-  "transport_attempt_count": 1,
-  "transport_retry_count_observed": 0,
-  "attempt_count_source": "httpx_request_event_hook",
-  "schema_version": 3,
-  "answers": { "…": "…" },
-  "notes": { "…": "…" }
-}
-```
+| | |
+|---|---|
+| [Architecture](docs/architecture/architecture.md) | Data flow, the agent-control pattern, module map. |
+| [Findings](docs/findings/findings.md) | What reproduced, engineering lessons, killed findings, scope limits. |
+| [Methodology](docs/methodology/evaluation.md) | Claim labelling, experiment design, what A/B arms do and do not establish. |
+| [Reproducibility](docs/guides/reproducibility.md) | Offline and live paths, what "reproduce" can and cannot mean here. |
+| [Credentials](docs/guides/credentials.md) | How the API key is resolved, and what that scheme does not buy you. |
+| [Evidence provenance](docs/EVIDENCE_PROVENANCE.md) | The P0–P3 lineage: measurement commits vs. analysis commits. |
+| [Final evaluation](results/JEV_LOCAL_EVALUATION_FINAL.md) | All 42 records, every claim labelled. *Derived artifact.* |
+| [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) | How to work in this repo, and how to report a problem. |
 
-- **Token counts are the ones the API returned** in `usage`. This project never estimates tokens;
-  `usage` is the canonical measurement.
-- **The position fields exist because latency is confounded by position.** `client_session_id`
-  groups the calls that shared one `TypeSafeClient` (and therefore one connection pool);
-  `is_first_request_in_client_session` marks the call that opened it;
-  `logical_request_index_in_run` counts 0-based across the whole invocation, and
-  `case_sequence_index` counts 0-based within the experiment. All four are recorded before the
-  request is sent, so a failed call carries them too. Schema-1 rows simply lack them — a missing
-  field means "not recorded" and never means zero. `run` prints all of this per run so the
-  confound is visible while the run is happening rather than discovered later.
-- **`retry_count` is vestigial.** It is still written so old lines stay readable, but it is always
-  `null` — see the retries subsection below. The live attempt fields are `transport_attempt_count`
-  and `transport_retry_count_observed`, and a missing value in any of them means *not recorded*,
-  never `1` and never `0 retries`.
-- **`latency_ms` is local wall-clock** around the call. It is measured by this tool, not by the
-  API.
-- **`notes` carries the case's design metadata** (which arm it belongs to, an expected label where
-  one exists) plus `notes.derived`: values computed locally from the answer, such as the
-  confidence gate's routing decision. Derived values cost no extra API call.
-- `results/` is **append-only**. Nothing rewrites or deletes prior records.
-- `results/capability_snapshot.md` and `results/JEV_LOCAL_EVALUATION_FINAL.md` are **derived**
-  views, regenerated by `snapshot` and `final-report`. Neither is a measurement and neither is a
-  source of truth; every number in them is recomputed from the log on the way out, so they cannot
-  drift from the records they describe.
-- `results/` is **committed selectively**: the canonical log and the final report are tracked, and
-  every other derived file is ignored. A clone gets the measurements, which is what makes an
-  evaluation citable; it rebuilds the views. See the comment on the `results/*` rule in
-  `.gitignore` — the pattern is `results/*` with a negation per tracked file, because a negation
-  cannot resurrect a file whose parent directory is ignored.
+## Ground rules
 
-### Retries distort latency, and are now counted locally
-
-The SDK retries by default (`RetryPolicy(max_retries=2)`, retrying 408/429/5xx with backoff and a
-30s budget). A retried call is still **one** logical request in the log, but its `latency_ms`
-includes every attempt and the backoff between them.
-
-`retry_count` — the SDK's own field — **is dead and stays dead.** The SDK sets
-`X-TypeSafe-Retry-Count` on the retried *request*; this recorder reads that header off the
-*response*, where the server does not echo it. It is therefore always `null`. It is kept only so
-old lines stay readable, is never backfilled, and `null` in it never means "no retries happened".
-Do not reason from it.
-
-The live fields are counted in this process instead. `TransportProbe` attaches an `httpx2` request
-event hook — which fires once per wire attempt — to the client the SDK uses, and each logical call
-records the difference between two reads of that counter:
-
-- `transport_attempt_count` — outgoing HTTP attempts inside this call's timing window.
-- `transport_retry_count_observed` — `max(transport_attempt_count - 1, 0)`.
-- `attempt_count_source` — how it was measured, `"httpx_request_event_hook"`.
-
-The hook increments an integer and inspects nothing: it never reads a header, a URL, or a body,
-never retains the request, and never writes anything. It cannot leak a credential because it never
-looks at one. The count is a **local observation of this process's traffic**, not a server-side
-statement; it counts wire attempts, so a redirect hop would be included if one ever happened.
-
-A failed call still records its count — the second read happens in a `finally`, so a call that
-exhausts its retries and raises reports all of them. When no probe is attached the fields stay
-`null`, which means **not recorded** and is deliberately distinct from `1`. The before/after delta
-assumes experiments run **serially**, which the CLI does; introducing concurrency would require
-re-auditing it.
-
-### Latency measurement policy
-
-Latency here is **wall-clock around one SDK call**, and it inherits a substrate: a fresh client pays
-DNS, TCP, and TLS that its siblings do not. A timing difference between two arms is therefore not
-evidence about the model until the order is controlled. The policy for any experiment that wants to
-say something about latency:
-
-1. **Balance the order, always.** Neither arm may sit in the same position in every run. This is the
-   one non-negotiable item, and it is what the four position fields exist to verify after the fact.
-2. **Report the first request separately; do not silently drop it.** The canonical log keeps every
-   call. Any derived view that excludes warm-up observations says so explicitly and shows what it
-   excluded, so the exclusion is auditable rather than invisible.
-3. **Do not treat repetition as optional to save a couple of calls.** Two extra calls cost a
-   fraction of a cent; an unbalanced comparison is worth nothing. `03_parallel_questions` runs two
-   order-balanced cycles for exactly this reason.
-4. **Check the attempt count before reading any latency.** This is what `transport_attempt_count`
-   is for, and it licenses exactly one sentence: *this call was not observed to make more than one
-   HTTP attempt*. It licenses nothing more.
-5. **Never equate `attempts == 1` with pure model inference latency.** A single attempt still sits
-   inside a window that contains DNS, TCP, and TLS setup, connection-pool state, the server's own
-   queueing, upstream model time, and local scheduling. The count rules out *observed* HTTP retries
-   and nothing else. A call with no attempt count rules out even that.
-6. **A dedicated latency benchmark is the eventual home for this.** Capability experiments should
-   not have to carry timing controls they were not designed around.
-
-Even when the order is balanced, the result is an **observed latency comparison** and is named that
-way. Two cycles is a small sample: it is not enough to claim a stable speedup factor, and no
-experiment here claims one.
-
-A warm-up is tempting and only partly available. `client.models.list()` is a `GET /v1/models` on the
-same client, so it shares the connection pool — that part is verified in the SDK, which constructs
-the `Models` resource with the same `httpx2.Client` that `system_one` uses. Its response schema
-carries no `usage` field at all, so it cannot be a token-accounted Jev inference call. But this
-project has not confirmed with TypeSafe that the endpoint is unbilled, and a warm-up cannot remove a
-position effect that also varies with server-side conditions. So a warm-up is a *possible future
-refinement*, not a substitute for balancing, and nothing here depends on it yet.
-
-### Logging
-
-Do **not** set `TYPESAFE_LOG_LEVEL=debug` while running experiments. The SDK redacts secret
-*headers*, but it explicitly does **not** redact request or response *bodies* — debug logging will
-dump your full `state` and every answer to the console. Nothing in this project enables it.
-
----
-
-## 6. Cost is a local estimate
-
-`estimated_cost_usd` is computed locally from the published price:
-
-```text
-estimated_cost_usd = input_tokens × 0.042 / 1_000_000
-```
-
-Output tokens are free at the published rate, so they contribute nothing. Prices live in one
-place, `src/jev_lab/pricing.py`, keyed by the **resolved** model — never the requested one.
-
-If a response's resolved model is not in that table, the cost is recorded as `null` with
-`cost_basis: "unknown: resolved model is not in this project's price table"` rather than being
-assumed to share `jev-1.13.0`'s rate. A future model must be added to the table deliberately.
-
-> **This is an estimate.** TypeSafe's Console billing is the authoritative, server-side record of
-> what you were charged. Treat these numbers as a local planning aid.
-
----
-
-## 7. Jev is not a chat or generative model
-
-This matters for reading every result in this repository.
-
-Jev takes a `state` and a set of **typed questions**, and returns **structured, typed answers with
-probabilities** — not prose. It does not generate text, does not hold a conversation, and has no
-memory between requests. Each request is independent.
-
-- A `Choice` answer is a label plus a probability for every option and a `confidence`.
-- A `Score` answer is a probability-weighted position on an ordered rubric, plus its distribution
-  and a `confidence`.
-- A `Noul` answer is a single probability that the answer is yes, with **no separate confidence** —
-  with only two outcomes, the one number already describes the whole distribution.
-
-The design rule that follows from this, and that shapes every experiment here: **code does the
-arithmetic and the branching; Jev supplies the semantic judgment.** When you see this project ask
-Jev for a count or a comparison, it is measuring a documented limitation, and the correct
-code-side answer is included alongside it.
-
----
-
-## 8. The experiments
-
-Every experiment below is **designed and registered**. The "real run" column says whether it has
-actually been run against the API, and the "records" column is the number of lines it owns in
-`results/usage.jsonl` — those two are read off the log, not maintained by hand.
-
-`core` — the foundational mechanics:
-
-| Experiment | Real run | Records | What it measures |
-|---|---|---|---|
-| `00_model_info` | no | 0 | Which versioned ID each alias resolves to. |
-| `01_primitives` | yes | 1 | Choice + Score + Noul in one request against one state (the smoke test). |
-| `02_structured_addressing` | yes | 2 | Field-path addressing over structured state versus described addressing over prose state. |
-| `03_parallel_questions` | yes | 12 | One batched request versus the same questions sent separately, in two order-balanced cycles. |
-| `04_confidence` | yes | 2 | Specific versus ambiguous evidence; routed in code on confidence alone. |
-
-`extended` — specific behaviours and documented limits:
-
-| Experiment | Real run | Records | What it measures |
-|---|---|---|---|
-| `05_speculative_fanout` | yes | 6 | The same branching control flow run two ways: every candidate follow-up in one request (speculative fanout) versus the routed branch's follow-ups in a second request (staged). Two states, order-balanced, capped at 6 logical calls. |
-| `06_composite_scoring` | yes | 3 | Four separate atomic Score questions per state, composed into one risk in Python with weights frozen before the run. Jev is asked for no arithmetic and no verdict. Three states, one request each. |
-| `07_instruction_precision` | yes | 2 | Vague versus explicit decision boundaries on a byte-identical state. |
-| `08_literal_reading` | no | 0 | Negation, implied conditions, and scope. |
-| `09_numeric_limits` | no | 0 | A small demonstration of the documented counting and arithmetic limits. |
-| `10_state_length` | no | 0 | Fixed core evidence with growing irrelevant filler. |
-| `11_language_pair` | no | 0 | Equivalent English and Chinese input and questions. |
-| `12_function_routing` | yes | 4 | Route a state to a name in a registry frozen before the run, and to one of that name's closed-set arguments, then call an inert handler. Four states, one request each; a frozen policy can only withhold execution. |
-| `13_repeatability` | yes | 5 | One byte-identical Choice + Score + Noul request sent five times, to observe how much the answers and the reported usage move. |
-| `13b_ambiguous_repeatability` | yes | 5 | `01_primitives`' own request sent five times, to observe run-to-run variation where the Choice and the Score are not at the ends of their scales. |
-
-`08` and `09` are built from the official *Jev 1.13 jaggedness* page and are deliberately tiny:
-the docs already state those limitations, so repeating them at scale would spend budget to learn
-something already known. Their purpose is to see the failure mode once, locally, not to grade the
-model. Neither has been run.
-
-### `OPTIONAL_EDGE_COVERAGE_BACKLOG`
-
-`00_model_info`, `08_literal_reading`, `09_numeric_limits`, `10_state_length`, and
-`11_language_pair` have **no records**. They extend coverage of behaviour this bench already has a
-reading on; none of them answers an open core-capability question, and none is a blocker for the
-status below. Running one would start a new measurement rather than complete this one.
-
-The list is derived, not maintained: `final-report` computes it as the registered experiments with
-no canonical record, so an experiment leaves the backlog the moment it produces a line.
-
-The most load-bearing of them is `00_model_info`, the only core-tier experiment that was never
-run. The alias-to-version resolution it exists to record is nevertheless in every record of the
-log, because every call records both `model_requested` and `model_resolved`.
-
----
-
-## Current evaluation status
-
-**`CORE_CAPABILITY_EXPLORATION_CLOSED`** — the core-capability questions this bench was built to
-ask have each produced a local measurement, and every measurement is in the canonical log.
-Nothing was adjusted after seeing an answer: no threshold, state, or criterion was revised once
-results existed, and no negative or unexpected result was dropped.
-
-All 42 canonical records are `status: ok`, every one resolved to `jev-1.13.0`, and the log carries
-no credential material.
-
-One boundary is carried forward deliberately rather than closed:
-
-**`ACTUAL_HANDLER_EXECUTION_UNTESTED`** — in `12_function_routing` every resolved route was
-withheld by the frozen policy, so the branch that reaches `HANDLERS[name](argument)` was never
-entered under a live answer. This is **not a blocker**: that branch is Python-side plumbing rather
-than an open question about the model, and the offline suite exercises it directly. No threshold
-was moved and no state was chosen to make it execute, because either would have replaced a
-measurement with a fit.
-
-**`LATENCY_NOT_ESTABLISHED_AS_MODEL_PERFORMANCE_BENCHMARK`** — latency is recorded here and read
-nowhere else. Sessions show a slow first call, and the fields needed to check that hypothesis are
-present on the newer records only; the window is not decomposable from these records, and no
-speedup is claimed anywhere.
-
-The full findings, with every claim labelled OFFICIAL / DESIGN ASSUMPTION / LOCAL MEASUREMENT /
-DERIVED CALCULATION / LIMITATION, are in **`results/JEV_LOCAL_EVALUATION_FINAL.md`** — a derived
-artifact, regenerable with `final-report`.
-
-Some experiments A/B two arms (batched vs separate, structured vs prose, vague vs explicit, English
-vs Chinese, short vs long). Those are read from the per-case table each `run` prints, and from the
-per-case rows in `usage.jsonl` — the summary aggregates by experiment, not by case.
-
-### What the A/B experiments do and do not establish
-
-An A/B here varies more than its name suggests, and the difference matters when reading a result.
-
-- **`03_parallel_questions`** runs two order-balanced cycles — batched-then-separate, then
-  separate-then-batched — because its first version put the batched arm first in every run and left
-  arm identity perfectly confounded with request position. Twelve logical calls. Token and cost
-  comparisons are tight: identical state, identical question definitions, one request carrying all
-  five questions against five requests carrying one each. **Latency is still only observational**:
-  two cycles balance the order but are nowhere near enough to claim a speedup, so this experiment
-  never claims one.
-- **`02_structured_addressing`** is **not** a clean "JSON versus prose" causal test. Three things
-  move together: the state representation, whether a question can name a field path at all, and the
-  payload length (the structured arm is longer). Token, latency, and cost differences are therefore
-  **confounded by length** and are reported as observations, not attributed to representation.
-  `state_chars` / `state_utf8_bytes` are recorded per case so the gap stays measurable. Both arms
-  carry the same facts, the same question set, and identical criteria.
-- **`04_confidence`** keeps both arms in one scenario with the same entities, similar length, and
-  identical Choice and Score criteria, so the main variable is how specific the evidence is.
-  Correctness and confidence are reported **separately**: the clear arm declares an expected label,
-  the ambiguous arm declares none rather than inventing one, so "confidently wrong" stays visible.
-  The Score is there to observe the ordinal distribution; **Score confidence is not correctness**
-  and is not comparable to Choice confidence.
-- **`07_instruction_precision`** holds the state byte-identical and puts criteria in **both** arms,
-  so the answer space is the same. It varies how explicitly the decision boundary is stated, in the
-  instructions and criteria **together** — it does **not** isolate instruction wording from criteria
-  wording, and it does not claim to have isolated every prompt-engineering factor. The explicit
-  criteria deliberately avoid the state's own nouns so a correct answer cannot come from lexical
-  matching. Noul has no distribution and no confidence, so this experiment compares the Noul scalar,
-  tokens, latency, and cost only.
-
-### On thresholds
-
-`04_confidence` routes in code on the answer's own confidence — `confidence < 0.60` escalates,
-anything at or above it is accepted. That `0.60` is a **demonstration parameter**, not a tuned,
-calibrated, or optimal value: the TypeSafe docs use 0.6 on one pattern page and 0.5 on another for
-the same example, and state plainly that thresholds depend on your domain and must be tuned on your
-own data. The gate's decision, and the basis string labelling it a demo, are written into each
-record's `notes.derived` so the routing is auditable after the fact. Nothing here claims an optimal
-threshold, and a passing gate is not evidence that the underlying answer was correct.
-
----
-
-## 9. Ground rules
-
-- All state in this repository is **synthetic test data**. No real personal or proprietary content.
 - Official TypeSafe docs are the source of truth for product semantics:
-  <https://docs.typesafe.ai/llms.txt>.
-- Code does arithmetic; Jev does semantic judgment.
-- Prefer batching questions that share a state.
-- Always log the resolved model and the exact usage the API returned.
-- No secrets in this repository, ever. The key comes from the environment or from the git-ignored
-  `.secrets/typesafe.env`, and from nowhere else.
+  <https://docs.typesafe.ai/llms.txt>. A local observation that contradicts them is recorded as a
+  finding, not silently "fixed".
+- Official claims and local measurements are recorded separately, and each result says which it is.
+- **Code does arithmetic; Jev does semantic judgment.** Jev is never asked to count, sum, compare,
+  interpolate, or compute a date difference.
+- Token counts are the `usage` values the API returned. **Nothing here estimates a token count.**
+- Both `model_requested` and `model_resolved` are recorded, because an alias can move.
+- `results/usage.jsonl` is append-only. Nothing is rewritten, reordered, or deleted — including
+  rows for failed calls. A failed call is data.
+- All state is synthetic. No real personal, customer, or proprietary data.
+- No secrets in this repository, ever.
+
+## License
+
+**No license has been chosen yet.** This repository is not yet published under an open-source
+license; see [the license decision](docs/OPEN_SOURCE_LICENSE_DECISION.md). Until that decision is
+made, all rights are reserved by the author.
