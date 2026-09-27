@@ -8,7 +8,7 @@ It is that Jev does not really want to talk to you.
 
 No prose, no explanation. You ask it something, and it hands back a label and a probability table, and that is the entire reply.
 
-The first question was an ordinary one. If a model is built for classify, route, score and gate, does that make an agent any easier to write?
+The first question was an ordinary one. If a model is built to classify, route, score, and gate, does that make an agent any easier to write?
 
 So the plan was to measure it before answering that.
 
@@ -76,7 +76,7 @@ Somewhere in the middle of this, a realisation arrived. This repository was not 
 
 Most of the time, the answer was: not enough.
 
-A word on cost, since it is worth knowing. Those 54 calls came to roughly **$0.001** by local estimate — a thousandth of a dollar. That is a local estimate, not a bill; TypeSafe Console billing is authoritative. The point of mentioning it is that the barrier to independently checking a model's behaviour is lower than most people assume.
+A word on cost, since it is worth knowing. Those 54 calls came to roughly **$0.001** by local estimate — a thousandth of a dollar. That is a local estimate, not a bill; TypeSafe Console billing is authoritative. For this bench, API cost was not the main barrier to independently checking the model's behaviour.
 
 ---
 
@@ -200,7 +200,7 @@ But it gives that as a bundle. It has never been taken apart.
 
 **Is that boundary carried by `instructions`, or by `criteria`?**
 
-The vendor never decomposed it. The data here never decomposed it — both fields moved together. And nothing in the public material turned up a controlled attribution experiment.
+The vendor material we reviewed did not decompose it. The data here never decomposed it — both fields moved together. And our public-material search did not turn up a controlled attribution experiment.
 
 So: which field was actually doing the work?
 
@@ -315,7 +315,7 @@ n = 3. Three repeats support a median and a range. They do not support any inter
 
 The conclusion is what it literally says, with nothing added. On this payload, at this sample size, under this design, the effect cannot be attributed to a single field.
 
-That KILL condition was written before the data, and it was genuinely executed. That is the one thing preregistration can actually deliver.
+That KILL condition was written before the data, and it was genuinely executed. That is what preregistration bought this experiment.
 
 ---
 
@@ -399,11 +399,11 @@ It had four independent problems. The two arms were not semantically equivalent 
 
 That last point is the project's own rule doing its job. "This result would be popular" is an argument about readers, not an argument about design. A confounded, underpowered design with ambiguous semantics does not become usable because of who its audience is.
 
-When an experiment's code is already written, should it be run anyway to justify the sunk cost?
+When the code was already written, it was tempting to run the experiment anyway just to justify the sunk cost.
 
-The answer is no.
+This project chose not to.
 
-Not running a bad experiment is usually better than getting a number you cannot interpret. Retiring a never-run design loses no evidence. A design that was never run is only an intention, and deleting an intention is not the same as discarding a result.
+In these two cases, retiring the design was more honest than collecting another number that the design could not interpret. Retiring a never-run design loses no evidence. A design that was never run is only an intention, and deleting an intention is not the same as discarding a result.
 
 (Which is also why this repository has no "registered but unrun" state. It either runs, or it is retired.)
 
@@ -471,11 +471,11 @@ It goes like this. This was a project that its owner fully understood and built 
 
 No.
 
-Most of the implementation was done by AI agents — writing code, changing tests, making those 12 calls, repairing the analyzer, maintaining the documentation. ChatGPT's part was mainly problem decomposition, stage planning, evidence review and writing supervision. Claude Code's part was mainly going into the repository and implementing: code changes, tests, actually executing the Jev calls, and the drafts and structural rewrites of this article. The owner's part was a different kind of action altogether: deciding what question the project should answer, deciding what each stage would and would not do, approving or rejecting key steps, and making the calls that only an owner can make — the license, retiring experiments, the article's style, and renaming the project.
+Most of the implementation was done by AI agents — writing code, changing tests, making those 12 calls, repairing the analyzer, maintaining the documentation. ChatGPT's part was mainly problem decomposition, stage planning, evidence review and writing supervision. Claude Code's part was mainly going into the repository and implementing: code changes, tests, actually executing the Jev calls, and the drafts and structural rewrites of this article. The owner's part was a different kind of action altogether: deciding what question the project should answer, deciding what each stage would and would not do, approving or rejecting key steps, and making the decisions only the owner could make — the license, retiring experiments, the article's style, and renaming the project.
 
 Writing "I ran 54 calls" would be an inaccurate sentence. The calls themselves were primarily executed by the agent.
 
-This is not a gotcha. The production relationship behind this article is itself part of the project's meta-level experiment, which is why it is written into the body of the text rather than hidden in a footnote.
+This is not a gotcha. The way this article was produced is itself part of the project's meta-level experiment, which is why it is written into the body of the text rather than hidden in a footnote.
 
 Looking at that division of labour, a more uncomfortable question surfaces.
 

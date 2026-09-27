@@ -3,6 +3,9 @@
 **Status:** `ENGLISH_REALIGNMENT = COMPLETE` · `PARITY = PASS`
 **Written:** 2026-09-27, at the blog boundary cleanup (claim audit revision 8).
 **Completed:** 2026-09-28, by the P5-F English realignment (claim audit revision 10).
+**Amended:** 2026-09-28, by the English human editorial micro-pass (claim audit revision 11; English
+style and process attribution audits revision 2). Seven wordings changed at the owner's editorial
+direction, no structure changed, the Chinese untouched. The status line above is unchanged.
 **Audience:** the record. This is a **docs artifact**, not article prose.
 
 ---
@@ -38,9 +41,10 @@ the claim audit's §4 reports **novelty parity, bilingual factual-and-numeric pa
 `PASS`**, over 70 claims located in both articles and 50 numeric tokens counted in each. `PARITY = PASS` is
 a result now, not a state held open.
 
-**One thing this does not mean.** The English article has passed its mechanical gates and its
-author-side audits. **It has not passed human editorial review, and this file does not report that it
-has.**
+**One thing this does not mean.** The English article has passed its mechanical gates, its author-side
+audits, and **one round of human editorial review** — the micro-pass of 2026-09-28, which corrected seven
+wordings and changed no structure. **The review is not the approval.** The article is now the final
+approval candidate; final human approval has not been given, and this file does not report that it has.
 
 ---
 

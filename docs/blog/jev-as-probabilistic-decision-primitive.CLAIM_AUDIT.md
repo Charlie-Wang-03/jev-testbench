@@ -20,7 +20,18 @@ text. The one row that could not be located in either document is retired, and �
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
 **Audit date:** 2026-09-28 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 10 — the bilingual re-audit. The English was rewritten from the approved Chinese, its column
+**Revision:** 11 — the English human editorial micro-pass. Seven wording corrections were applied to the
+English article, none of them structural. Four tighten a statement that had been written more broadly
+than what was actually done, and one of those four also restores fidelity to the Chinese by putting the
+searcher back into the sentence that describes the prior-art search. One removes a pun, and two are
+grammar or naturalness fixes. **No
+row is added, retired or reclassified:** the totals hold at **70 substantive claims — 45 `A` + 25 `B` +
+0 `C`** — and `DO_NOT_STATE_ZH` and `DO_NOT_STATE_EN` remain 0. §1.10 records the pass, including the one
+part of it that is a genuine asymmetry between the two languages rather than a correction. **§4.2's token
+table was re-verified row by row during this revision and two of its fifty rows were wrong**; they are
+corrected there, and the counting method is now stated explicitly.
+
+**Revision 10 — the bilingual re-audit.** The English was rewritten from the approved Chinese, its column
 was re-established section by section against the new text, and the parity checks that could not be run
 while the pair was out of step are real gates again — all three of them, and all three pass. **One row is
 retired:** C-68 described a sentence that had already left the Chinese in P5-E and that the English never
@@ -278,6 +289,60 @@ untouched.
 scope was checked in the English sentence itself rather than assumed from the Chinese. **No row is
 `MISSING` in either language**, and the three gates in §4 are the mechanical form of that check.
 
+### 1.10 Revision 11: the English editorial micro-pass
+
+Seven wording corrections were made to the English article — ten sentences across nine changed lines,
+because one correction replaced three sentences and another replaced two. **The article's sentence count is
+unchanged; nothing was added or dropped.** They are listed with their before-and-after in the accompanying
+editorial report; what matters here is which of them touch a claim this audit classifies, and which do not.
+
+**Four corrections narrow a statement to what was actually done, and one of them therefore touches a
+row.**
+
+- **C-32 is the row that moves.** Its statement was *the official remedy … is given as a bundle and never
+  decomposed*. The English said *The vendor never decomposed it*, which asserts something about the vendor;
+  the corrected sentence says *The vendor material we reviewed did not decompose it*, which asserts
+  something about the review. **The row's statement is updated to the narrower English form** and its class
+  is unchanged at `A` — the narrower claim is if anything easier to support, since the search is a fact
+  about this project and the vendor's whole corpus is not.
+- **The other three narrowings are not rows.** *The one thing preregistration can actually deliver* became
+  *what preregistration bought this experiment*; *the barrier to independently checking a model's
+  behaviour is lower than most people assume* became *For this bench, API cost was not the main barrier*;
+  and *not running a bad experiment is usually better than getting a number you cannot interpret* became
+  *In these two cases, retiring the design was more honest than collecting another number that the design
+  could not interpret*. All three are statements about how this project ran itself — its preregistration,
+  its cost profile, its retirement decisions. **None is a claim about Jev, about a measurement, or about
+  what TypeSafe published**, so none has ever had a row here, and none acquires one by being narrowed.
+  They are process statements, and the process record is the other audit.
+
+**The resulting asymmetry is real, and it is recorded rather than smoothed.** In all four cases the
+approved Chinese states the broader version — 官方没拆, 这是预注册唯一能兑现的东西, 比很多人想象的低,
+不运行一个坏实验，通常比得到一个无法解释的数字要好 — and the Chinese is frozen. So for these four sentences
+**the English is now deliberately narrower than the Chinese**, by owner decision taken during human
+editorial review. The direction matters and is the safe one: the English claims less than its source,
+never more. `DO_NOT_STATE_EN` is 0 and stays 0, because narrowing a claim cannot create an unsafe one. **A
+reader comparing the two texts sentence by sentence will find these four places differ, and this paragraph
+is the record that the difference is intentional.** Four sentences out of a 440-sentence article, all four
+narrower in English, none changing a figure, a finding or a verdict.
+
+**The public-novelty correction is the opposite case: it restores parity rather than departing from it.**
+The Chinese says 公开材料里也没有找到带控制变量的归因实验 — *did not find*, a search with an agent. The English
+had said *nothing in the public material turned up a controlled attribution experiment*, which is agentless
+and reads as a statement that no such experiment exists. The correction — *our public-material search did
+not turn up* — **puts the searcher back and brings the English back to what the Chinese already said.**
+`PUBLIC_NOVELTY_UNRESOLVED` means *we did not find*, never *nobody has done it*, and the English now says
+so in the same words the Chinese does.
+
+**Three corrections touch no claim at all** — a grammar fix in the opening (*built for classify* → *built
+to classify*), the removal of the pun in *making the calls that only an owner can make* → *making the
+decisions only the owner could make*, and one naturalness fix in the AI-involvement disclosure (*the
+production relationship behind this article* → *the way this article was produced*, which renders 生产关系
+as what it means and claims nothing new). None changes what is asserted about Jev, about a measurement, or
+about what TypeSafe published.
+
+**What did not change.** No row is added or retired, no class moves, no verdict flips, and the Chinese
+article was not touched: it is byte-identical to `f0ae65e`.
+
 ---
 
 ## 2. The audit
@@ -321,7 +386,7 @@ in the same or immediately adjacent sentence, in that language), `n/a` (the clas
 | C-29 | Routing: 4/4 function matches, 4/4 argument matches, 4/4 suppressed, handler never entered | B — our architecture | The `12` records; P2 §4.1 (G) | 路由, 三条经验 | §6, §12 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-30 | Route confidences 0.76 / 0.58 / 0.72 / 1.0 against a 0.8 floor; the 1.0 case withheld by `needs_human_review` 0.94 ≥ 0.5 | B — our own policy; thresholds are demonstration parameters | Log: the four `function` answers carry those confidences; `needs_human_review` = 0.94 | 路由 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-31 | `07`: an 82-byte byte-identical state, `Noul` 0.75 → 0.20, a 0.55 move | B — the `07` illustration | Log: `state_utf8_bytes = 82`; vague `0.75`, explicit `0.20` | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-32 | The official remedy for the literal-reading edge is given as a bundle and never decomposed | A — official | `TS-DOC-JAG`; P2 §4.3 | 07 | §7 | yes | yes | `SAFE_TO_STATE` |
+| C-32 | The official remedy for the literal-reading edge is given as a bundle and never decomposed — **stated in the English as a fact about the material reviewed, not about the vendor** (§1.10) | A — official | `TS-DOC-JAG`; P2 §4.3 | 07 | §7 | yes | yes | `SAFE_TO_STATE` |
 | C-33 | The novelty check returned `PUBLIC_NOVELTY_UNRESOLVED`, recorded as unresolved, never as "nobody has done this" | B — anything about novelty | P2 §4.8 | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-34 | It was the only question that passed triage and was worth spending calls on | B — novelty | P2 §5: exactly one `R_GO` candidate | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-35 | Design, order, statistics and thresholds were committed before the first request | A — preregistration | Freeze §5.1; `db7d06f` | P3 设计 | §8 | n/a | n/a | `SAFE_TO_STATE` |
@@ -397,6 +462,12 @@ that differs, and it differs only by C-73, C-74 and C-75.
 preregistration sentence and classifies identically, so revision 9's figures are revision 8's. §1.8 is where
 that is argued; the column would repeat these numbers to the row.
 
+**There is no r11 column, for the third time and the same reason.** The English editorial micro-pass
+corrects seven sentences and narrows the statement of one existing row; it adds no row, retires no row and
+flips no verdict. **Revision 11's figures are revision 10's**, so the `English (r10)` column above is also
+the revision-11 column, unchanged to the row. The one row it touches is C-32, which is narrowed rather than
+reclassified and stays class `A`; §1.10 records the correction and the asymmetry it creates.
+
 **`DO_NOT_STATE_ZH = 0`.** Nothing in the article had to be deleted or rewritten for asserting something
 the evidence does not carry. The one class change is a **tightening**, not a new defect: C-05 moved from
 `A` to `B` because the display-precision caveat is now load-bearing, and a reader who drops it would read
@@ -461,13 +532,21 @@ public prior art in the same two groups in both languages.
 ### 4.2 Bilingual factual and numeric parity — **PASS**
 
 The check: every figure the two languages must agree on is present in both, and means the same thing in
-both. 50 tokens were counted mechanically in each file — a digit-boundary match, so `12` does not match
-inside `512` — and the counts include every occurrence, not just the first.
+both. 50 tokens were counted mechanically in each file, and the counts include every occurrence, not just
+the first. **Two counting rules, both stated rather than left implicit**, because getting either wrong
+changes a number in this table:
+
+- **Digit boundaries.** `12` does not match inside `512`. Every count below is a digit-boundary count.
+- **Ratios are counted in either spelling.** The English writes ratios with `of` where the Chinese writes
+  them with `/`: the same figure is `4 / 4` in the Chinese and **4 of 4** in the English, seven times each.
+  The four ratio tokens are therefore counted across both spellings. **The alternative — counting the
+  literal `4 / 4` string — would report the English as 0, which is true of the string and false of the
+  article.** The spelling used by each language is given under the table.
 
 | Token | ZH | EN | | Token | ZH | EN | | Token | ZH | EN |
 |---|---:|---:|---|---|---:|---:|---|---|---:|---:|
-| `54` | 7 | 6 | | `42` | 9 | 9 | | `12` | 8 | 9 |
-| `45 / 45` | 2 | 2 | | `816` | 2 | 2 | | `3,480` | 2 | 2 |
+| `54` | 7 | 6 | | `42` | 9 | 9 | | `12` | 8 | 7 |
+| `45 / 45` | 2 | 3 | | `816` | 2 | 2 | | `3,480` | 2 | 2 |
 | `4.2647` | 2 | 2 | | `76.55` | 1 | 1 | | `0.75` | 4 | 4 |
 | `0.20` | 7 | 7 | | `0.55` | 7 | 7 | | `0.76` | 5 | 5 |
 | `0.31` | 4 | 4 | | `0.36` | 4 | 4 | | `0.56` | 3 | 3 |
@@ -484,13 +563,20 @@ inside `512` — and the counts include every occurrence, not just the first.
 | `jev-1.13.0` | 1 | 1 | | `38e67630` | 1 | 1 | | `17f36f75` | 1 | 1 |
 | `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION` | 1 | 1 | | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET` | 1 | 1 | | — | — | — |
 
-**All 50 tokens are present in both articles, and 48 of them with identical counts.** Two differ, and
-neither is a changed figure:
+**All 50 tokens are present in both articles, and 47 of them with identical counts.** Three differ, and
+none is a changed figure:
 
 | Token | ZH | EN | Why they differ |
 |---|---:|---:|---|
 | `54` | 7 | 6 | **One dropped repetition.** The Chinese disclosure paragraph opens 54 次调用的实验，从头到尾的实施; the English opens *"Most of the implementation was done by AI agents — writing code, changing tests, making those 12 calls…"*. The paragraph carries the project's scale either way, and the title, the opening beat, the cost aside, the closing movement and the refusal sentence all carry `54` in both. |
-| `12` | 8 | 9 | **Eight figures in both; the English's ninth match is the section heading `## 12`** — structural numbering, not a figure. Two of its eight are spelled out where the Chinese uses digits: *Twelve calls. No extras.* (§8) and *All twelve calls succeeded.* (§9). The other six are the same six occurrences. |
+| `12` | 8 | 7 | **Two of the Chinese matches are spelled out in English, and the English has one the Chinese has no place for.** Chinese `12 次。一条都不许多。` is *Twelve calls. No extras.* and `12 次调用全部成功。` is *All twelve calls succeeded.* — two digit matches lost to words. The English's `## 12.` heading is a third the Chinese cannot have, because the Chinese article has no numbered headings. 8 − 2 + 1 = 7. The other six occurrences are the same six in both. |
+| `45 / 45` | 2 | 3 | **The English states the same corrected figure one extra time, in a different spelling.** Both articles point at the erratum in §1 and state the corrected value in §11. The English also writes the value out in full in its §1 statement — **45 of 45** Noul answers — where the Chinese says 45 个 Noul 答案, which is a count rather than a ratio and does not match this token. Same figure, same places, one more expression of it. |
+
+**The other three ratio tokens are identical across the two spellings.** `5 / 5` and `10 / 10` are 1 and 1
+in both articles; `4 / 4` is 7 and 7. **In every one of those fourteen English occurrences the English
+writes `of`** — *4 of 4 correct functions*, *all **10 of 10** selected values were identical* — so a reader
+checking the literal string `4 / 4` against the English finds nothing, which is why the rule is stated at
+the top of this section rather than assumed.
 
 **Three further classes of statement were compared directly, and agree in both languages.** Every
 comparison keeps its direction (`0.05 < 0.10`, `0.61 ≥ 0.60`, `0.75 → 0.20`, a `0.56` endpoint gap); every
