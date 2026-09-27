@@ -7,10 +7,11 @@
 (`SKILL.md` §"自检输出格式"), run by hand against the rewritten text.
 **Article archetype:** `调查实验型 × 方法论分享型`, primary 调查实验型. Recorded before writing; unchanged in P5-E.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 4 — recomputed after the three micro corrections that followed P5-E1. Supersedes revision 3,
-which recomputed everything in P5-E1 and added the **Over-stylization check**; and revision 2 (P5-E),
-which superseded the P5-D revision, whose two colloquial-expression counts (11 and 35) contradicted each
-other and are withdrawn.
+**Revision:** 5 — recomputed after the fourth correction, which rewrote one line of the micro round's third
+correction. Supersedes revision 4, which recomputed after the first three micro corrections; revision 3,
+which recomputed everything in P5-E1 and added the **Over-stylization check**; and revision 2 (P5-E), which
+superseded the P5-D revision, whose two colloquial-expression counts (11 and 35) contradicted each other and
+are withdrawn. **Revision 5 moves one figure, 全文/正文, by +7, and nothing else.**
 
 **What this file is not.** It is not a claim audit. Whether a sentence is *permitted* is decided by
 [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md) and recorded in
@@ -32,23 +33,37 @@ owner actually took, per the process attribution audit.
 ## What changed in this revision
 
 **The micro-correction round: three lines, one of which is the only figure in this audit that ever goes
-the "wrong" way.**
+the "wrong" way — and then a fourth line that rewrites the third.**
 
 | Correction | Style consequence |
 |---|---|
 | 它们没有让解释真话变得可能 → 但不会自动让维护者获得独立解释、验证这些事实的能力 | The aphorism became a clause. One fewer short declarative beat, replaced by a longer and more precise one. |
 | 发布的时候 → 到这里，这个仓库能给出的最诚实总结 | Neutral. One comma added. |
 | 七个候选跑完对抗性审查，只剩一个 → 这些候选逐个做完对抗性审查，最后只剩一个问题 | **`最后` goes 2 → 3.** This is the one metric this round moves upward. |
+| 这些候选逐个做完对抗性审查，最后只剩一个问题 → 七个候选逐个做完对抗性审查后，最后只剩一个值得继续追的问题 | **No metric moves.** `最后` stays at 3, the sentence stays single, and 值得继续追 is plain prose rather than a colloquial device. +7 characters. |
 
 **That third one needs saying plainly, because it is the first time a figure in this audit has gone up.**
 The L1-1 rule bans 首先…其次…最后 as a *structural frame*, not the word. The two pre-existing instances
-were temporal (最后被删的一个; 最后真的被执行了) and the new one is too (最后只剩一个问题) — so all three
-are 实指 and the rule is still at zero hits. **But a rising number is the thing §"Over-stylization check"
-exists to watch**, so it is recorded here rather than footnoted: the count went up because a sentence was
-made more accurate, not because a device was added, and L1-1 re-ran clean.
+were temporal (最后被删的一个; 最后真的被执行了) and the new one is too (最后只剩一个值得继续追的问题) —
+so all three are 实指 and the rule is still at zero hits. **But a rising number is the thing
+§"Over-stylization check" exists to watch**, so it is recorded here rather than footnoted: the count went up
+because a sentence was made more accurate, not because a device was added, and L1-1 re-ran clean.
 
-**The article is 21 characters longer again** (14,928 → 14,949; narrative body 14,391 → 14,412). Three
-corrections, all three expanding a compressed phrase. Same direction as P5-E1 and the same reason.
+**The fourth correction does not raise it further, which is the point worth recording.** The count stays at
+`3` rather than going to `4`, because the rewrite replaced the third line rather than adding a fourth one
+that also used 最后. A round that fixes a sentence by writing another `最后` would have pushed the only
+rising metric up again; this one did not.
+
+**The article is 21 characters longer again** (14,928 → 14,949; narrative body 14,391 → 14,412), **and then
+7 more** (→ 14,956; → 14,419). Four corrections, all four expanding a compressed phrase. Same direction as
+P5-E1 and the same reason.
+
+**A note on the 正文 figure.** 全文 is the raw file length and is independently reproducible: it was
+re-measured at 14,949 on the pre-correction revision and 14,956 on this one, matching the 全文 figures
+below. The 正文 figure is carried forward as the previous revision's number plus the exact delta of the
+changed line, which is +7 — the file's only change this round is that one line, so every count that
+includes it moves by exactly 7. The 正文 *absolute* is therefore an inherited figure, not one this revision
+re-derived from scratch, and it is labelled that way rather than presented as freshly measured.
 
 **P5-E1 was a subtraction pass, and the style metrics were allowed to fall.** Nine passages were
 corrected, none was added, and the work order forbade introducing any new colloquial device —
@@ -66,9 +81,9 @@ change is a consequence of it rather than a target.
 
 **The figures that moved, and the figures that did not.**
 
-| Figure | P5-E | P5-E1 | micro | Direction |
+| Figure | P5-E | P5-E1 | micro → final | Direction |
 |---|---:|---:|---:|---|
-| 全文 / 正文 字数 | 14,789 / 14,252 | 14,928 / 14,391 | **14,949 / 14,412** | up three times running — every pass traded a short phrase for a precise one |
+| 全文 / 正文 字数 | 14,789 / 14,252 | 14,928 / 14,391 | **14,956 / 14,419** | up four times running — every pass traded a short phrase for a precise one |
 | 口语化表达 | 33 | 32 | **32** | down in P5-E1, flat here |
 | 单句成段 | 107 | 106 | **106** | down in P5-E1, flat here |
 | 15 字以内短拍 | 34 | 34 | **34** | flat throughout |
@@ -84,7 +99,8 @@ change is a consequence of it rather than a target.
 colloquial expressions as "35 个不同条目" in one table and "11 个" in the summary of the same layer — an
 internal contradiction that P5-E's work order named and required be resolved by recomputation from the
 current text. Every figure below is recounted from the P5-E1 article by the same script that reproduced
-revision 2's numbers exactly, so the deltas above compare like with like. The count is one number, **32**,
+revision 2's numbers exactly, so the deltas above compare like with like; revision 5 carried those figures
+forward and re-derived only 全文, which is the one figure that moved. The count is one number, **32**,
 with the full list printed in L2-3 so a reader can check it rather than trust it.
 
 **Context from P5-E, retained because P5-E1 did not change it.** The P5-D → P5-E movement was
@@ -199,7 +215,10 @@ P5-E1 没有动它。剩下的这一处在 AI 参与披露段：前一句是 `�
 
 **micro 轮对这四个问题的影响：一处需要写下，但不是缺陷。**
 
-三个改动里，两个与风格无关（时间框架、候选计数），第三个把一句格言换成了一个带主语和谓语的从句。
+四个改动里，两个与风格无关（时间框架、候选计数），第三个把一句格言换成了一个带主语和谓语的从句；
+第四个把候选计数那一句重写了一遍，**它修的是指代，不是风格** —— 改后的 `七个候选` 没有更近的先行词，
+句子不可能再被读成在说那四个已淘汰的候选，而 `值得继续追` 把幸存者的身份写成了开放问题而不是发现。
+从本审计的角度看，这一句变长 7 个字，句式和口语化两个计数都不动，属于内容赢、风格不动的一次改动。
 **它在同一段里造成了一次近距离复述，本审计的最短职责是把它写出来而不是放过去。** 那一段现在是：
 
 > 一份冻结的 manifest 能证明一组字节没有移动过，它不能证明**维护者**还能够独立解释、验证或重建那组字节。这些机制让说出假话更难，但不会自动让**维护者**获得独立解释、验证这些事实的能力。
@@ -213,17 +232,18 @@ P5-E1 没有动它。剩下的这一处在 AI 参与披露段：前一句是 `�
 **这一节的结论。** 四个问题里，只有一个（回扣重复）在 P5-E 答案是"是"，P5-E1 把它变成了"否"。另外三个
 在 P5-E 就已经是否定的，P5-E1 和 micro 轮都没有让它们变差。**本版审计的判断是：这篇文章的风格现在服务
 于内容，而不是反过来 —— 判据不是 32 这个数，而是这一版每一次风格指标下降都能指到一句因此变准确的话。
-micro 轮出现了一次指标上升（`最后` 2 → 3），它是同一件事的另一种形态：那一句也变准确了。**
+micro 轮出现了一次指标上升（`最后` 2 → 3），它是同一件事的另一种形态：那一句也变准确了。第四处修正
+没有再加一个 `最后`，计数留在 3，理由和这句话一样 —— 改写是为了让句子更准，不是为了让它更好看。**
 
 ---
 
 ## L1 明细
 
 **L1-1 禁用词。** 全文扫描零命中。`首先` 与 `其次` 各 0 处；`最后` 出现 **3** 处，三处都是实指（`也是
-最后被删的一个` 指第四个候选的序号；`最后真的被执行了` 指 K1 的执行时点；micro 轮新增的
-`最后只剩一个问题` 指七个候选里唯一活下来的那个问题），不是"首先…其次…最后"这种结构套话，不属于本项
-射程。**这一项从 2 升到 3，是本审计所有指标里唯一一次上升**，理由和检查记在 §"What changed in this
-revision"。
+最后被删的一个` 指第四个候选的序号；`最后真的被执行了` 指 K1 的执行时点；micro 轮新增并保留到最终稿的
+`最后只剩一个值得继续追的问题` 指七个候选里唯一活下来、且仍是开放问题的那个），不是"首先…其次…最后"这种
+结构套话，不属于本项射程。**这一项从 2 升到 3，是本审计所有指标里唯一一次上升**；第四处修正重写了这一行
+而没有再写一个 `最后`，所以计数留在 3 而不是升到 4，理由和检查记在 §"What changed in this revision"。
 
 **L1-2 禁用标点。** 中文冒号、破折号、弯引号在正文散文里各 0 处。正文引语一律用 `「」`，共 32 处
 （`「字面阅读」「未解决」「没有人做过」「官方 vs 实际」「登记但未运行」「这个结果会很受欢迎」` 等）。
@@ -425,8 +445,9 @@ P5-D 用四个同构的段落收掉四个候选，读者得到的是一个整齐
 
 **8. 全篇最重要的叙事装置是一个可能自己长出论断的装置。**
 `删故事` 离 `否定了七项发现` 只有一次压缩的距离，而后者是假的 —— 分诊里的七个候选没有一个是"被证伪的
-发现"，它们全部是**没有通过分诊的候选**（**注意：micro 轮之后，正文不再写出"七"这个数，所以这句话
-描述的是 P2 的分诊，不是文章的措辞**；见 claim audit §1.6）。因此它在 claim audit 里被单独列成 C-66 并
+发现"，它们全部是**没有通过分诊的候选**。（micro 轮的第一处修正曾把"七"从正文里删掉，第四处修正又把它
+写了回来，所以这句话压缩的又是文章自己的措辞了；两次都不改变上面这个论断，因为"七"始终是分诊的候选数，
+不是被证伪的发现数。）见 claim audit §1.6 与 C-66。因此它在 claim audit 里被单独列成 C-66 并
 归入 `B` 类而不是 `A` 类。
 P5-E 保住了它作为叙事装置的地位（正文一次、结尾一次），同时把它的断言力压在候选清单的范围内。
 **P5-E1 把结尾那一次从两遍压到一遍**，装置的断言力没有变化，但重复的次数少了一次 —— 见 §"Over-stylization

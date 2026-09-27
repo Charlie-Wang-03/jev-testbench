@@ -283,6 +283,10 @@ carries no verb in this project. The sentence says what external mechanisms fail
 maintains the bench, which is a statement about the mechanisms. Its subject is 这些机制, and its subject in
 P5-E1 was also 这些机制. **The actor did not change; the claim got a beneficiary.**
 
-**The other two are attribution-inert.** 发布的时候 → 到这里 changes a time frame, and 七个候选 → 这些候选
-removes a count. Neither names an actor, and neither is in this audit's search. The count one is a claim
-audit matter, recorded there as C-66's scope note (§1.6 of that file), not here.
+**The other two are attribution-inert.** 发布的时候 → 到这里 changes a time frame, and the count sentence
+— 七个候选跑完对抗性审查，只剩一个, rewritten twice more since (这些候选…, then back to 七个候选…后，最后只剩
+一个值得继续追的问题) — changes a count and then the antecedent that count sat on. **None of the three
+forms names an actor**, so none is in this audit's search, and this audit's counts are unaffected by which
+form stands. That sentence is a claim audit matter, recorded there as C-66 and §1.6 of that file, not here.
+*This paragraph is corrected in place without a revision bump: the attribution finding it reports was
+never in doubt for any of the three forms, and only the quotation of the current wording had gone stale.*
