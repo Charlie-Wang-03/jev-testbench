@@ -50,6 +50,20 @@ drift apart.
 | [Contributing](../CONTRIBUTING.md) | Setup, the license, and the rules a change here has to preserve. |
 | [Security](../SECURITY.md) | The real risks in this project, and how to report a problem. |
 
+## Publication readiness
+
+**Nothing in this section has been published.** The repository is private, no GitHub Release exists,
+and no external post has been made. These files are the decision pack for the owner, prepared so the
+decisions can be taken against exact wording rather than against a description of it.
+
+| Document | What it is |
+|---|---|
+| [Publication checklist](publication/PUBLICATION_CHECKLIST.md) | What has passed mechanically, the human editorial gate, and the decisions only the owner can take. **Start here.** |
+| [Blog publication options](publication/BLOG_PUBLICATION_OPTIONS.md) | Repository-only, external venues, or canonical-plus-syndication; the trade-offs, without a decision. |
+| [GitHub Release draft](publication/GITHUB_RELEASE_DRAFT.md) | The exact release body that would be used, if a Release is decided on. Not published. |
+| [Repository metadata proposal](publication/REPOSITORY_METADATA_PROPOSAL.md) | Proposed description and topics, with what is deliberately absent from them. Not applied. |
+| [TypeSafe feedback draft](publication/TYPESAFE_FEEDBACK_DRAFT.md) | Four `V1_DOCUMENTATION_FEEDBACK` observations. **Not sent.** Every item needs a fresh recheck first. |
+
 ## Reference
 
 | Document | What it is |

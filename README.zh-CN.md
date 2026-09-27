@@ -11,6 +11,10 @@ Jev 不是聊天模型。它接收一段 `state` 和一组**类型化问题**，
 本仓库就是这个原语的测量台。每一次真实 API 调用都会向一个只追加的 JSONL 日志写入且仅写入一行，
 而所有文档里的每一句话都被标注为：厂商官方说法、设计假设、本地测量、本地推导，或局限性。
 
+主要结果是一个负结果，这里照实写出来，而不做软化：`NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`。
+本仓库里没有任何一条结论，既相对于 TypeSafe 公开材料是新的、又被自己的数据支持。给下面所有内容
+划定边界的是[你不能从这个仓库得出的结论](#7-你不能从这个仓库得出的结论)。
+
 **状态：** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **测试：** 完整离线测试套件全部通过 ·
 **证据：** [42 条核心记录](results/usage.jsonl) + [12 条 P3 记录](results/p3_boundary_locus/usage.jsonl) ·
 **发布：** [v0.1.0 证据冻结](docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md)
@@ -220,6 +224,7 @@ case 数时拒绝启动。见[凭据](docs/guides/credentials.zh-CN.md)与[复�
 | [方法论](docs/methodology/evaluation.zh-CN.md) | 声明标注、实验设计、A/B 能说明与不能说明什么。 |
 | [复现](docs/guides/reproducibility.zh-CN.md) | 离线与在线两条路径，以及「复现」在此能意味着什么。 |
 | [凭据](docs/guides/credentials.zh-CN.md) | API key 如何解析，以及这套方案**不**能买到什么。 |
+| [技术长文](docs/blog/jev-as-probabilistic-decision-primitive.zh-CN.md) · [English](docs/blog/jev-as-probabilistic-decision-primitive.md) | 叙事版本：这套 bench 到底测了什么，以及为什么负结果本身就是结果。 |
 | [证据溯源](docs/EVIDENCE_PROVENANCE.md) | P0–P3 谱系：哪些是测量提交，哪些只是分析提交。（英文） |
 | [最终评测](results/JEV_LOCAL_EVALUATION_FINAL.md) | 全部 42 条记录，每一条声明都带标注。*派生文件。*（英文） |
 | [贡献指南](CONTRIBUTING.md) · [安全](SECURITY.md) | 如何在本仓库工作，以及如何报告问题。（英文） |

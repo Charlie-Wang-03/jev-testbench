@@ -1,8 +1,12 @@
 # Claim audit — the bilingual technical blog
 
-**Audited documents:**
-[`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md) (English, canonical) and
-[`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md) (Simplified Chinese).
+**Audited documents — a publication pair:**
+[`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md) (Chinese source text, P5-A) and
+[`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md) (English adaptation, P5-B).
+Both are audited here, and neither is more canonical than the other in claim validity: the two are
+held to the same evidence contract and each carries the same totals (§3). Authoring provenance is a
+separate question, and it is recorded honestly — the Chinese was written first and the English was
+adapted from it, so the English is not retroactively the source.
 **Standard:** [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md)
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
@@ -21,11 +25,11 @@ from the work order that commissioned the articles and not copied from the freez
 Where a work order and the frozen evidence could disagree, the frozen evidence governed. They did not
 disagree.
 
-**One text is a translation of the other, and that is not a defence.** The contract binds every
-public-facing sentence derived from the release. A translation can carry a scope into the wrong
-clause, or drop it, while every number still matches — so each language gets its own scope column
-and its own verdict, and a scope that is present in one language and absent in the other is a defect
-in the absent one.
+**The two texts say the same things, and that is not a defence.** The contract binds every
+public-facing sentence derived from the release, and it binds the adaptation's sentences on their own
+terms rather than through the source. An adaptation can carry a scope into the wrong clause, or drop
+it, while every number still matches — so each language gets its own scope column and its own verdict,
+and a scope that is present in one language and absent in the other is a defect in the absent one.
 
 ---
 

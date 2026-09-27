@@ -15,6 +15,11 @@ This repository is a measurement bench for that primitive. Every real API call a
 line to an append-only JSONL log, and every claim in these documents is labelled as an official
 vendor claim, a design assumption, a local measurement, a derived calculation, or a limitation.
 
+The main result is a negative one, and it is stated rather than softened:
+`NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`. Nothing here is both new relative to TypeSafe's published
+material and supported by this repository's own data. The section that bounds every other claim is
+[what you cannot conclude](#7-what-you-can-not-conclude-from-this-repository).
+
 **Status:** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **Tests:** the full offline suite passing ·
 **Evidence:** [42 core records](results/usage.jsonl) + [12 P3 records](results/p3_boundary_locus/usage.jsonl) ·
 **Release:** [v0.1.0 evidence freeze](docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md)
@@ -253,6 +258,7 @@ do: start here, understand the evidence, or reproduce and extend.
 | [Methodology](docs/methodology/evaluation.md) | Claim labelling, experiment design, what A/B arms do and do not establish. |
 | [Reproducibility](docs/guides/reproducibility.md) | Offline and live paths, what "reproduce" can and cannot mean here. |
 | [Credentials](docs/guides/credentials.md) | How the API key is resolved, and what that scheme does not buy you. |
+| [Technical write-up](docs/blog/jev-as-probabilistic-decision-primitive.md) · [中文](docs/blog/jev-as-probabilistic-decision-primitive.zh-CN.md) | The narrative version: what the bench measured, and why the null is the result. |
 | [Evidence provenance](docs/EVIDENCE_PROVENANCE.md) | The P0–P3 lineage: measurement commits vs. analysis commits. |
 | [Final evaluation](results/JEV_LOCAL_EVALUATION_FINAL.md) | All 42 records, every claim labelled. *Derived artifact.* |
 | [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) | How to work in this repo, and how to report a problem. |

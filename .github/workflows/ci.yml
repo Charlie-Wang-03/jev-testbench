@@ -5,18 +5,18 @@ name: ci
 # is referenced anywhere below, so a pull request that accidentally reached for the network fails
 # here instead of spending money against a real TypeSafe account.
 #
-# This is the first gate that runs somewhere other than the machine the measurements were taken on.
-# That matters for exactly one class of failure: a test that quietly depends on Windows. None is
-# known to, but the suite has only ever been run on Windows so far.
+# Linux CI provides cross-platform validation in addition to the original Windows development
+# environment. That matters for exactly one class of failure: a test that quietly depends on
+# Windows. None is known to be present -- the suite runs green on both.
 
 on:
   push:
     # `main` is the promoted branch. `release/**` is here so a release branch is verified at its own
     # exact SHA before it is fast-forwarded onto `main`, rather than only after promotion. A
     # `pull_request` trigger would not serve that purpose: it checks out the synthetic merge commit,
-    # so it would verify a tree that is never published. `workflow_dispatch` is unavailable until
-    # this file first reaches the default branch, which is why the push trigger is the one that has
-    # to work on the first run.
+    # so it would verify a tree that is never published. `workflow_dispatch` could not be relied on
+    # for the first run -- it is only offered once this file has reached the default branch -- so the
+    # push trigger is the one that has to work on its own.
     branches: [main, "release/**"]
   pull_request:
   workflow_dispatch:
