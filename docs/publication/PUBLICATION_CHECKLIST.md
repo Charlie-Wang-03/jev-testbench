@@ -20,7 +20,7 @@ Jev inference call; installing dependencies is the only step that needs network 
 | **Canonical logs unchanged** | `38e67630…` (42 core) and `17f36f75…` (12 P3). Re-hashed during the audit. |
 | **License resolved** | MIT; `LICENSE`, `pyproject.toml` and both READMEs agree. Asserted by the suite. |
 | **Secret audit** | Current tree and full reachable history, all branches and tags. No credential, token, key, local path or personal identifier found. See the P5-C report. |
-| **CI** | Green on Linux for the P5-P, P5-B and P5-C revisions. Offline, sockets blocked, `TYPESAFE_API_KEY` empty by construction. |
+| **CI** | Green on Linux for the P5-P, P5-B, P5-C and P5-C1 revisions. Offline, sockets blocked, `TYPESAFE_API_KEY` empty by construction. |
 | **Bilingual claim audit** | 64 claims × 2 languages. `DO_NOT_STATE_ZH = 0`, `DO_NOT_STATE_EN = 0`. |
 | **Relative links** | Asserted over every tracked `.md` by the offline suite. |
 | **Tag verification** | `verify v0.1.0` reads the tag tree, not the working tree, so `main` may move while the release stays fixed. |
