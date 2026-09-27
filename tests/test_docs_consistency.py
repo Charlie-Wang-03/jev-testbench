@@ -43,6 +43,12 @@ PAIRED_DOCUMENTS = [
     ("docs/guides/reproducibility.md", "docs/guides/reproducibility.zh-CN.md"),
     ("docs/guides/credentials.md", "docs/guides/credentials.zh-CN.md"),
     ("docs/findings/findings.md", "docs/findings/findings.zh-CN.md"),
+    # A process record rather than a measurement, but a public document in both languages, so the
+    # same no-drift rule applies: it is a pair, and the two halves must keep saying one thing.
+    (
+        "docs/AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md",
+        "docs/AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.zh-CN.md",
+    ),
 ]
 
 # Evidence artifacts: canonical in English, and intentionally not translated.
@@ -406,6 +412,12 @@ class TestThePublicationPackStaysConsistent:
         "Chinese-language README",
     ]
 
+    # The rename was an open question when this pack was written and was decided by the owner in
+    # P5-E. The pack must record the decision rather than continue to offer it.
+    RENAME_DECIDED = "PROJECT_RENAME: OWNER_APPROVED"
+    STEP_RENAME = "no rename is proposed"
+    RESOLVED_RENAME_ASK = "Decide about a repository rename"
+
     # Every document here is able to say what it is. One of these must be present.
     UNPUBLISHED_MARKERS = [
         "not published",
@@ -453,6 +465,25 @@ class TestThePublicationPackStaysConsistent:
                 "freeze, and README.zh-CN.md exists and is linked from both README switchers, so "
                 "neither is a decision left to make."
             )
+
+    def test_the_pack_records_the_rename_as_a_decision_already_taken(self):
+        """The rename was proposed here and decided by the owner in P5-E.
+
+        The project is `jev-testbench`; `v0.1.0` was frozen under the historical name `jev-test`.
+        A pack still offering the rename as an open question asks the owner to re-make a decision
+        they have made, which is the second failure mode above.
+        """
+        assert self.RENAME_DECIDED in read("docs/publication/REPOSITORY_METADATA_PROPOSAL.md"), (
+            f"the metadata proposal does not record {self.RENAME_DECIDED!r}"
+        )
+        for path in self._pack_files():
+            text = read(f"docs/publication/{path.name}")
+            for stale in (self.STEP_RENAME, self.RESOLVED_RENAME_ASK):
+                assert stale not in text, (
+                    f"{path.name} still carries {stale!r}. The rename was decided in P5-E; the "
+                    "frozen v0.1.0 set keeps the old name because that is the name it was "
+                    "published under, and that is a historical fact rather than an open question."
+                )
 
     def test_every_pack_document_says_in_its_status_line_that_it_is_unpublished(self):
         """'Draft' that reads as 'live' is the failure that matters in this directory.

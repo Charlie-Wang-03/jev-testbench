@@ -23,8 +23,8 @@ This is the path you want. It reproduces the *analysis*, which is the part that 
 exactly.
 
 ```console
-git clone https://github.com/Charlie-Wang-03/jev-test.git
-cd jev-test
+git clone https://github.com/Charlie-Wang-03/jev-testbench.git
+cd jev-testbench
 
 uv sync --locked
 uv run pytest

@@ -1,5 +1,14 @@
 cff-version: 1.2.0
-message: "If you cite this release, cite the tag v0.1.0. It is a frozen evidence set; `main` will move."
+# This file describes one release, not the project's current state: `version` and the title's
+# project name are the identity `v0.1.0` was published under, and neither is updated when the
+# project moves on. Only the URLs follow the repository, which is where a reader has to land.
+#
+# v0.1.0 was frozen under the historical project name `jev-test`. The repository has since been
+# renamed `jev-testbench`. No later version has been released.
+message: >-
+  If you cite this release, cite the tag v0.1.0. It is a frozen evidence set; `main` will move.
+  v0.1.0 was frozen under the historical project name `jev-test`; the repository has since been
+  renamed `jev-testbench`, and the URLs below follow it. The release itself is unchanged by that.
 title: "jev-test: local evaluation bench and evidence freeze for TypeSafe Jev 1.13.0"
 abstract: >-
   A measurement bench for TypeSafe's Jev model and the audit trail of what it measured:
@@ -16,8 +25,8 @@ authors:
 version: 0.1.0
 date-released: 2026-09-27
 license: MIT
-repository-code: "https://github.com/Charlie-Wang-03/jev-test"
-url: "https://github.com/Charlie-Wang-03/jev-test/tree/v0.1.0"
+repository-code: "https://github.com/Charlie-Wang-03/jev-testbench"
+url: "https://github.com/Charlie-Wang-03/jev-testbench/tree/v0.1.0"
 keywords:
   - typesafe
   - jev

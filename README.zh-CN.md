@@ -1,8 +1,13 @@
-# jev-test
+# jev-testbench
 
 [English](README.md) | **简体中文**
 
-一个可审计的实验台，用于把 **TypeSafe Jev** 作为 LLM 与 Agent 工作流中的「类型化概率决策原语」来研究。
+`jev-testbench` 是一个基于 Agentic Engineering 搭建的 Jev 模型简易实验台。
+
+在**对象层**，它把 **TypeSafe Jev** 作为 LLM 与 Agent 工作流中的「类型化概率决策原语」来研究。
+在**元层**，它记录另一个问题：当 AI 辅助下的项目复杂度增长速度超过维护者的理解速度时，认知负债
+如何产生，以及我们如何尝试偿还它。前一半是证据，后一半是过程记录，两者刻意分开 —— 见
+[Agentic Engineering 与认知负债](docs/AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.zh-CN.md)。
 
 Jev 不是聊天模型。它接收一段 `state` 和一组**类型化问题**，返回**带概率的结构化答案** —— 一个
 `Choice` 标签连同分布、一个有序量表上的 `Score` 位置，或者一个 `Noul` 标量概率。它不生成散文、不

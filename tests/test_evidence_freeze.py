@@ -49,6 +49,12 @@ TAMPERS = {
         "results/usage.jsonl"
     ].update({"answers_by_type": {"choice": 45, "noul": 44, "score": 29}}),
     "a required key was dropped": lambda m: m.pop("scientific_state"),
+    # The identity a release records is the one its own tree declared. This is what a hard-coded
+    # name in the builder produces once the project is renamed on `main`: a manifest describing a
+    # project the release never was.
+    "the manifest names a project its tree never had": lambda m: m["project"].update(
+        {"name": "jev-renamed-after-the-release"}
+    ),
 }
 
 
@@ -98,6 +104,30 @@ class TestTheFreezeVerifies:
             f"{ef.PLANNED_GIT_TAG}; run it against that tag and commit the result "
             "(or, if the release is already tagged, open a new version)"
         )
+
+    def test_the_release_keeps_the_name_it_was_frozen_under(self):
+        """`v0.1.0` was published as `jev-test`. The rename did not rewrite it.
+
+        Project identity is a fact about a release, not a constant of the builder. Read from a
+        hard-coded string, `build_manifest` pointed at the tag would describe the release with a
+        name its tree never carried, and the committed manifest would stop being reproducible from
+        the release alone. The two names differing here is the property under test, not drift to
+        correct.
+        """
+        with ef.GitTreeSource(ef.PLANNED_GIT_TAG) as source:
+            frozen = ef.build_manifest(source)["project"]
+        current = ef.build_manifest()["project"]
+
+        assert frozen["name"] == "jev-test"
+        assert frozen["repository"] == "https://github.com/Charlie-Wang-03/jev-test"
+        assert current["name"] == "jev-testbench"
+        assert current["repository"] == "https://github.com/Charlie-Wang-03/jev-testbench"
+
+    def test_the_historical_release_still_verifies_after_the_rename(self):
+        """A rename on `main` must not invalidate a citation to the frozen tag."""
+        release = ef.Release.for_tag(ef.PLANNED_GIT_TAG)
+        with ef.GitTreeSource(ef.PLANNED_GIT_TAG) as source:
+            assert ef.verify_manifest(echo=lambda *_: None, source=source, release=release) == 0
 
 
 class TestTheVerifierCanFail:
@@ -238,6 +268,25 @@ class TestTheFreezeMatchesTheEvidence:
 
 SYNTHETIC_EXPERIMENT = "00_synthetic"
 
+# The synthetic release's project identity, and the name `main` moves to afterwards. Project identity
+# is per-release -- this repository's own `v0.1.0` was frozen as `jev-test` and the project was
+# renamed `jev-testbench` later -- so the fixture reproduces that shape rather than only describing
+# it: commit A is tagged under `SYNTHETIC_PROJECT`, commit B renames it, and the release at A must
+# still verify and still report the name it was published under.
+SYNTHETIC_PROJECT = "jev-synthetic"
+RENAMED_PROJECT = "jev-synthetic-renamed"
+
+
+def _pyproject(name: str) -> str:
+    return (
+        "[project]\n"
+        'version = "0.1.0"\n'
+        f'name = "{name}"\n'
+        "\n"
+        "[project.urls]\n"
+        f'Repository = "https://example.invalid/{name}"\n'
+    )
+
 
 def _git(repo: Path, *args: str) -> str:
     proc = subprocess.run(
@@ -283,7 +332,7 @@ def _synthetic_files() -> dict[str, str]:
         "docs/README.md": "# The release docs index\n",
         "LICENSE": 'MIT License\n\nTHE SOFTWARE IS PROVIDED "AS IS"\n',
         "CITATION.cff": "cff-version: 1.2.0\nversion: 0.1.0\nlicense: MIT\n",
-        "pyproject.toml": '[project]\nversion = "0.1.0"\n',
+        "pyproject.toml": _pyproject(SYNTHETIC_PROJECT),
         "results/usage.jsonl": json.dumps(record) + "\n",
     }
 
@@ -297,7 +346,7 @@ def _synthetic_manifest(root: Path, files: dict[str, str]) -> dict:
         "release_version": "0.1.0",
         "planned_git_tag": "v0.1.0",
         "freeze_date": "2026-01-01",
-        "project": {"license": "MIT"},
+        "project": {"name": SYNTHETIC_PROJECT, "license": "MIT"},
         "model_scope": {},
         "official_claim_snapshot": {},
         "canonical_measurements": {
@@ -374,8 +423,12 @@ def _make_release_repo(root: Path, *, tag_points_at_the_moved_tree: bool = False
 
     (root / "README.md").write_text("# Rewritten after the release\n", encoding="utf-8", newline="\n")
     (root / "docs/README.md").write_text("# Index, reworded\n", encoding="utf-8", newline="\n")
+    # The project is renamed after the release. Nothing about the tagged tree changes.
+    (root / "pyproject.toml").write_text(
+        _pyproject(RENAMED_PROJECT), encoding="utf-8", newline="\n"
+    )
     _git(root, "add", "-A")
-    _git(root, "commit", "-q", "-m", "post-release documentation")
+    _git(root, "commit", "-q", "-m", "post-release documentation and rename")
 
     if tag_points_at_the_moved_tree:
         _git(root, "tag", "-f", "-a", "-m", "moved", "v0.1.0", "HEAD")
@@ -489,4 +542,20 @@ class TestReleaseVerification:
                 )
                 == 1
             )
+
+    def test_a_release_keeps_the_identity_its_own_tree_declared(self, tmp_path):
+        """The fixture renames the project in commit B. The release at A keeps its own name.
+
+        This is the regression the builder was reshaped for. `v0.1.0` was frozen as `jev-test` and
+        the project became `jev-testbench` afterwards; a builder holding today's name would have
+        made the old release describe itself as something it was never called, and verifying it
+        would have failed on a rename that changed none of its evidence.
+        """
+        repo = _make_release_repo(tmp_path / "repo")
+        with ef.GitTreeSource("v0.1.0", repo_root=repo) as source:
+            assert ef.project_identity(source)[0] == SYNTHETIC_PROJECT
+        assert ef.project_identity(ef.WorktreeSource(repo))[0] == RENAMED_PROJECT
+
+        code, output = _verify_in(repo)
+        assert code == 0, output
 

@@ -1,9 +1,14 @@
-# jev-test
+# jev-testbench
 
 **English** | [简体中文](README.zh-CN.md)
 
-An auditable experimental harness for studying **TypeSafe Jev** as a typed probabilistic decision
-primitive for LLM and agent workflows.
+`jev-testbench` is a lightweight Jev testbench built through **Agentic Engineering**.
+
+At the **object level**, it studies **TypeSafe Jev** as a typed probabilistic decision primitive for
+LLM and agent workflows. At the **meta level**, it documents **cognitive debt**: what happens when
+AI-assisted project complexity grows faster than the maintainer's understanding. The first half is
+evidence; the second is a process record, kept deliberately separate from it — see
+[Agentic Engineering and cognitive debt](docs/AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md).
 
 Jev is not a chat model. It takes a `state` and a set of **typed questions**, and returns
 **structured answers with probabilities** — a `Choice` label with a distribution, a `Score`

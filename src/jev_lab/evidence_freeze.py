@@ -48,6 +48,7 @@ import hashlib
 import json
 import subprocess
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol, Sequence
@@ -508,6 +509,36 @@ def _experiments_with_records(source: EvidenceSource, registered: Sequence[str])
     return sorted(names)
 
 
+def project_identity(source: EvidenceSource) -> tuple[str, str]:
+    """The distribution name and repository URL **as the source tree declared them**.
+
+    Project identity is a per-release fact, not a constant of this module. ``v0.1.0`` was frozen
+    under the name ``jev-test``; the project was renamed ``jev-testbench`` afterwards, and a
+    release's own tree is the only authority on what that release called itself. Reading the two
+    fields out of ``pyproject.toml`` is what lets ``build_manifest`` pointed at the ``v0.1.0`` tag
+    still reproduce the committed manifest after ``main`` has moved on -- the same reason
+    ``_check_release_metadata`` reads the version out of the source rather than comparing it
+    against today's.
+
+    Hard-coding today's name here instead would make the builder describe a historical release with
+    a name its tree never carried, and the committed manifest could no longer be rebuilt from the
+    release alone.
+    """
+    if not source.is_file("pyproject.toml"):
+        raise ValueError(f"no pyproject.toml in {source.label}; cannot read the project identity")
+    project = tomllib.loads(source.read_bytes("pyproject.toml").decode("utf-8")).get("project", {})
+    name = project.get("name")
+    urls = project.get("urls", {})
+    repository = urls.get("Repository") or urls.get("Homepage")
+    if not name or not repository:
+        raise ValueError(
+            f"pyproject.toml in {source.label} declares no project.name and/or no "
+            "project.urls Repository or Homepage; the manifest's project section is built from "
+            "those two fields, and an absent one is not a value to guess"
+        )
+    return name, repository
+
+
 def build_manifest(
     source: EvidenceSource | None = None, release: Release | None = None
 ) -> dict[str, Any]:
@@ -517,6 +548,9 @@ def build_manifest(
     ``GitTreeSource`` it recomposes an *already published* release from its own tag -- which is how
     the test suite checks that the committed manifest is what the code builds from the release,
     rather than merely that it verifies against itself.
+
+    Project identity is read from whichever tree ``source`` names, so recomposing a past release
+    reproduces the name that release was published under rather than today's.
     """
     if source is None:
         source = WorktreeSource()
@@ -529,6 +563,9 @@ def build_manifest(
     freeze_doc = source.read_bytes(
         (release.evidence_dir / "PUBLIC_EVIDENCE_FREEZE.md").as_posix()
     ).decode("utf-8")
+    # `name` and `repository` are per-release facts read from the tree being described. The other
+    # three are properties of the scientific artifact and are the same for every release of it.
+    name, repository = project_identity(source)
 
     return {
         "schema_version": 1,
@@ -536,12 +573,12 @@ def build_manifest(
         "planned_git_tag": release.tag,
         "freeze_date": FREEZE_DATE,
         "project": {
-            "name": "jev-test",
+            "name": name,
             "description": (
                 "A measurement bench for TypeSafe's Jev model and the audit trail of what it "
                 "measured. The product is the trustworthiness of the evidence, not a discovery."
             ),
-            "repository": "https://github.com/Charlie-Wang-03/jev-test",
+            "repository": repository,
             "license": "MIT",
             "license_file": "LICENSE",
             "python_requires": ">=3.13",
@@ -833,6 +870,17 @@ def _check_release_metadata(
             failures.append("CITATION.cff claims a DOI; this release has none")
     if manifest.get("project", {}).get("license") != "MIT":
         failures.append("manifest does not record the license as MIT")
+
+    # The name a release records is the name its own tree declared. A mismatch is not cosmetic: it
+    # means the manifest describes a project the release never was, which is exactly what a
+    # hard-coded identity in the builder produces once the project is renamed on `main`.
+    declared_name, _ = project_identity(source)
+    recorded_name = manifest.get("project", {}).get("name")
+    if recorded_name != declared_name:
+        failures.append(
+            f"manifest records project name {recorded_name!r}, but pyproject.toml in "
+            f"{source.label} declares {declared_name!r}"
+        )
 
 
 def _check_scientific_state(

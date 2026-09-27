@@ -1,6 +1,15 @@
 [project]
-name = "jev-test"
-version = "0.1.0"
+name = "jev-testbench"
+# The version lifecycle, which the numbers alone do not explain:
+#
+#   0.1.0     the frozen evidence release, tagged `v0.1.0`. It was published under the project's
+#             historical name, `jev-test`. That release is immutable and this file on `main` has no
+#             bearing on it -- the tag carries its own copy.
+#   0.1.1.dev0 development identity after that freeze: project identity, presentation and process
+#             documentation. It contains no new measurement and must never be tagged as a release;
+#             it exists so that "post-freeze" and "the release" are distinguishable at a glance.
+#   0.2.0     reserved for genuinely new scientific evidence.
+version = "0.1.1.dev0"
 # The word "benchmark" is avoided on purpose: this repository has no ground truth, so it does not
 # produce an accuracy score, which is what the word promises. What it produces is a log and a set
 # of labelled claims about that log.
@@ -46,18 +55,20 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Charlie-Wang-03/jev-test"
-Repository = "https://github.com/Charlie-Wang-03/jev-test"
-Issues = "https://github.com/Charlie-Wang-03/jev-test/issues"
-Documentation = "https://github.com/Charlie-Wang-03/jev-test/blob/main/docs/README.md"
+Homepage = "https://github.com/Charlie-Wang-03/jev-testbench"
+Repository = "https://github.com/Charlie-Wang-03/jev-testbench"
+Issues = "https://github.com/Charlie-Wang-03/jev-testbench/issues"
+Documentation = "https://github.com/Charlie-Wang-03/jev-testbench/blob/main/docs/README.md"
 
 [build-system]
 requires = ["uv_build>=0.12.6,<0.13.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-# The distribution is named `jev-test`, but the import package is `jev_lab`. Left unset, the
-# backend looks for a module matching the *project* name (`src/jev_test/`) and the build fails.
+# The distribution is named `jev-testbench`, but the import package stays `jev_lab` -- unchanged
+# by the project rename, because the supported interface is the CLI and the evidence files it
+# writes, not `import jev_lab`. Left unset, the backend looks for a module matching the *project*
+# name (`src/jev_testbench/`) and the build fails.
 module-name = "jev_lab"
 
 [dependency-groups]

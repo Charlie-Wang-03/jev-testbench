@@ -25,9 +25,12 @@ Jev inference call; installing dependencies is the only step that needs network 
 | **Relative links** | Asserted over every tracked `.md` by the offline suite. |
 | **Tag verification** | `verify v0.1.0` reads the tag tree, not the working tree, so `main` may move while the release stays fixed. |
 | **Offline test suite** | Green on Windows (development) and on Linux (CI). |
+| **Project rename** | `jev-test` → `jev-testbench`, decided by the owner and applied in P5-E (`PROJECT_RENAME: OWNER_APPROVED`). The frozen `v0.1.0` tree is unchanged and keeps the name it was published under. See [`REPOSITORY_METADATA_PROPOSAL.md`](REPOSITORY_METADATA_PROPOSAL.md). |
 
 **Also already true, and worth stating:** no API call has been made since the freeze. The P5-A, P5-B,
-P5-C and P5-C1 stages produced presentation and infrastructure only.
+P5-C, P5-C1, P5-D and P5-E stages produced presentation, infrastructure and process documentation
+only. The rename is an owner decision that has been taken; it is not a gate that passed, and it is
+listed here because this file's other sections would otherwise still imply it was open.
 
 ---
 
@@ -102,9 +105,6 @@ none of it should be treated as gating.**
 - [ ] GitHub Pages for the blog, if option B or C in the venue comparison is chosen.
 - [ ] A DOI via Zenodo, if the release should be citable by DOI rather than by tag.
 - [ ] `CITATION.cff` review — it exists and points at the tag; a DOI would change it.
-- [ ] Renaming the repository from `jev-test`. It reads as a scratch name. A rename is disruptive
-      (redirects, citation links, the freeze's own URLs) and is the owner's call; P5-C does not
-      rename it and suggests no name.
 
 **No decorative assets were created during P5-C.** No logo, no social card, no architecture
 illustration. Adding image assets to a release candidate that is otherwise byte-accounted-for would

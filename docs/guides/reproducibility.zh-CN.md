@@ -22,8 +22,8 @@
 这是你应该走的路径。它复现的是*分析*，而那正是可以被精确复现的部分。
 
 ```console
-git clone https://github.com/Charlie-Wang-03/jev-test.git
-cd jev-test
+git clone https://github.com/Charlie-Wang-03/jev-testbench.git
+cd jev-testbench
 
 uv sync --locked
 uv run pytest

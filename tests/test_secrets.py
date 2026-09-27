@@ -533,7 +533,13 @@ class TestTheSuiteGuard:
 
 
 class TestTheSdkReceivesTheKey:
-    """The real `open_client` and the real SDK, over a mock transport. No socket is opened."""
+    """The real `open_client` and the real SDK, over a mock transport. No socket is opened.
+
+    ``model="fake-model"`` is a placeholder, not a claim about anything: nothing here asserts on the
+    model name, the mock response carries its own ``model`` field, and no request leaves the process.
+    It is deliberately not the project's name -- a placeholder that collides with the project would
+    read as a reference to it.
+    """
 
     RESPONSE = {
         "model": "jev-1.13.0",
@@ -569,7 +575,7 @@ class TestTheSdkReceivesTheKey:
         # `probe=` is what routes the client through the mock. Without it `open_client` builds an
         # uninstrumented client, and the call goes to the real API -- which `conftest.no_network`
         # now turns into a failure instead of a live request.
-        with open_client(model="jev-test", probe=TransportProbe()) as client:
+        with open_client(model="fake-model", probe=TransportProbe()) as client:
             run_experiment(get_experiment("01_primitives"), client=client, recorder=UsageRecorder(tmp_path))
         assert captured["authorization"] == f"Bearer {FROM_FILE}"
 
@@ -578,7 +584,7 @@ class TestTheSdkReceivesTheKey:
         monkeypatch.setenv(client_module.API_KEY_ENV, FROM_ENVIRONMENT)
         captured = {}
         self.instrument_with(monkeypatch, captured)
-        with open_client(model="jev-test", probe=TransportProbe()) as client:
+        with open_client(model="fake-model", probe=TransportProbe()) as client:
             run_experiment(get_experiment("01_primitives"), client=client, recorder=UsageRecorder(tmp_path))
         assert captured["authorization"] == f"Bearer {FROM_ENVIRONMENT}"
 
@@ -591,7 +597,7 @@ class TestTheSdkReceivesTheKey:
         self.instrument_with(monkeypatch, captured)
         from typesafe_sdk import TypeSafeClient
 
-        with TypeSafeClient(model="jev-test", http_client=instrumented.instrument(timeout=5.0)) as client:
+        with TypeSafeClient(model="fake-model", http_client=instrumented.instrument(timeout=5.0)) as client:
             run_experiment(get_experiment("01_primitives"), client=client, recorder=UsageRecorder(tmp_path))
         assert captured["authorization"] == f"Bearer {FROM_ENVIRONMENT}"
 
@@ -600,4 +606,4 @@ class TestTheSdkReceivesTheKey:
 
         without_environment(monkeypatch)
         with pytest.raises(TypeSafeError):
-            TypeSafeClient(model="jev-test")
+            TypeSafeClient(model="fake-model")

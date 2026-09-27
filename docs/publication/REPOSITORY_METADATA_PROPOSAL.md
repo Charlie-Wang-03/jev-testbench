@@ -1,8 +1,12 @@
 # Repository metadata proposal
 
-**Status: PROPOSAL ONLY. Nothing has been applied.** No description, topic, name or setting on
-`Charlie-Wang-03/jev-test` has been changed by P5-C. These are GitHub-side fields; changing them is
-the owner's action, and this file exists so the decision can be made against exact wording.
+**Status: PROPOSAL ONLY. The description and topics below are not applied.** No GitHub description or
+topic has been changed. These are GitHub-side fields; changing them is the owner's action, and this
+file exists so the decision can be made against exact wording.
+
+**One item in this file is no longer a proposal.** The repository rename was decided by the owner in
+P5-E and applied: `PROJECT_RENAME: OWNER_APPROVED`, `jev-test` → `jev-testbench`. See
+[Repository name](#repository-name) for exactly what that did and did not touch.
 
 ---
 
@@ -88,28 +92,42 @@ GitHub allows up to 20. More than about ten stops helping and starts diluting.
 
 ## Repository name
 
-**Not changed, and no rename is proposed here.**
+**`PROJECT_RENAME: OWNER_APPROVED`** — decided by the owner in P5-E, and applied.
 
-`jev-test` reads as a scratch name, and it was one when the repository was created. It now holds a
-frozen evidence release with a citation pointing at it. A rename is a real cost:
+`jev-test` read as a scratch name because it was one when the repository was created. The owner
+renamed it to **`jev-testbench`**, and chose to do it while the repository is still private, which is
+the point at which a rename costs almost nothing.
 
-- GitHub redirects the old path, but the **citation and the freeze documents name the URL**;
-- the release notes and the blog both link to `Charlie-Wang-03/jev-test`;
-- the tag `v0.1.0` does not encode the repository name, so the release itself would survive a rename
-  intact — the links around it would not.
+What the rename did and did not touch:
 
-That balance may well favour renaming *before* publication rather than after, since a rename while
-the repository is private costs almost nothing and a rename afterwards costs redirects and stale
-citations. It is the owner's call, and P5-C takes no action either way.
+| Aspect | Effect of the rename |
+|---|---|
+| The GitHub repository | Now `Charlie-Wang-03/jev-testbench`. The old path redirects to it. |
+| The distribution name | Now `jev-testbench`. The import package stays `jev_lab`, because the supported interface is the CLI and the evidence files, not a Python library API. |
+| The frozen release `v0.1.0` | **Unchanged.** It was published under the name `jev-test`, and that is a historical fact about it rather than a stale string. |
+| [`docs/evidence/v0.1.0/`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md) | **Unchanged.** Its manifest still records `"name": "jev-test"`, and `evidence_freeze verify v0.1.0` still passes. |
+| [`CITATION.cff`](../../CITATION.cff) | Keeps `version: 0.1.0` and the title it was published under; its URLs follow the repository. |
+| The English blog adaptation | Still says `jev-test` where it describes the build. It is frozen pending re-alignment, not overlooked. |
+
+The one thing that must not happen is creating a new repository at `Charlie-Wang-03/jev-test`. The
+GitHub redirect from the old path to the new one is what keeps the historical links in the frozen
+release, in the release notes and in the blog resolving. A new repository at the old path would take
+that redirect over and break every one of them.
 
 ---
 
-## Owner actions, none taken
+## Owner actions
+
+Description and topics:
 
 - [ ] Approve, edit or reject the description above.
 - [ ] Approve, edit or reject the topic set.
-- [ ] Decide about a repository rename, if any, **before** visibility changes rather than after.
 - [ ] Apply the approved metadata on GitHub.
 
-**No metadata has been modified. The repository is `PRIVATE` and its description and topics are
-unchanged.**
+Name:
+
+- [x] The repository rename — decided in P5-E: `PROJECT_RENAME: OWNER_APPROVED`.
+- [x] Apply it: `Charlie-Wang-03/jev-test` → `Charlie-Wang-03/jev-testbench` — done by the owner.
+
+**No GitHub description or topic has been modified. The repository is `PRIVATE`, the description and
+the topics are unchanged, and `PROJECT_RENAME` is the only item here that is settled.**

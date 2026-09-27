@@ -11,10 +11,14 @@ not to `main`. The release is the tree that tag points at.
 
 ## Draft body
 
-> ### `jev-test` v0.1.0 — evidence freeze
+> ### `v0.1.0` — evidence freeze
 >
 > The first frozen, citable evidence release from this repository: a local evaluation bench for
 > TypeSafe's Jev 1.13.0, and the results of using it honestly.
+>
+> *This release was frozen under the project's historical name `jev-test`. The repository has since
+> been renamed `jev-testbench`, and the links below follow it. The release itself is unchanged, and
+> the frozen documents still carry the name they were published under.*
 >
 > **What is in it**
 >
@@ -57,7 +61,7 @@ not to `main`. The release is the tree that tag points at.
 > No general accuracy claim. No calibration validation, in either direction. No latency benchmark. No
 > universal batching ratio. No determinism verdict. No production safety certification. No claim
 > about NAS. The full list, with reasons, is in
-> [§ 7 of the freeze document](https://github.com/Charlie-Wang-03/jev-test/blob/v0.1.0/docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md).
+> [§ 7 of the freeze document](https://github.com/Charlie-Wang-03/jev-testbench/blob/v0.1.0/docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md).
 >
 > **The method is the contribution.** Every claim is labelled as an official claim, a local
 > measurement, a derived calculation or a limitation. P3's design, thresholds and stopping rule were
@@ -69,8 +73,8 @@ not to `main`. The release is the tree that tag points at.
 > **Reproducing it**
 >
 > ```console
-> git clone https://github.com/Charlie-Wang-03/jev-test.git
-> cd jev-test
+> git clone https://github.com/Charlie-Wang-03/jev-testbench.git
+> cd jev-testbench
 > git checkout v0.1.0
 > uv sync --locked
 > uv run pytest
@@ -83,7 +87,7 @@ not to `main`. The release is the tree that tag points at.
 > The verifier recomputes every SHA-256 in the manifest, re-counts both logs, and re-checks the
 > registry, license, version and P3-verdict invariants.
 >
-> **License:** MIT — see [`LICENSE`](https://github.com/Charlie-Wang-03/jev-test/blob/v0.1.0/LICENSE).
+> **License:** MIT — see [`LICENSE`](https://github.com/Charlie-Wang-03/jev-testbench/blob/v0.1.0/LICENSE).
 >
 > Cite the tag, not `main`. Citation metadata is in `CITATION.cff`.
 

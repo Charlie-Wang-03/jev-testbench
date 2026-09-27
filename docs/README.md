@@ -8,6 +8,10 @@ Most public-facing documents exist in **English and Simplified Chinese**. The ev
 only** — deliberately, so that the evidence layer has one textual source rather than two that can
 drift apart.
 
+> **Project name.** The project is `jev-testbench`. It was named `jev-test` until the rename in
+> P5-E, and the frozen `v0.1.0` release keeps the name it was published under — a historical
+> document saying `jev-test` is accurate about the release, not stale.
+>
 > **License: MIT.** See [`LICENSE`](../LICENSE) and the [license
 > decision](OPEN_SOURCE_LICENSE_DECISION.md). One license covers the code, the two canonical logs,
 > and the derived reports.
@@ -25,6 +29,7 @@ drift apart.
 | [README](../README.md) | Project overview, the experiment map, and what you can and cannot conclude. |
 | [Architecture](architecture/architecture.md) · [中文](architecture/architecture.zh-CN.md) | How data moves through the bench, the agent-control pattern, and the module map. |
 | [Reproducibility](guides/reproducibility.md) · [中文](guides/reproducibility.zh-CN.md) | The fully-offline path, the live path, and what "reproduce" can honestly mean here. |
+| [Agentic Engineering and cognitive debt](AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) · [中文](AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.zh-CN.md) | How this bench was built: the human/AI division of labour, and the cognitive debt it left. **Process record — not evidence.** |
 
 ## Understand the evidence
 

@@ -61,7 +61,7 @@ that it cannot be reached by `run-all`. Its twelve records are in
 
 Five designs were registered and never run. Each was reviewed against the same six questions before
 publication, and each was retired. The retired designs were all introduced in the P0 freeze commit
-[`e20fad5`](https://github.com/Charlie-Wang-03/jev-test/commit/e20fad5) and removed from the active
+[`e20fad5`](https://github.com/Charlie-Wang-03/jev-testbench/commit/e20fad5) and removed from the active
 registry at the P3.6 release-closure commit; `git log --follow -- src/jev_lab/experiments.py`
 recovers the full text of each.
 
@@ -85,7 +85,7 @@ The rubric applied to all five:
 |---|---|
 | Former purpose | List accessible models and record which versioned ID each alias resolves to. |
 | Tier / calls | `core` / 2 |
-| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-test/commit/e20fad5) |
+| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-testbench/commit/e20fad5) |
 
 **Why retired.** The alias-to-version resolution it exists to record is *already in every record of
 the canonical log*. All 42 records carry `model_requested = "jev-latest"` and
@@ -105,7 +105,7 @@ current, which is the one property a frozen log cannot hold.
 |---|---|
 | Former purpose | Negation, implied conditions, and scope, following the documented jaggedness page. |
 | Tier / calls | `extended` / 4 |
-| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-test/commit/e20fad5) |
+| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-testbench/commit/e20fad5) |
 
 **Why retired.** `TS-DOC-JAG` is a vendor-published known-limitations page that already names
 literal reading, indirection and double negatives explicitly, scoped to `jev-1.13`. Four
@@ -127,7 +127,7 @@ demonstration. Retiring it removes no evidence, because it produced none.
 |---|---|
 | Former purpose | A tiny demonstration of the documented counting and arithmetic limits. |
 | Tier / calls | `extended` / 3 |
-| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-test/commit/e20fad5) |
+| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-testbench/commit/e20fad5) |
 
 **Why retired.** The design cannot falsify anything, and its own docstring says so: *"the docs
 already state the limitation and repeating it at scale would burn budget to learn something already
@@ -147,7 +147,7 @@ names.
 |---|---|
 | Former purpose | Fixed core evidence with growing irrelevant filler. |
 | Tier / calls | `extended` / 3 |
-| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-test/commit/e20fad5) |
+| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-testbench/commit/e20fad5) |
 
 **Why retired.** Three defects compound into a design that cannot support a length claim.
 
@@ -171,7 +171,7 @@ task, and running the current design instead would invite a README claim the des
 |---|---|
 | Former purpose | Equivalent English and Chinese input and questions. |
 | Tier / calls | `extended` / 2 |
-| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-test/commit/e20fad5) |
+| Historical source | [`e20fad5`](https://github.com/Charlie-Wang-03/jev-testbench/commit/e20fad5) |
 
 This is the one worth reading in full, because it is the case where the pull to keep an experiment
 is strongest and least related to its evidence.
