@@ -31,6 +31,8 @@ drift apart.
 | Document | What it is |
 |---|---|
 | [Findings](findings/findings.md) · [中文](findings/findings.zh-CN.md) | What reproduced, engineering lessons, findings deliberately killed, and scope limits. |
+| [Technical blog](blog/jev-as-probabilistic-decision-primitive.zh-CN.md) · [技术博客](blog/jev-as-probabilistic-decision-primitive.zh-CN.md) | A narrative walk through the bench: what it measured, the preregistered null, and the evaluation lessons. **简体中文**. |
+| [Blog claim audit](blog/jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md) | Every substantive claim in that post, mapped to its `BLOG_CLAIM_CONTRACT.md` class and its evidence. |
 | [Final local evaluation](../results/JEV_LOCAL_EVALUATION_FINAL.md) | All 42 records with every claim labelled. **Derived artifact** — regenerable, never a source of truth. |
 | [P1 — official claims audit](audits/P1_OFFICIAL_CLAIMS_LOCAL_EVIDENCE.md) | Every TypeSafe claim we could locate, audited against local evidence. Verdict: `P1_OFFICIAL_LOCAL_AUDIT_PASS`. |
 | [P2 — novelty triage](audits/P2_JEV_INSIGHT_TRIAGE.md) | The triage that retired seven candidates, including the two with the largest effect sizes. Verdict: `P2_TRIAGE_PASS`. |
