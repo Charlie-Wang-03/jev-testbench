@@ -1,8 +1,51 @@
 # English realignment — handoff
 
-**Status:** `ENGLISH_REALIGNMENT = NOT_STARTED` · `PARITY = SUSPENDED`
+**Status:** `ENGLISH_REALIGNMENT = COMPLETE` · `PARITY = PASS`
 **Written:** 2026-09-27, at the blog boundary cleanup (claim audit revision 8).
-**Audience:** whoever performs the English realignment. This is a **docs artifact**, not article prose.
+**Completed:** 2026-09-28, by the P5-F English realignment (claim audit revision 10).
+**Audience:** the record. This is a **docs artifact**, not article prose.
+
+---
+
+## Completed — 2026-09-28
+
+The realignment this file asked for has been done. **The file is kept rather than replaced**, because what
+it asked for is part of the provenance of what was delivered: it is the record of the constraint the work
+was performed under, written by the owner before the work began.
+
+**What was delivered.** The English article was rewritten from scratch as a fresh adaptation of the
+approved Chinese narrative — not a translation, not a patch of the P5-B text. The result, and the whole
+audit trail behind it, are in:
+
+| | |
+|---|---|
+| The English article | [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md) |
+| Bilingual claim audit | [`…CLAIM_AUDIT.md`](jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md) — **revision 10**; §1.9 and §4 are the realignment record and the three parity gates. |
+| English process attribution | [`…PROCESS_ATTRIBUTION_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.en.md) |
+| English style audit | [`…STYLE_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.STYLE_AUDIT.en.md) |
+
+**Both constraints below were honoured, and both are checkable.**
+
+- **NAS is absent from the new English article — and from the Chinese.** It was removed, not translated,
+  and **nothing was substituted for it**; the absence check in the claim audit's §4.4 covers both languages.
+  The non-negotiable instruction was the first constraint written, and it is the one with a mechanical test.
+- **The frozen layer was not touched.** `docs/evidence/v0.1.0/**`, `results/**`, the P1/P2/P3 historical
+  audits and the `v0.1.0` release are unchanged. The Chinese article is byte-identical to its approved
+  state.
+
+**On parity.** This file said parity would become a real gate again on completion. It did, and it passes:
+the claim audit's §4 reports **novelty parity, bilingual factual-and-numeric parity, and scope parity, all
+`PASS`**, over 70 claims located in both articles and 50 numeric tokens counted in each. `PARITY = PASS` is
+a result now, not a state held open.
+
+**One thing this does not mean.** The English article has passed its mechanical gates and its
+author-side audits. **It has not passed human editorial review, and this file does not report that it
+has.**
+
+---
+
+*Everything below is the handoff as written on 2026-09-27, preserved unedited. Its present-tense
+statements describe the repository at that date.*
 
 ---
 
