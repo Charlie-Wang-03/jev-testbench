@@ -7,7 +7,7 @@ cognitive debt), and corrected again in P5-E1 — nine narrowly-scoped editorial
 change, followed by three one-line micro corrections and one further correction that closes the reading
 risk the third of those opened. **It then had a scope cleanup that removed two matters the project no
 longer covers** — the internal governance status at the top of the article, and the whole NAS topic. §1.5
-through §1.7 record what each pass changed and which rows it moved.
+through §1.8 record what each pass changed and which rows it moved.
 **Second document, tracked but not re-audited:**
 [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md)
 (the English adaptation). **It is frozen and was not modified in P5-D, P5-E or P5-E1.** The P5-E1
@@ -18,10 +18,11 @@ what revision 2 established about it and is carried forward unchanged.
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 8 — the blog boundary cleanup. The article lost its header governance note and all of its NAS
-material, so C-62 and C-69 are retired here and C-65 is narrowed. **This is the first revision in which the
-totals table goes down**: 73 rows to 71, with no new row and no verdict flip. Supersedes revision 7, which
-resolved the antecedent reading risk revision 6 recorded and moved no figure.
+**Revision:** 9 — the narrative positioning closure. One sentence of the preregistration block is re-stated
+as a fact plus a counterfactual instead of as an impossibility, so the article describes its own practice
+rather than laying a rule on the reader. **No row is added, retired, moved or reclassified, and the totals
+are unchanged** at 71. Supersedes revision 8, which was the blog boundary cleanup — the first revision in
+which the totals table goes down, retiring C-62 and C-69 and narrowing C-65.
 
 **What this file is.** Every substantive claim in the Chinese article **about Jev, about this bench's
 measurements, or about what TypeSafe has published**, classified against the contract's three classes —
@@ -187,6 +188,38 @@ article prose. The handoff also carries the one instruction that follows from de
 not be carried into the new English adaptation.** The frozen English still contains it (§15), and removing
 it there is a realignment task, not a cleanup task — the English file was not touched in this revision.
 
+### 1.8 The narrative positioning closure: one sentence, and why no row moves
+
+**Exactly one sentence of the body changed in this pass.** The preregistration block closed on an
+impossibility:
+
+> ~~所以事后没有人能拿它们去调阈值。~~
+
+It now closes on the fact and its consequence:
+
+> 这些阈值在第一个请求发出去前就已经定了。后来如果再改，分析口径也就变了，不再是原先预注册的那套实验。
+
+**This is a tightening, and it is worth being exact about which way the correction points.** The old form
+asserted a mechanism — that nobody *could* retune — which is not what a freeze does and not what the
+evidence shows. The new form asserts what was actually true (the thresholds were fixed before the first
+request) and what follows from changing them (a different analysis, not this preregistered experiment). The
+article states less than it did, and states it accurately; that is the direction this contract prefers, and
+it is the same direction as the other corrections in §1.6.
+
+**No row moves, because the statement C-35 records did not change.** C-35 is *design, order, statistics and
+thresholds were committed before the first request*, class `A`, resting on the freeze §5.1 and `db7d06f`.
+The new sentence states that claim directly, in its first clause. Its second clause is a counterfactual about
+the design's logic, which is not a claim about Jev, about this bench's measurements, or about what TypeSafe
+published — the same reason the closing movement is outside this contract (§5). So C-35 keeps its class, its
+evidence and its `n/a` scope cell, and the counterfactual needs no row of its own. **No row is added, none is
+retired, none is renumbered and no verdict flips.** The totals hold at **46 `A` + 25 `B` + 0 `C` = 71**, and
+`DO_NOT_STATE_ZH` remains **0**.
+
+**Nothing else in the article changed in this pass, and nothing came back.** The retired NAS rows — C-62 and
+C-69 — are still absent from §2, and the `C-62`/`C-69` gaps in the ID sequence still mark where they were.
+The removal was a scope decision, and a later pass that edits one sentence for tone is not a reason to revisit
+it. The same goes for the header governance note: it stays out of the prose.
+
 ---
 
 ## 2. The audit
@@ -290,6 +323,10 @@ ID in the table above still means what it meant in revision 2.
 C-66 and restores a number the article had dropped; it adds no row, removes no row, and flips no verdict, so
 carrying r6 as its own column would repeat those numbers exactly. Revision 5 is the last column before r7
 that differs, and it differs only by C-73, C-74 and C-75.
+
+**There is no r9 column either, and for the same reason.** The narrative positioning closure re-states one
+preregistration sentence and classifies identically, so revision 9's figures are revision 8's. §1.8 is where
+that is argued; the column would repeat these numbers to the row.
 
 **`DO_NOT_STATE_ZH = 0`.** Nothing in the article had to be deleted or rewritten for asserting something
 the evidence does not carry. The one class change is a **tightening**, not a new defect: C-05 moved from

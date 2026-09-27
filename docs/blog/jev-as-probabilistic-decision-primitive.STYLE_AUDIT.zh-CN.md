@@ -7,14 +7,18 @@
 (`SKILL.md` §"自检输出格式"), run by hand against the rewritten text.
 **Article archetype:** `调查实验型 × 方法论分享型`, primary 调查实验型. Recorded before writing; unchanged in P5-E.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 6 — recomputed after the blog scope cleanup, which deleted the header governance note and the
-whole NAS movement. Supersedes revision 5 (the fourth correction), revision 4 (the first three micro
-corrections), revision 3, which recomputed everything in P5-E1 and added the **Over-stylization check**, and
-revision 2 (P5-E), which superseded the P5-D revision, whose two colloquial-expression counts (11 and 35)
-contradicted each other and are withdrawn.
-**This is the first revision in which the article gets shorter** — 339 characters, every one of them a
-deletion rather than a compression. 口语化表达 falls 32 → 30, 单句成段 106 → 101, 短拍 34 → 33, and
-**nothing was added to compensate.**
+**Revision:** 7 — recomputed after the narrative positioning closure, which rewrote one sentence of the
+preregistration block. This revision also adds the **Normative-tone check**. Supersedes revision 6 (the blog
+scope cleanup), revision 5 (the fourth correction), revision 4 (the first three micro corrections), revision
+3, which recomputed everything in P5-E1 and added the **Over-stylization check**, and revision 2 (P5-E),
+which superseded the P5-D revision, whose two colloquial-expression counts (11 and 35) contradicted each
+other and are withdrawn.
+**This revision makes the article 34 characters longer and takes one metric down with it.** The replaced
+sentence was a one-sentence paragraph; its replacement is a two-sentence paragraph, so 单句成段 falls
+101 → 100. Nothing was added to compensate, and the fall is recorded rather than repaired.
+**Revision 6 was the first in which the article got shorter** — 339 characters, every one of them a deletion
+rather than a compression. 口语化表达 fell 32 → 30, 单句成段 106 → 101, 短拍 34 → 33, and **nothing was
+added to compensate.**
 
 **What this file is not.** It is not a claim audit. Whether a sentence is *permitted* is decided by
 [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md) and recorded in
@@ -93,11 +97,21 @@ surrounding separators (199). **全文 14,956 → 14,617; narrative body 14,419 
 reduction in the article's history, and it is a scope change rather than an edit: nothing was shortened,
 only removed.
 
+**The positioning round goes the other way, by 34 characters, and one metric falls with it.** One sentence
+was replaced — the preregistration block's `所以事后没有人能拿它们去调阈值。` becomes
+`这些阈值在第一个请求发出去前就已经定了。后来如果再改，分析口径也就变了，不再是原先预注册的那套实验。`
+The old sentence was a **one-sentence paragraph**; the replacement is a **two-sentence paragraph**. That is
+the whole of the style movement: **单句成段 101 → 100**. The replacement introduces no entry from the
+口语化 list, no `最后`, no 扣主线句, no ？, no 中文冒号 and no 破折号, so every other metric holds. **Nothing
+was added to compensate for the lost 单句成段**, and nothing was retired or topped up to keep a count level:
+all 30 colloquial entries were re-confirmed present in the final text, along with the 10 扣主线句, the 6
+questions, the 5 deliberate breaks and the 4 self-deprecations.
+
 **A note on the 正文 figure, which applies to both of the reductions above.** 全文 is the raw file length
-and is independently reproducible — it was re-measured at 14,949, 14,956 and now 14,617, matching the 全文
+and is independently reproducible — it was re-measured at 14,949, 14,956, 14,617 and now 14,651, matching the 全文
 figures below each time. The 正文 figure is carried forward as the previous revision's number plus the
 measured delta of the body region (everything from the first body paragraph onward), which was +7 for the
-fourth correction and −207 for the cleanup. The header note is excluded from 正文 because it sits above
+fourth correction, −207 for the cleanup and +34 for the positioning round. The header note is excluded from 正文 because it sits above
 that point, which is why the cleanup's 正文 delta is 207 rather than the full 339. **The 正文 *absolute* is
 therefore an inherited figure, not one this revision re-derived from scratch**, and it is labelled that way
 rather than presented as freshly measured — the deltas are exact, the base is inherited.
@@ -118,19 +132,19 @@ change is a consequence of it rather than a target.
 
 **The figures that moved, and the figures that did not.**
 
-| Figure | P5-E | P5-E1 | micro → final | cleanup | Direction |
-|---|---:|---:|---:|---:|---|
-| 全文 / 正文 字数 | 14,789 / 14,252 | 14,928 / 14,391 | 14,956 / 14,419 | **14,617 / 14,212** | up four times on compression, then **down 339 on deletion** |
-| 口语化表达 | 33 | 32 | 32 | **30** | down in P5-E1, flat, then **down 2** — `锤子` and `钉子` left with the NAS sentence |
-| 单句成段 | 107 | 106 | 106 | **101** | flat, then **down 5** — the five NAS paragraphs |
-| 15 字以内短拍 | 34 | 34 | 34 | **33** | flat, then **down 1** — 但这个仓库现在没有资格回答。 |
-| `最后` | 2 | 2 | **3** | **3** | **up** in the micro round, held here; all three temporal, L1-1 still at zero |
-| 扣主线句 | 10 | 10 | 10 | **10** | flat — none of the ten lived in the removed material |
-| 疑问句刹车 | 6 个 / 7 次 | 6 个 / 7 次 | 6 个 / 7 次 | **6 个 / 7 次** | flat — the NAS section posed no question in ？ form |
-| 正文中文冒号 | 0 | 0 | 0 | **0** | flat |
-| 破折号 / 弯引号 | 0 / 0 | 0 / 0 | 0 / 0 | **0 / 0** | flat |
-| 独立成段的 `不是。` | 1 | 1 | 1 | **1** | flat |
-| 情绪标点 | 0 | 0 | 0 | **0** | flat, by rule |
+| Figure | P5-E | P5-E1 | micro → final | cleanup | positioning | Direction |
+|---|---:|---:|---:|---:|---:|---|
+| 全文 / 正文 字数 | 14,789 / 14,252 | 14,928 / 14,391 | 14,956 / 14,419 | 14,617 / 14,212 | **14,651 / 14,246** | up four times on compression, **down 339 on deletion**, then **up 34 on one mandated sentence** |
+| 口语化表达 | 33 | 32 | 32 | 30 | **30** | down in P5-E1, flat, then **down 2** — `锤子` and `钉子` left with the NAS sentence; held here |
+| 单句成段 | 107 | 106 | 106 | 101 | **100** | flat, then **down 5** — the five NAS paragraphs; then **down 1** — the replaced sentence was one sentence, its replacement is two |
+| 15 字以内短拍 | 34 | 34 | 34 | 33 | **33** | flat, then **down 1** — 但这个仓库现在没有资格回答。; held here |
+| `最后` | 2 | 2 | **3** | 3 | **3** | **up** in the micro round, held since; all three temporal, L1-1 still at zero |
+| 扣主线句 | 10 | 10 | 10 | 10 | **10** | flat — none of the ten lived in the removed material, and none is in the replaced sentence |
+| 疑问句刹车 | 6 个 / 7 次 | 6 个 / 7 次 | 6 个 / 7 次 | 6 个 / 7 次 | **6 个 / 7 次** | flat — the NAS section posed no question in ？ form |
+| 正文中文冒号 | 0 | 0 | 0 | 0 | **0** | flat |
+| 破折号 / 弯引号 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | **0 / 0** | flat |
+| 独立成段的 `不是。` | 1 | 1 | 1 | 1 | **1** | flat |
+| 情绪标点 | 0 | 0 | 0 | 0 | **0** | flat, by rule |
 
 **The P5-D revision's numbers were wrong, and that history still matters.** Revision 1 reported
 colloquial expressions as "35 个不同条目" in one table and "11 个" in the summary of the same layer — an
@@ -165,7 +179,7 @@ as a technical exception). **P5-E1 introduced no colon and inherited none.**
 **L2 风格一致性** ✅
 
 - 开头 ✅
-- 节奏 ✅（单句成段 101 处，其中 15 字以内的短拍 33 处；扣主线句 10 处；疑问句刹车 6 个不同问句 /
+- 节奏 ✅（单句成段 100 处，其中 15 字以内的短拍 33 处；扣主线句 10 处；疑问句刹车 6 个不同问句 /
   7 次出现；无小标题）
 - 口语化 ✅（不同口语化表达 30 个，全表列出；论述中的故意打破 5 处；自嘲/承认不足 4 处；
   情绪标点 0 处 —— 这是 L2-3 四项里唯一未做到的一项，理由见 §"Evidence-contract overrides"）
@@ -286,6 +300,47 @@ micro 轮出现了一次指标上升（`最后` 2 → 3），它是同一件事�
 一处因此变准确或因此不再需要的话"，这一轮三处下降全部能指到被删掉的 NAS 材料，而且**没有任何一处
 下降伴随新增**，这一点比数字本身更能说明风格没有被拿去填空白。**
 
+**positioning 轮给这一节添的下降，判据不变，但性质与 cleanup 那一轮不同。** 单句成段 101 → 100 是这一轮
+唯一的结构性变化，原因是那句被要求重写的话从一句变成两句。**cleanup 的下降是内容离开，这一轮的下降是
+同一件事被说得更准**：旧句断言了一个冻结机制并不具备的性质（"没有人能调"），新句陈述事实（阈值在第一个
+请求前就定了）加上改动的后果（那会是另一次分析）。按这一节的判据 —— 每一次下降能不能指到一处因此变
+准确或因此不再需要的话 —— 这一处可以，而且是全文唯一一次由"句子变准确"直接造成的结构性指标下降。
+
+---
+
+## Normative-tone check
+
+**这一节是 positioning 轮按工作令新增的正向检查。** 前面几节问的是"这些风格手段有没有盖住内容"，这一节
+问的是另一个方向的问题：**这些话把谁当主语 —— 是这个项目自己，还是读它的人。** 三条判据逐条回答。
+
+**扫描范围与方法。** 全文正文逐行扫了两组词。第一组是可读作指令的词：`应该`、`必须`、`不得`、`不能`、
+`不许`、`正确的方法`、`唯一正确`、`任何人`、`所有开发者`、`以后都要`、`一定要`。第二组是可读作"对读者
+说话"的词：`读者`、`大家`、`所有人`、`每个人都`、`人人都`、`从今`、`从此`、`永远`、`应当`、`需要记住`、
+`切记`、`必须记住`、`我们都知道`、`众所周知`。改写前命中 **28 行**，改写后 **27 行**（被改的那一行不再
+命中，且改后的句子没有引入新的命中）。**每一行都先判断主语是谁，再决定改不改 —— 没有机械删除任何命中词。**
+
+**问题一：有没有对未来开发者下达的普遍指令？**
+**没有。** 27 行里，约束对象全部是这个项目自己的产物 —— canonical log 的写法、日志一次调用一条的追加
+规则、模型身份两个字段都记、派生产物不许漂移、延迟数字不能被读成推理延迟 benchmark、这份结果能说什么
+和不能说什么。它们的上下文本身就写着这是"先给项目加了一堆限制"，主语在段内是明确的。剩下的命中是**转述
+厂商文档**：`控制流应该留在代码里`、`门槛必须按领域调`，说这两句话的是 TypeSafe，不是本文。**全部保留。**
+
+**问题二：一次性的探索实验有没有被写成通用规范？**
+**没有。** 判定为越界的只有 1 行，就是 preregistration 段的收尾句 `所以事后没有人能拿它们去调阈值。`：它把
+一次实验的冻结写成了一条"谁都做不到"的机制断言，语气上是对人的约束，而不是对这次实验的描述。**已按要求
+改写为陈述事实加后果**，这是本轮唯一一处正文修改。改后的句子不再断言任何人不能做什么，只说明改了会构成
+另一次分析 —— 这与本次实验自己冻结阈值是两件事，前者是对读者的要求，后者是这次实验的实际做法。
+
+**问题三：作者反思有没有被写成读者义务？**
+**没有。** 这一类里最像命令的是 `12 次。一条都不许多。`，但它指的是**这次实验自己预注册的调用上限**，
+是预算而不是要求；同类的还有两条承重限制必须跟着结论走、两个百分比必须说清楚 —— 主语都是本文自己的报告
+纪律和这次实验的设计。作者反思的部分（认知负债、删故事、机关枪和火的比喻）主语是"我"和"这个项目遇到了
+什么"，没有一处滑向"所以你应该"。**保留，不改。**
+
+**结论：`No material normative overreach.`** 判据不是命中词的数量，而是每一处的主语归属：约束**这个项目
+自己的产物**的保留，要求**未来开发者应该怎样做**的一处也没有出现。**这一节没有为通过而新增或修改任何风格
+装置**，唯一的一处修改是 preregistration 那一句，而它是工作令直接指定的。
+
 ---
 
 ## L1 明细
@@ -323,11 +378,13 @@ Jev 的时候`，P5-E 改成了这一版**，理由不是风格而是归属：�
 
 **L2-2 节奏。**
 
-- 单句成段：101 处；其中 15 字以内的短拍 33 处（`54 次。` / `漂亮。` / `不是。` / `实验没坏。` /
+- 单句成段：100 处；其中 15 字以内的短拍 33 处（`54 次。` / `漂亮。` / `不是。` / `实验没坏。` /
   `分析器坏了。` / `到底是谁动的？` / `为什么？` / `答案是不要。` / `关于这件事，有一个比喻。` 等）。
   规则要求 3 次，实际是其 33 倍以上，本项不存在"接近不达标"的问题。**这五个单句成段的减少全部来自
   cleanup**：被删的 NAS 段是五个段落、每段一句，整段离开，短拍同时少掉 `但这个仓库现在没有资格回答。`
-  （14 字）。**删除没有触发任何补位**，没有任何新的短拍或单句成段被写进来填这五个空位。
+  （14 字）。**删除没有触发任何补位**，没有任何新的短拍或单句成段被写进来填这五个空位。**positioning
+  轮再减少一处，性质不同**：被重写的那句原本独立成段、只有一句，改写后仍是独立成段，但成了两句 ——
+  它不再是单句成段，减少的是这一处，不是又有段落离开。同样没有补位。
 - 扣主线句：10 处（`先说一分钟背景` / `好，回到实验。` / `到这一步` / `写到这里` / `跑完这些` /
   `还有一件做得挺狠的事` / `而且这还不是唯一一次` / `顺便说一句` / `顺带一提` / `回到开头。`）。
 - 疑问句刹车：6 个不同问句，7 次出现（`那 Agent 会不会真的好写一点？` / `那个边界，到底是
@@ -529,8 +586,12 @@ check" 问题三。
 `STYLE_AUDIT` 回答"有没有太刻意"，而不只是"有没有达到最低数量"。就这个问题而言，本版审计的结论是：
 **L1 与 L2-4 是零命中，不是接近通过；L2-2 的各项远超下限，不存在凑数的风险；唯一需要人工判断的地方
 是 L1-4 的那一个泛指"模型"，已经在明细里写明。** 反过来，本版审计没有发现任何一处"为了达到数量而
-硬塞"的痕迹 —— 这在 30 个口语化条目和 101 个单句成段的规模上是一个真实的结论，不是一句客气话。
+硬塞"的痕迹 —— 这在 30 个口语化条目和 100 个单句成段的规模上是一个真实的结论，不是一句客气话。
 
 **P5-E1 增加的反向检查见上面的 §"Over-stylization check"。** 那一节的结论和这一节是同一条：四个
 过密问题里三个从一开始就是否，一个在 P5-E 是"是"、在 P5-E1 被修成"否"，而修的方式是**删掉一句**而不是
 补一句。**这一版审计没有任何一个数字是因为想让文章"更像"而变动的。**
+
+**positioning 轮增加的正向检查见上面的 §"Normative-tone check"。** 那一节的结论同样不是数字：命中的
+27 行里没有一处把要求指向未来的开发者，唯一被改的一行是把一次实验的冻结说成了对所有人的约束。这一轮的
+数字变化只有一个（单句成段 101 → 100），而它下降的原因是句子被说准了，**没有任何一个数字是为风格而动的**。
