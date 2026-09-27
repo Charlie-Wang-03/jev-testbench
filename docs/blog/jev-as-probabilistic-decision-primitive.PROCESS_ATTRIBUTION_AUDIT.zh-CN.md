@@ -5,9 +5,10 @@
 recorded in [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) §2.
 **Not a basis:** the `v0.1.0` frozen evidence. See §6.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 3 — re-verified again after the three micro corrections that followed P5-E1. Supersedes
-revision 2 (P5-E1). The re-verifications are recorded in §9 and §10; the findings of revision 1 stand
-unchanged.
+**Revision:** 4 — recomputed after the blog scope cleanup, which removed one row. Supersedes revision 3
+(the micro corrections) and revision 2 (P5-E1). The re-verifications are recorded in §9 through §11; the
+findings of revision 1 stand unchanged. **The cleanup column in §7 is the only figure this revision moves,
+and it moves because a statement left the article — see §11.**
 
 ---
 
@@ -130,7 +131,6 @@ anchor, since the article has no numbered sections.
 | 21 | `ERR-001`: the 45/45 count, P1 left unedited | `AI_EXECUTION` + `HUMAN_DECISION` | 独立复核的时候发现 / P1 的文本没有被改. The recount is the agent's; leaving the historical audit untouched is the owner's. |
 | 22 | Retiring five registered, never-run designs | `HUMAN_DECISION` | 5 个已经登记但从未运行的实验全部被退休了. Experiment retirement is named in the owner's role list; the sentence is passive and the decision is the owner's. |
 | 23 | The non-claims | `PROJECT_OBSERVATION` | Statements about what the evidence supports. |
-| 24 | The NAS question being kept open | `HUMAN_DECISION` + `AUTHORIAL_REFLECTION` | 这个问题确实想留下来 — an intent, not an execution. |
 | 25 | The closing disclosure of AI involvement | `PROJECT_OBSERVATION` | The role split, stated plainly. |
 | 26 | Cognitive debt, its definition and the repayment argument | `AUTHORIAL_REFLECTION` | The owner's working concept, explicitly labelled as one. **The micro correction replaced the block's closing aphorism** (它们没有让解释真话变得可能) with a statement that names a party and a capability (但不会自动让维护者获得独立解释、验证这些事实的能力). 维护者 is a role noun, not the owner and not an agent; the sentence asserts what the mechanisms do not confer, never who executed anything, so it stays reflection. |
 | 27 | The gorilla and fire metaphor | `AUTHORIAL_REFLECTION` | Used once, as a figure. |
@@ -183,14 +183,23 @@ process layer, this audit would be claiming a rigour it does not have — §1 sa
 
 ## 7. Totals
 
-| Result | P5-D | P5-E | P5-E1 | micro |
-|---|---:|---:|---:|---:|
-| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** | **2** |
-| …of which assert an action performed in this project | 88 | **0** | **0** | **0** |
-| …of which are quotations rather than assertions | 4 | **2** | **2** | **2** |
-| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** | **9 of 10** |
-| Process statements classified | — | 28 | **29** | **29** |
-| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** | **0** |
+| Result | P5-D | P5-E | P5-E1 | micro | cleanup |
+|---|---:|---:|---:|---:|---:|
+| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** | **2** | **2** |
+| …of which assert an action performed in this project | 88 | **0** | **0** | **0** | **0** |
+| …of which are quotations rather than assertions | 4 | **2** | **2** | **2** | **2** |
+| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** | **9 of 10** | **9 of 10** |
+| Process statements classified | — | 28 | **29** | **29** | **28** |
+| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** | **0** | **0** |
+
+**The cleanup column moves one figure, and it is a subtraction, not a finding.** Row 24 — *the NAS question
+being kept open*, classified `HUMAN_DECISION + AUTHORIAL_REFLECTION` — described the sentence 这个问题确实想
+留下来. That sentence is gone from the article with the rest of the NAS material, so the row is gone too.
+**The count falls 29 → 28 because a statement left the article, not because a statement was reclassified.**
+Row 24 is not renumbered and not reassigned: the gap in §4 is the record of the removal, and every other row
+keeps the number it had. **The attribution result is unchanged** — the removed row was one of the
+`HUMAN_DECISION` entries, so no owner-execution attribution was lost or gained, and
+`PROCESS_ATTRIBUTION_UNRESOLVED` stays at **0**.
 
 **The two survivors are both quotations, and neither is an assertion by the article.** One is
 「我觉得它有时候不太行」, a reader's impression being ruled out inside a subordinate clause. The
@@ -202,8 +211,10 @@ checkable against the P5-D text, and the four that would have been most tempting
 are still present in full: the 0.60 constant is still named and still called uncalibrated; the
 analyzer defect, its disclosure and its post-run repair are still described at the same length; P1
 still stands unedited with the erratum carrying the corrected count; and the four routing
-suppressions are still traced to `routing.py`. Nothing was removed to make the attribution easier,
-and no number or scope clause changed in the process — the claim audit's
+suppressions are still traced to `routing.py`. Nothing was removed **to make the attribution easier** —
+and no number or scope clause changed in the process. (The cleanup column above is a different kind of
+removal and is not an exception to this sentence: row 24 left because the article stopped covering NAS, not
+because its attribution was awkward. It was never in doubt.) The claim audit's
 [bilingual token check](jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md) confirms all 18
 figures survive.
 
@@ -288,5 +299,40 @@ P5-E1 was also 这些机制. **The actor did not change; the claim got a benefic
 一个值得继续追的问题) — changes a count and then the antecedent that count sat on. **None of the three
 forms names an actor**, so none is in this audit's search, and this audit's counts are unaffected by which
 form stands. That sentence is a claim audit matter, recorded there as C-66 and §1.6 of that file, not here.
-*This paragraph is corrected in place without a revision bump: the attribution finding it reports was
-never in doubt for any of the three forms, and only the quotation of the current wording had gone stale.*
+*This paragraph was corrected in place without a revision bump when the wording changed, because the
+attribution finding it reports was never in doubt for any of the forms and only the quotation had gone
+stale. The revision-4 bump below is a different thing: it follows a row being removed.*
+
+---
+
+## 11. The scope-cleanup re-verification
+
+The article's header note and all of its NAS material were removed. **One row left this audit's inventory
+with them, and the full search was re-run to confirm nothing else moved.**
+
+| Check | After the cleanup |
+|---|---|
+| The ten first-person action phrases | **9 of 10 absent** — unchanged; the removed NAS material contained none |
+| 我 as a total character count | **4** (2 singular + 2 我们) — unchanged; none of the removed lines carried 我 |
+| Sentences attributing an execution to the owner | **0** |
+| Rows in §4 | **28** — row 24 removed, all others unchanged and unrenumbered |
+| `PROCESS_ATTRIBUTION_UNRESOLVED` | **0** |
+
+**Why the removed row was the only one affected.** Row 24 read *the NAS question being kept open*, typed
+`HUMAN_DECISION + AUTHORIAL_REFLECTION`, resting on the sentence 这个问题确实想留下来. It was an **intent
+statement** — the owner saying he wanted to keep looking at the question — and intents are attributed here
+because the article presented it as the owner's. The sentence is gone, so the row is gone.
+
+**The removal is attribution-neutral in the direction that matters.** Row 24 was a `HUMAN_DECISION` entry,
+one of the rows where the owner is credited with a judgment call. Removing it does not add an
+owner-execution attribution, does not weaken a re-attribution made in P5-E, and does not touch any row in
+the `AI_EXECUTION` set. **The finding this audit exists to report is unchanged: the finished article
+attributes no execution in this project to the owner.**
+
+**The header note that was also removed is worth one line, because it is the kind of thing this audit
+would otherwise have to classify.** It stated that the English half was parked, that parity was
+`SUSPENDED`, and that the two halves were out of step. It named no actor at all — it is a statement about
+two documents, and it is now carried in
+[`ENGLISH_REALIGNMENT_HANDOFF.md`](ENGLISH_REALIGNMENT_HANDOFF.md) instead. **It was never in §4's
+inventory**, so this is not a second removal; it is recorded so that a reader comparing revisions does not
+go looking for it.

@@ -5,7 +5,9 @@
 factual repairs, a reduction in punchline density, and a new closing movement on AI involvement and
 cognitive debt), and corrected again in P5-E1 — nine narrowly-scoped editorial corrections, no structural
 change, followed by three one-line micro corrections and one further correction that closes the reading
-risk the third of those opened. §1.5 and §1.6 record what each pass changed and which rows it moved.
+risk the third of those opened. **It then had a scope cleanup that removed two matters the project no
+longer covers** — the internal governance status at the top of the article, and the whole NAS topic. §1.5
+through §1.7 record what each pass changed and which rows it moved.
 **Second document, tracked but not re-audited:**
 [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md)
 (the English adaptation). **It is frozen and was not modified in P5-D, P5-E or P5-E1.** The P5-E1
@@ -16,9 +18,10 @@ what revision 2 established about it and is carried forward unchanged.
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 7 — a fourth correction resolves the antecedent reading risk revision 6 recorded. Supersedes
-revision 6 (the three micro corrections on top of P5-E1). **No verdict moves**: revision 7 re-scopes one row
-and restores one number, and every figure in the totals table below is identical to revision 6's.
+**Revision:** 8 — the blog boundary cleanup. The article lost its header governance note and all of its NAS
+material, so C-62 and C-69 are retired here and C-65 is narrowed. **This is the first revision in which the
+totals table goes down**: 73 rows to 71, with no new row and no verdict flip. Supersedes revision 7, which
+resolved the antecedent reading risk revision 6 recorded and moved no figure.
 
 **What this file is.** Every substantive claim in the Chinese article **about Jev, about this bench's
 measurements, or about what TypeSafe has published**, classified against the contract's three classes —
@@ -137,6 +140,53 @@ sentence is now consistent with its own continuation and cannot be read as repor
 `B`, because the compression risk §7 tracks — *seven stories were deleted* standing in for *seven
 discoveries were disproved* — is a property of the count, not of the sentence that carries it.
 
+### 1.7 The scope cleanup: what left the article, and the rows that left with it
+
+Two owner decisions, both about **what this blog is about**, not about what is true. Nothing here was
+removed because it was unsafe to state; both removals are scope changes, and this audit records them that
+way rather than as repairs.
+
+**Decision A — internal governance status is not reader-facing prose.** The article's header carried an
+italic note saying the English half was parked at P5-B, that cross-language parity was `SUSPENDED` rather
+than `PASS` in this audit, and that the two halves were out of step. That is a true statement about this
+repository's *process*, and it belongs in this file and in `docs/README.md`, where it still is. It does not
+belong in an article a reader arrives at cold. **No row moves**: the note asserted nothing about Jev, about
+this bench's measurements, or about TypeSafe's published material, so it was never in this audit's
+inventory to begin with — it is recorded here because a reader comparing revisions will see it gone.
+
+**Decision B — NAS is out of the project's scope.** The project's subject is *a small Jev bench built by
+Agentic Engineering*; its meta-subject is *cognitive debt accumulated while building a project with AI*.
+NAS was neither. Three pieces left the article:
+
+| Piece | Was | Row effect |
+|---|---|---|
+| A clause in the non-claims list | 没有 NAS 适用性结论。 | **None.** C-61 covers the non-claims list as a unit; the list is one item shorter and the row is unchanged. |
+| A framing clause in the first-person row | *still wanting to look at NAS*, and `NAS` in that row's location column | **C-65 narrowed.** A framing clause, not a separate claim, so the row survives and loses a clause. |
+| A whole closing movement, seven lines | 从 Jev 能不能拿去做 NAS 到 不能因为手上有锤子，就把问题看成钉子 plus its section break | **C-62 and C-69 retired.** Both were supported *only* by this material: C-62 was the NAS non-claim itself, and C-69 was the aphorism attached to it. With the movement gone there is nothing left for either to describe. |
+
+**The two retired rows are removed, not renumbered.** C-62 and C-69 are simply absent from §2, and every
+other ID keeps the meaning it had in revision 2 — so a reader who cites C-65 or C-70 from an older revision
+is still citing the right row. The gaps in the sequence are the record that something was taken out, and
+this section is the record of what and why.
+
+**One more removal, from §7's exclusion table rather than from §2.** The exclusion row *Jev is suitable for
+NAS (or any workload never run here)* was deleted for a different reason: the contract still forecloses that
+statement, but the table's column is *where the Chinese article refuses it*, and the article no longer
+raises the topic, so there is no such place. The frozen evidence keeps `NO_NAS_CLAIM`; only the article's
+scope changed.
+
+**What this does to the totals.** 73 substantive claims become 71: **46 `A` + 25 `B` + 0 `C`**. Two rows out,
+both `A`, no row in, no verdict flipped. `DO_NOT_STATE_ZH` is still **0** — and it is worth saying precisely
+what that does and does not mean here: it counts statements the article makes that the evidence cannot carry,
+and the article now makes two fewer statements, so a fall to zero would have been the wrong thing to read
+even if the number had moved. It did not move. It was already zero.
+
+**These states now live only in metadata.** `ENGLISH_REALIGNMENT = NOT_STARTED` and `PARITY = SUSPENDED` are
+recorded in [`ENGLISH_REALIGNMENT_HANDOFF.md`](ENGLISH_REALIGNMENT_HANDOFF.md), which is a docs artifact, not
+article prose. The handoff also carries the one instruction that follows from decision B: **NAS content must
+not be carried into the new English adaptation.** The frozen English still contains it (§15), and removing
+it there is a realignment task, not a cleanup task — the English file was not touched in this revision.
+
 ---
 
 ## 2. The audit
@@ -207,14 +257,12 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-59 | `10_state_length`'s three defects: no ground truth, n = 1 per tier, and filler that repeats five sentences rather than accumulating content | A — registry reasoning | Registry entry for `10_state_length` | 退休实验 | §13 | yes | yes | `SAFE_TO_STATE` |
 | C-60 | `11_language_pair`'s four reasons, including that the official docs state English is primary and CJK currently has lower accuracy | A + official, attributed | Registry entry for `11_language_pair`; `TS-DOC-STATE` | 退休实验 | §13 | yes | yes | `SAFE_TO_STATE` |
 | C-61 | The nine non-claims, in natural prose rather than as markers | A — non-claims | Freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
-| C-62 | No NAS experiment, dataset or measurement exists here; NAS is a future question to be re-derived from NAS task structure | A — non-claim | `NO_NAS_CLAIM`; freeze §7 | NAS | §15 | n/a | n/a | `SAFE_TO_STATE` |
 | C-63 | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`; every large local effect restates a documented behaviour or is this repository's own policy | **B** — state of the science, stated as novelty | Freeze §5.3 | 结尾 | §16 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-64 | License: MIT | A — release fact | `LICENSE`; `pyproject.toml` | 附录 | §16 | n/a | n/a | `SAFE_TO_STATE` |
-| C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic; still wanting to look at NAS | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's | 开头, 测量台, 分析器, NAS | — | n/a | n/a | `SAFE_TO_STATE` |
+| C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's. **The NAS item was dropped in revision 8** with the rest of the NAS material — it was a framing clause, not a separate claim | 开头, 测量台, 分析器 | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-66 | The narrative device: candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked. **The article describes four in detail and states the triage total of seven once**, in the closing movement, where the survivor is named as 一个值得继续追的问题 rather than as a finding — so the prose carries the count *and* the survivor's open status (see §1.6 for the reading risk the first form of that sentence opened and the fourth correction closed) | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
 | C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry (carried by 一个用来检验发现的仓库…在做它该做的事，而不是在累积战利品); what it accumulates is that ability (carried by 这个仓库真正积累的，不是故事。是删故事的能力。). **P5-E1 deleted a third sentence that restated the first half ahead of the second**; the claim is unchanged and both halves still stand, one sentence apart. | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-68 | The project reads as training in model evaluation and agent engineering rather than as a model benchmark, and most of the learning was not on Jev's side | A — the author's own assessment | The author's first-hand account of the work | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
-| C-69 | Not looking for applications because you already hold the tool | A — aphorism attached to the NAS non-claim | The NAS non-claim is C-62; this adds no factual content | NAS | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-70 | The author is willing to put a name to the frozen state string | **B** — novelty-adjacent | Freeze §5.3; the string is quoted in the same paragraph and restated in scope around it | 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
 | C-71 | No adjudication of vendor claims: incommensurable, not "the vendor is wrong" and not "the local run proves them right" | A — contract rule | `BLOG_CLAIM_CONTRACT.md`; P1 audit | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
 | C-72 | Every state is synthetic; there is no real personal, customer or proprietary data here | A — contract rule | Repository practice; freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
@@ -226,17 +274,22 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 
 ## 3. Totals
 
-| Verdict | Chinese (r7) | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (frozen r2) |
-|---|---:|---:|---:|---:|---:|
-| `SAFE_TO_STATE` | **48** | 47 | 45 | 46 | **42** |
-| `SAFE_WITH_SCOPE` | **25** | 25 | 25 | 24 | **22** |
-| `DO_NOT_STATE` | **0** | **0** | **0** | **0** | **0** |
-| **Substantive claims audited** | **73** | 72 | 70 | 70 | **64** |
+| Verdict | Chinese (r8) | Chinese (r7) | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (frozen r2) |
+|---|---:|---:|---:|---:|---:|---:|
+| `SAFE_TO_STATE` | **46** | 48 | 47 | 45 | 46 | **42** |
+| `SAFE_WITH_SCOPE` | **25** | 25 | 25 | 25 | 24 | **22** |
+| `DO_NOT_STATE` | **0** | **0** | **0** | **0** | **0** | **0** |
+| **Substantive claims audited** | **71** | 73 | 72 | 70 | 70 | **64** |
+
+**Revision 8 removes two rows and adds none, which is the first time this table has gone down.** C-62 and
+C-69 were supported only by the NAS material, and the article no longer contains any; C-65 loses its NAS
+clause but keeps its row. All three changes are recorded in §1.7 rather than by renumbering, so every other
+ID in the table above still means what it meant in revision 2.
 
 **There is no r6 column, because revision 7's figures are revision 6's.** The fourth correction re-scopes
 C-66 and restores a number the article had dropped; it adds no row, removes no row, and flips no verdict, so
-carrying r6 as its own column would repeat these four numbers exactly. Revision 5 is the last column that
-differs from the current one, and it differs only by C-73, C-74 and C-75.
+carrying r6 as its own column would repeat those numbers exactly. Revision 5 is the last column before r7
+that differs, and it differs only by C-73, C-74 and C-75.
 
 **`DO_NOT_STATE_ZH = 0`.** Nothing in the article had to be deleted or rewritten for asserting something
 the evidence does not carry. The one class change is a **tightening**, not a new defect: C-05 moved from
@@ -249,7 +302,16 @@ one, that a latency figure is a wall-clock measurement rather than a benchmark, 
 mechanisms do not confer comprehension. An implicit statement that a reader could complete wrongly is the
 same defect as an explicit one, which is why they are entered as rows rather than counted as wording.
 
-**Every one of the 73 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`.
+**Every one of the 71 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`. The
+two IDs this revision retired — **C-62 and C-69** — left with the material they described rather than being
+dropped from the audit; §1.7 records both, and no ID above them was renumbered.
+
+**Two further gaps in the sequence pre-date this revision and are not explained here.** `C-02` and `C-56`
+have no row in §2 and no note anywhere in this file. They were already absent in revision 7, they are not
+casualties of the scope cleanup, and this audit has not established what became of them. **They are recorded
+here as an open documentation gap rather than left to look like two more removals** — a reader counting rows
+against the totals would otherwise be short by two with nothing to point at. Reconstructing them is a task
+for a future revision, not something this one should guess at.
 
 **The English total stays at 64** because the English document did not change. **This is a consequence of
 the freeze, not a parity result**, and it is why §4's parity gate is reported as suspended rather than
@@ -354,7 +416,6 @@ missing evidence. Each was excluded by construction, not caught in review:
 | Jev is deterministic — or non-deterministic | 非声明: a few repeats on two payloads is not a verdict in either direction |
 | Jev is universally 4.26× cheaper | 批处理: one payload, five questions sharing one state; not a general ratio and not comparable to the vendor figure |
 | A general instruction-vs-criteria field preference | 负结果: the null, plus two explicitly refused summaries and `FIELD_ALIGNMENT_CAVEAT` |
-| Jev is suitable for NAS (or any workload never run here) | NAS: no NAS experiment, dataset or measurement exists |
 | These observations are novel discoveries | 结尾: the state string, quoted; and 四个候选, where the two largest effects are killed on prior art |
 | Jev cannot hallucinate / these results certify schema safety | 背景, 非声明: schema conformance on benign payloads is the only axis measured |
 | This pattern is safe for production | 三条经验: every handler is inert; `ACTUAL_HANDLER_EXECUTION_UNTESTED` |
@@ -364,6 +425,14 @@ missing evidence. Each was excluded by construction, not caught in review:
 | This release is peer-reviewed, endorsed, or a standard | Not asserted; 非声明 links the claim contract that forecloses it |
 | The retired designs were run | 退休实验: retired before publication, never run |
 | **The probability table is exactly normalised as displayed** | 背景 (repair A): the displayed values are quantised; the claim is made about the distribution, not about the two-decimal rendering |
+
+**One exclusion was removed from this table in revision 8, and the removal is not a contract change.** The
+row read *Jev is suitable for NAS (or any workload never run here) → NAS: no NAS experiment, dataset or
+measurement exists*. The article no longer raises that topic at all, so there is no longer a place in the
+Chinese prose where it is refused — and a table whose column is *where the article refuses it* cannot carry
+a row with no such place. **The contract still excludes the statement**, and the frozen evidence still
+records `NO_NAS_CLAIM`; nothing under `docs/evidence/v0.1.0/` was touched. What changed is the article's
+scope, not the contract's reach.
 
 Two exclusions worth naming, because the revisions made them *more* tempting rather than less:
 

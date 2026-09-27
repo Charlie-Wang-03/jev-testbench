@@ -7,11 +7,14 @@
 (`SKILL.md` §"自检输出格式"), run by hand against the rewritten text.
 **Article archetype:** `调查实验型 × 方法论分享型`, primary 调查实验型. Recorded before writing; unchanged in P5-E.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 5 — recomputed after the fourth correction, which rewrote one line of the micro round's third
-correction. Supersedes revision 4, which recomputed after the first three micro corrections; revision 3,
-which recomputed everything in P5-E1 and added the **Over-stylization check**; and revision 2 (P5-E), which
-superseded the P5-D revision, whose two colloquial-expression counts (11 and 35) contradicted each other and
-are withdrawn. **Revision 5 moves one figure, 全文/正文, by +7, and nothing else.**
+**Revision:** 6 — recomputed after the blog scope cleanup, which deleted the header governance note and the
+whole NAS movement. Supersedes revision 5 (the fourth correction), revision 4 (the first three micro
+corrections), revision 3, which recomputed everything in P5-E1 and added the **Over-stylization check**, and
+revision 2 (P5-E), which superseded the P5-D revision, whose two colloquial-expression counts (11 and 35)
+contradicted each other and are withdrawn.
+**This is the first revision in which the article gets shorter** — 339 characters, every one of them a
+deletion rather than a compression. 口语化表达 falls 32 → 30, 单句成段 106 → 101, 短拍 34 → 33, and
+**nothing was added to compensate.**
 
 **What this file is not.** It is not a claim audit. Whether a sentence is *permitted* is decided by
 [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md) and recorded in
@@ -32,8 +35,34 @@ owner actually took, per the process attribution audit.
 
 ## What changed in this revision
 
-**The micro-correction round: three lines, one of which is the only figure in this audit that ever goes
-the "wrong" way — and then a fourth line that rewrites the third.**
+**The scope cleanup: the article loses 339 characters, and for the first time the style metrics fall
+because content left rather than because a phrase was compressed.**
+
+Two owner decisions removed material. The header governance note went first — an italic line stating that
+the English half was parked at P5-B, that cross-language parity was `SUSPENDED`, and that the two halves
+were out of step. Then the whole NAS movement went: a clause in the non-claims list, and a five-paragraph
+closing section that began 从 Jev 能不能拿去做 NAS and ended 不能因为手上有锤子，就把问题看成钉子.
+
+| What left | Style consequence |
+|---|---|
+| The header note (front matter) | **None to any body metric.** It sat above the first paragraph and was never counted in 正文. It did carry one short declarative beat, so the front matter is one beat lighter and the body is unchanged. |
+| 没有 NAS 适用性结论。 (a clause in the non-claims list) | Removes one item from a list that already had eight others. No paragraph merges, no beat changes. |
+| The five-paragraph NAS movement | **Five single-sentence paragraphs leave at once**, and one of them — 但这个仓库现在没有资格回答。 at 14 characters — was a short beat. This is why 单句成段 falls by 5 and 短拍 by 1. |
+| 不能因为手上有锤子，就把问题看成钉子。 | **Two colloquial entries leave**: `锤子` and `钉子`, both of which appeared only in this sentence. 口语化表达 falls 32 → 30. |
+
+**Nothing was added to compensate, and that is the instruction rather than an oversight.** The work order
+for this round forbids introducing any colloquial device, punchline or transition sentence to fill the
+space the deletion opened. **A metric that drops because content was removed is not a style regression and
+is not recorded as one** — the article says less because the project no longer covers the subject, and the
+metrics fall as a mechanical consequence of that.
+
+**The deletion is also the first time this audit's structural figures have fallen rather than held.** Every
+previous pass either held the paragraph count or raised it. Five single-sentence paragraphs going at once
+is the largest single movement in any column of the table below, and it is a deletion, not a rewrite.
+
+**The micro-correction round, retained above the cleanup because the cleanup did not touch it: three lines,
+one of which is the only figure in this audit that ever goes the "wrong" way — and then a fourth line that
+rewrites the third.**
 
 | Correction | Style consequence |
 |---|---|
@@ -58,12 +87,20 @@ rising metric up again; this one did not.
 7 more** (→ 14,956; → 14,419). Four corrections, all four expanding a compressed phrase. Same direction as
 P5-E1 and the same reason.
 
-**A note on the 正文 figure.** 全文 is the raw file length and is independently reproducible: it was
-re-measured at 14,949 on the pre-correction revision and 14,956 on this one, matching the 全文 figures
-below. The 正文 figure is carried forward as the previous revision's number plus the exact delta of the
-changed line, which is +7 — the file's only change this round is that one line, so every count that
-includes it moves by exactly 7. The 正文 *absolute* is therefore an inherited figure, not one this revision
-re-derived from scratch, and it is labelled that way rather than presented as freshly measured.
+**Then it drops 339, in one round, and none of it is compression.** The cleanup removes the header note
+(130 characters, front matter), the NAS clause in the non-claims list (10) and the NAS movement with its
+surrounding separators (199). **全文 14,956 → 14,617; narrative body 14,419 → 14,212.** This is the first
+reduction in the article's history, and it is a scope change rather than an edit: nothing was shortened,
+only removed.
+
+**A note on the 正文 figure, which applies to both of the reductions above.** 全文 is the raw file length
+and is independently reproducible — it was re-measured at 14,949, 14,956 and now 14,617, matching the 全文
+figures below each time. The 正文 figure is carried forward as the previous revision's number plus the
+measured delta of the body region (everything from the first body paragraph onward), which was +7 for the
+fourth correction and −207 for the cleanup. The header note is excluded from 正文 because it sits above
+that point, which is why the cleanup's 正文 delta is 207 rather than the full 339. **The 正文 *absolute* is
+therefore an inherited figure, not one this revision re-derived from scratch**, and it is labelled that way
+rather than presented as freshly measured — the deltas are exact, the base is inherited.
 
 **P5-E1 was a subtraction pass, and the style metrics were allowed to fall.** Nine passages were
 corrected, none was added, and the work order forbade introducing any new colloquial device —
@@ -81,19 +118,19 @@ change is a consequence of it rather than a target.
 
 **The figures that moved, and the figures that did not.**
 
-| Figure | P5-E | P5-E1 | micro → final | Direction |
-|---|---:|---:|---:|---|
-| 全文 / 正文 字数 | 14,789 / 14,252 | 14,928 / 14,391 | **14,956 / 14,419** | up four times running — every pass traded a short phrase for a precise one |
-| 口语化表达 | 33 | 32 | **32** | down in P5-E1, flat here |
-| 单句成段 | 107 | 106 | **106** | down in P5-E1, flat here |
-| 15 字以内短拍 | 34 | 34 | **34** | flat throughout |
-| `最后` | 2 | 2 | **3** | **up** — see above; all three temporal, L1-1 still at zero |
-| 扣主线句 | 10 | 10 | **10** | flat |
-| 疑问句刹车 | 6 个 / 7 次 | 6 个 / 7 次 | **6 个 / 7 次** | flat |
-| 正文中文冒号 | 0 | 0 | **0** | flat |
-| 破折号 / 弯引号 | 0 / 0 | 0 / 0 | **0 / 0** | flat |
-| 独立成段的 `不是。` | 1 | 1 | **1** | flat |
-| 情绪标点 | 0 | 0 | **0** | flat, by rule |
+| Figure | P5-E | P5-E1 | micro → final | cleanup | Direction |
+|---|---:|---:|---:|---:|---|
+| 全文 / 正文 字数 | 14,789 / 14,252 | 14,928 / 14,391 | 14,956 / 14,419 | **14,617 / 14,212** | up four times on compression, then **down 339 on deletion** |
+| 口语化表达 | 33 | 32 | 32 | **30** | down in P5-E1, flat, then **down 2** — `锤子` and `钉子` left with the NAS sentence |
+| 单句成段 | 107 | 106 | 106 | **101** | flat, then **down 5** — the five NAS paragraphs |
+| 15 字以内短拍 | 34 | 34 | 34 | **33** | flat, then **down 1** — 但这个仓库现在没有资格回答。 |
+| `最后` | 2 | 2 | **3** | **3** | **up** in the micro round, held here; all three temporal, L1-1 still at zero |
+| 扣主线句 | 10 | 10 | 10 | **10** | flat — none of the ten lived in the removed material |
+| 疑问句刹车 | 6 个 / 7 次 | 6 个 / 7 次 | 6 个 / 7 次 | **6 个 / 7 次** | flat — the NAS section posed no question in ？ form |
+| 正文中文冒号 | 0 | 0 | 0 | **0** | flat |
+| 破折号 / 弯引号 | 0 / 0 | 0 / 0 | 0 / 0 | **0 / 0** | flat |
+| 独立成段的 `不是。` | 1 | 1 | 1 | **1** | flat |
+| 情绪标点 | 0 | 0 | 0 | **0** | flat, by rule |
 
 **The P5-D revision's numbers were wrong, and that history still matters.** Revision 1 reported
 colloquial expressions as "35 个不同条目" in one table and "11 个" in the summary of the same layer — an
@@ -128,9 +165,9 @@ as a technical exception). **P5-E1 introduced no colon and inherited none.**
 **L2 风格一致性** ✅
 
 - 开头 ✅
-- 节奏 ✅（单句成段 106 处，其中 15 字以内的短拍 34 处；扣主线句 10 处；疑问句刹车 6 个不同问句 /
+- 节奏 ✅（单句成段 101 处，其中 15 字以内的短拍 33 处；扣主线句 10 处；疑问句刹车 6 个不同问句 /
   7 次出现；无小标题）
-- 口语化 ✅（不同口语化表达 32 个，全表列出；论述中的故意打破 5 处；自嘲/承认不足 4 处；
+- 口语化 ✅（不同口语化表达 30 个，全表列出；论述中的故意打破 5 处；自嘲/承认不足 4 处；
   情绪标点 0 处 —— 这是 L2-3 四项里唯一未做到的一项，理由见 §"Evidence-contract overrides"）
 - 标点禁令二次确认 ✅
 
@@ -169,17 +206,23 @@ as a technical exception). **P5-E1 introduced no colon and inherited none.**
 
 **问题一：一行反转是不是过密？**
 
-**不是。11 处，平均每 46 行一处**（正文 505 行）。逐处列出，位置是行号：
+**不是。10 处**（全文 505 行）。逐处列出，位置是行号：
 
-`所以这是复现，不是发现。`(105)、`这个读法站不住。`(137)、`效应很大 ≠ 原因已确定。`(288)、
-`实验没坏。`(312)、`分析器坏了。`(314)、`答案是不要。`(386)、`但这个仓库现在没有资格回答。`(420)、
-`但这个结果比预期好。`(436)、`但还有一个故事要删。`(454)、`不是。`(462)、
-`但它们不会自动变成人的理解。`(490)。
+`所以这是复现，不是发现。`(103)、`这个读法站不住。`(135)、`效应很大 ≠ 原因已确定。`(286)、
+`实验没坏。`(310)、`分析器坏了。`(312)、`答案是不要。`(384)、
+`但这个结果比预期好。`(422)、`但还有一个故事要删。`(440)、`不是。`(448)、
+`但它们不会自动变成人的理解。`(476)。
 
-判定依据不是这个数小，而是**分布**：间隔为 32 / 151 / 24 / **2** / 72 / 34 / 16 / 18 / 8 / 28 行。
-唯一一处相邻反转是 312 与 314 的 `实验没坏。` / `分析器坏了。`，那是有意成对的一组 —— 先否定"结果坏了"，
+判定依据不是这个数小，而是**分布**：间隔为 32 / 151 / 24 / **2** / 72 / 38 / 18 / 8 / 28 行。
+唯一一处相邻反转是 310 与 312 的 `实验没坏。` / `分析器坏了。`，那是有意成对的一组 —— 先否定"结果坏了"，
 再给出真正坏掉的东西，拆开会失去对照。其余最小间隔 8 行（`但还有一个故事要删。` 与 `不是。`），
 那是全文最大的两次反转，靠得近是对的。**最大间隔 151 行，说明反转是落在关键节点上的，不是按节拍铺的。**
+
+**cleanup 轮让这一项从 11 处降到 10 处，降的是 `但这个仓库现在没有资格回答。`** —— 它整句位于被删掉的
+NAS 段里。**这是这一项唯一一次下降，而且它没有让密度变松**：删掉的那一处原本与前后两处共享 34 / 16 行的
+间隔，现在合并成一个 38 行的间隔，10 处反转仍然均匀落在 505 行里。**删除没有触发任何补位** —— 没有任何
+一处新的反转被写进来填空，所以"反转是按节点落、不是按节拍铺"这个判断在删除之后仍然成立，而且更容易核对：
+少了一处，间隔反而少了一段。
 
 **问题二：`不是。` 是不是只出现在必要处？**
 
@@ -190,13 +233,15 @@ P5-E1 没有动它。剩下的这一处在 AI 参与披露段：前一句是 `�
 
 **问题三：`故事` 回扣是不是重复？**
 
-**P5-E 时是重复的，P5-E1 修掉了，现在是 6 次出现、一条线。** 出现位置：163（四个候选的结算）、
-434（`54 次调用之后，最好看的几个故事基本都没留下来。`）、438（`后来才发现，这个仓库真正积累的，
-不是故事。`）、440（`是删故事的能力。`）、454（`但还有一个故事要删。`）、458（`这个故事是关于这个
-项目本身的。`）。**434 到 458 是一个连续的回扣段，P5-E 在这个段里说了两遍同一件事** —— 438–442 那三行
+**P5-E 时是重复的，P5-E1 修掉了，现在是 6 次出现、一条线。** 出现位置：161（四个候选的结算）、
+420（`54 次调用之后，最好看的几个故事基本都没留下来。`）、424（`后来才发现，这个仓库真正积累的，
+不是故事。`）、426（`是删故事的能力。`）、440（`但还有一个故事要删。`）、444（`这个故事是关于这个
+项目本身的。`）。**420 到 444 是一个连续的回扣段，P5-E 在这个段里说了两遍同一件事** —— 424–428 那三行
 （`因为一个评估仓库真正应该帮你做的…` / `后来才发现…` / `是删故事的能力。`）里，第一行与后两行是同一个
-意思的两种说法。P5-E1 删掉了第一行。**删掉之后，回扣变成一次命名（438/440）接一次升级（454），中间不再
+意思的两种说法。P5-E1 删掉了第一行。**删掉之后，回扣变成一次命名（424/426）接一次升级（440），中间不再
 有第二遍铺垫**，`但还有一个故事要删。` 因此比以前更直接地跟着 `这个仓库积累的是删故事的能力` 出现。
+**cleanup 轮没有动这一项**：六处行号全部因为上面的删除整体前移 14 行，出现次序和间隔一个都没变，
+删掉的 NAS 段里也没有 `故事`。
 **这一条是这次检查里唯一一处真正的过密，也是 P5-E1 唯一一处风格上的净删减。**
 
 **问题四：口语化手段是不是开始盖住内容？**
@@ -231,9 +276,15 @@ P5-E1 没有动它。剩下的这一处在 AI 参与披露段：前一句是 `�
 
 **这一节的结论。** 四个问题里，只有一个（回扣重复）在 P5-E 答案是"是"，P5-E1 把它变成了"否"。另外三个
 在 P5-E 就已经是否定的，P5-E1 和 micro 轮都没有让它们变差。**本版审计的判断是：这篇文章的风格现在服务
-于内容，而不是反过来 —— 判据不是 32 这个数，而是这一版每一次风格指标下降都能指到一句因此变准确的话。
+于内容，而不是反过来 —— 判据不是 30 这个数，而是这一版每一次风格指标下降都能指到一句因此变准确的话。
 micro 轮出现了一次指标上升（`最后` 2 → 3），它是同一件事的另一种形态：那一句也变准确了。第四处修正
 没有再加一个 `最后`，计数留在 3，理由和这句话一样 —— 改写是为了让句子更准，不是为了让它更好看。**
+
+**cleanup 轮给这一节加了一种新的下降，判据不变。** 这一轮的 口语化 32 → 30、单句成段 106 → 101、
+短拍 34 → 33 都不是"句子变准确"，而是**内容离开**：`锤子`/`钉子` 来自一句被整句删掉的话，五个单句成段
+来自一个被整段删掉的题目。**这不是风格回退，也不该被读成回退** —— 判据仍然是"每一次下降能不能指到
+一处因此变准确或因此不再需要的话"，这一轮三处下降全部能指到被删掉的 NAS 材料，而且**没有任何一处
+下降伴随新增**，这一点比数字本身更能说明风格没有被拿去填空白。**
 
 ---
 
@@ -272,9 +323,11 @@ Jev 的时候`，P5-E 改成了这一版**，理由不是风格而是归属：�
 
 **L2-2 节奏。**
 
-- 单句成段：106 处；其中 15 字以内的短拍 34 处（`54 次。` / `漂亮。` / `不是。` / `实验没坏。` /
+- 单句成段：101 处；其中 15 字以内的短拍 33 处（`54 次。` / `漂亮。` / `不是。` / `实验没坏。` /
   `分析器坏了。` / `到底是谁动的？` / `为什么？` / `答案是不要。` / `关于这件事，有一个比喻。` 等）。
-  规则要求 3 次，实际是其 35 倍以上，本项不存在"接近不达标"的问题。
+  规则要求 3 次，实际是其 33 倍以上，本项不存在"接近不达标"的问题。**这五个单句成段的减少全部来自
+  cleanup**：被删的 NAS 段是五个段落、每段一句，整段离开，短拍同时少掉 `但这个仓库现在没有资格回答。`
+  （14 字）。**删除没有触发任何补位**，没有任何新的短拍或单句成段被写进来填这五个空位。
 - 扣主线句：10 处（`先说一分钟背景` / `好，回到实验。` / `到这一步` / `写到这里` / `跑完这些` /
   `还有一件做得挺狠的事` / `而且这还不是唯一一次` / `顺便说一句` / `顺带一提` / `回到开头。`）。
 - 疑问句刹车：6 个不同问句，7 次出现（`那 Agent 会不会真的好写一点？` / `那个边界，到底是
@@ -285,9 +338,9 @@ Jev 的时候`，P5-E 改成了这一版**，理由不是风格而是归属：�
 
 **L2-3 口语化。**
 
-口语化表达 **32 个不同条目**（规则要求 8–10 个），逐条在文中确认存在后列出：`压根`、`完了`、
+口语化表达 **30 个不同条目**（规则要求 8–10 个），逐条在文中确认存在后列出：`压根`、`完了`、
 `稍微绕`、`差点搞混`、`挺直白`、`最要命`、`顺便说一句`、`漂亮`、`吃掉`、`稳如泰山`、
-`底下的水一直在晃`、`挺尴尬`、`挺狠`、`顺带一提`、`顺手`、`一个字都没多`、`锤子`、`钉子`、
+`底下的水一直在晃`、`挺尴尬`、`挺狠`、`顺带一提`、`顺手`、`一个字都没多`、
 `愿意签字`、`混了`、`走回去`、`站不住`、`扎心`、`撞上`、`朴素`、`反过来`、`晃`、`拍板`、
 `好看`、`挺`、`搞`、`硬`。
 
@@ -300,6 +353,15 @@ Jev 的时候`，P5-E 改成了这一版**，理由不是风格而是归属：�
 （`删掉那些证据撑不住的故事`）里。**没有为补位新增任何一项**，这是工作令 §15 的直接要求。注意文中
 仍有 `支撑不了` 两处（`不能…` 与 `n = 3…` 两段），但那是标准书面表达，从来不在本清单里，也不应
 因为这一处删除而被追认为口语化标记 —— 清单不变，数字只会随文本变。
+
+**micro → final 轮没有增减。** 四处修正都没有引入或删除清单条目，`口语化表达` 稳定在 32。
+
+**cleanup 轮减少两项：`锤子` 和 `钉子`。** 两句都只出现在被删掉的那一句
+（`不能因为手上有锤子，就把问题看成钉子。`）里 —— 这句话整句离开正文，两个条目随之离开清单。
+**同样没有为补位新增任何一项。** 这一轮的删除幅度是清单里最大的一次（32 → 30），原因是整段主题被
+移出项目范围，而不是语言被收紧：**清单不变，数字只会随文本变**，所以这一项下降不构成风格回退，
+也不应被读成文章变得不那么口语化 —— 它只是少了一句话。**这一轮没有出现"删掉一个口语条目、再补一个
+进来"的情况**：清单上的其他 30 项都还在正文里，逐一回文确认过，没有一项是因为删除而被迫顶上来的。
 
 论述中的故意打破 5 处：`这个读法站不住。` 独立成段打断一个正在成立的论断；`实验没坏。` 与
 `分析器坏了。` 两段之间没有连接词；`12 次。一条都不许多。` 用重复加强而不是推进；
@@ -467,7 +529,7 @@ check" 问题三。
 `STYLE_AUDIT` 回答"有没有太刻意"，而不只是"有没有达到最低数量"。就这个问题而言，本版审计的结论是：
 **L1 与 L2-4 是零命中，不是接近通过；L2-2 的各项远超下限，不存在凑数的风险；唯一需要人工判断的地方
 是 L1-4 的那一个泛指"模型"，已经在明细里写明。** 反过来，本版审计没有发现任何一处"为了达到数量而
-硬塞"的痕迹 —— 这在 32 个口语化条目和 106 个单句成段的规模上是一个真实的结论，不是一句客气话。
+硬塞"的痕迹 —— 这在 30 个口语化条目和 101 个单句成段的规模上是一个真实的结论，不是一句客气话。
 
 **P5-E1 增加的反向检查见上面的 §"Over-stylization check"。** 那一节的结论和这一节是同一条：四个
 过密问题里三个从一开始就是否，一个在 P5-E 是"是"、在 P5-E1 被修成"否"，而修的方式是**删掉一句**而不是

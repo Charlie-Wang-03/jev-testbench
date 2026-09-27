@@ -2,8 +2,6 @@
 
 [English](jev-as-probabilistic-decision-primitive.md) | **简体中文**
 
-*英文版停在 P5-B，尚未与本文重新对齐。跨语言 parity 在 [claim audit](jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md) 里记为 `SUSPENDED`，不是 PASS。*
-
 Jev 有意思的地方，不是它又拿了什么 benchmark。
 
 是它压根不打算跟你聊天。
@@ -403,7 +401,7 @@ P1 的文本没有被改，因为它是历史审计产物。改了它，读者�
 
 没有确定性结论，两个方向都没有。逐字节相同的请求返回了不同形状的分布，但那只是两个 payload 上的少数几次重复，不足以成为判定。
 
-剩下几条顺带说完。没有广义的 hallucination benchmark，这里唯一测量的轴是良性 payload 上的 schema 合规。没有生产安全认证，每一个 handler 都是惰性的。没有关于 instructions 和 criteria 谁更重要的通用结论。没有 NAS 适用性结论。
+剩下几条顺带说完。没有广义的 hallucination benchmark，这里唯一测量的轴是良性 payload 上的 schema 合规。没有生产安全认证，每一个 handler 都是惰性的。没有关于 instructions 和 criteria 谁更重要的通用结论。
 
 还有两条不叫 marker 但同样有约束力的。
 
@@ -412,18 +410,6 @@ P1 的文本没有被改，因为它是历史审计产物。改了它，读者�
 全部 state 都是合成的。这个仓库里没有真实的个人数据、客户数据或专有数据。
 
 完整的清单在 [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md) 和冻结文档里，这里只挑最容易误解的说。
-
----
-
-Jev 能不能拿去做 NAS，这个问题确实想留下来。
-
-但这个仓库现在没有资格回答。
-
-这里没有 NAS 实验、没有 NAS 数据集、没有任何 NAS 测量，而被退休的五个设计里，有可能触及搜索相关行为的那些也从未运行。
-
-下一步如果真要做，得从 NAS 的任务结构出发重新验证，而不是因为已经研究过 Jev，就反过来去找应用场景。
-
-不能因为手上有锤子，就把问题看成钉子。
 
 ---
 
