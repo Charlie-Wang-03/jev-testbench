@@ -5,8 +5,9 @@
 recorded in [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) §2.
 **Not a basis:** the `v0.1.0` frozen evidence. See §6.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 2 — re-verified in P5-E1 against the editorially-corrected text. Supersedes revision 1 (P5-E).
-The re-verification is recorded in §9; the findings of revision 1 stand unchanged.
+**Revision:** 3 — re-verified again after the three micro corrections that followed P5-E1. Supersedes
+revision 2 (P5-E1). The re-verifications are recorded in §9 and §10; the findings of revision 1 stand
+unchanged.
 
 ---
 
@@ -131,7 +132,7 @@ anchor, since the article has no numbered sections.
 | 23 | The non-claims | `PROJECT_OBSERVATION` | Statements about what the evidence supports. |
 | 24 | The NAS question being kept open | `HUMAN_DECISION` + `AUTHORIAL_REFLECTION` | 这个问题确实想留下来 — an intent, not an execution. |
 | 25 | The closing disclosure of AI involvement | `PROJECT_OBSERVATION` | The role split, stated plainly. |
-| 26 | Cognitive debt, its definition and the repayment argument | `AUTHORIAL_REFLECTION` | The owner's working concept, explicitly labelled as one. |
+| 26 | Cognitive debt, its definition and the repayment argument | `AUTHORIAL_REFLECTION` | The owner's working concept, explicitly labelled as one. **The micro correction replaced the block's closing aphorism** (它们没有让解释真话变得可能) with a statement that names a party and a capability (但不会自动让维护者获得独立解释、验证这些事实的能力). 维护者 is a role noun, not the owner and not an agent; the sentence asserts what the mechanisms do not confer, never who executed anything, so it stays reflection. |
 | 27 | The gorilla and fire metaphor | `AUTHORIAL_REFLECTION` | Used once, as a figure. |
 | 28 | 这篇文章是开始偿还的第一笔 | `AUTHORIAL_REFLECTION` | Editorial stance about the article itself. |
 | 29 | The rate divergence: implementation advanced faster than the owner's comprehension of it | `AUTHORIAL_REFLECTION` | **Split out as its own row in the P5-E1 re-verification.** Revision 1 folded it into row 26 as part of the cognitive-debt argument; it is a distinct process statement and is now counted as one. The P5-E1 wording made it *more* precise rather than less: the P5-E form (实施的速度主要由 agent 决定，而理解的速度仍然由人决定) named a generic 人 as the second party, and the corrected form (agent 把实施推进得远快于 owner 消化这些工作的速度) names the role. Neither form attributes an execution to the owner. |
@@ -182,14 +183,14 @@ process layer, this audit would be claiming a rigour it does not have — §1 sa
 
 ## 7. Totals
 
-| Result | P5-D | P5-E | P5-E1 |
-|---|---:|---:|---:|
-| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** |
-| …of which assert an action performed in this project | 88 | **0** | **0** |
-| …of which are quotations rather than assertions | 4 | **2** | **2** |
-| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** |
-| Process statements classified | — | 28 | **29** |
-| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** |
+| Result | P5-D | P5-E | P5-E1 | micro |
+|---|---:|---:|---:|---:|
+| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** | **2** |
+| …of which assert an action performed in this project | 88 | **0** | **0** | **0** |
+| …of which are quotations rather than assertions | 4 | **2** | **2** | **2** |
+| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** | **9 of 10** |
+| Process statements classified | — | 28 | **29** | **29** |
+| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** | **0** |
 
 **The two survivors are both quotations, and neither is an assertion by the article.** One is
 「我觉得它有时候不太行」, a reader's impression being ruled out inside a subordinate clause. The
@@ -258,3 +259,30 @@ full. One of the nine corrections *is* a deletion — the 删故事 compression,
 it (claim audit §1.5). It removed no actor and no action. The agent-execution
 disclosure paragraph, the owner's four-part role list, and the 我跑了 refusal are all byte-for-byte what
 revision 1 classified.
+
+---
+
+## 10. The micro-correction re-verification
+
+Three sentences were corrected on top of P5-E1, one line each. The full search was re-run a third time.
+**Result: no drift, and nothing to add.** Every figure in §7's final column is identical to the P5-E1
+column.
+
+| Check | After the micro corrections |
+|---|---|
+| The ten first-person action phrases | **9 of 10 absent** — 我跑了 once, still quoted in order to be refused |
+| 我 as a total character count | **4** (2 singular + 2 我们) — the same four lines, none of them edited by this pass |
+| Sentences attributing an execution to the owner | **0** |
+| `PROCESS_ATTRIBUTION_UNRESOLVED` | **0** |
+
+**The one correction that touches this audit's subject matter, and why it is safe.** The mechanisms
+sentence now reads 这些机制让说出假话更难，但不会自动让维护者获得独立解释、验证这些事实的能力. It
+introduces a noun — 维护者 — where the P5-E1 text had none, so it was checked specifically rather than
+waved through. It is a **role**, not a person: it does not name the owner, does not name an agent, and
+carries no verb in this project. The sentence says what external mechanisms fail to confer on whoever
+maintains the bench, which is a statement about the mechanisms. Its subject is 这些机制, and its subject in
+P5-E1 was also 这些机制. **The actor did not change; the claim got a beneficiary.**
+
+**The other two are attribution-inert.** 发布的时候 → 到这里 changes a time frame, and 七个候选 → 这些候选
+removes a count. Neither names an actor, and neither is in this audit's search. The count one is a claim
+audit matter, recorded there as C-66's scope note (§1.6 of that file), not here.

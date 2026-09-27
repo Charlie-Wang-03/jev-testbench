@@ -4,7 +4,8 @@
 (the Chinese text). It was rewritten as a narrative in P5-D, revised in P5-E (five human-review-confirmed
 factual repairs, a reduction in punchline density, and a new closing movement on AI involvement and
 cognitive debt), and corrected again in P5-E1 — nine narrowly-scoped editorial corrections, no structural
-change. §1.5 records what P5-E1 changed and which rows it moved.
+change, followed by three one-line micro corrections. §1.5 and §1.6 record what each pass changed and
+which rows it moved.
 **Second document, tracked but not re-audited:**
 [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md)
 (the English adaptation). **It is frozen and was not modified in P5-D, P5-E or P5-E1.** The P5-E1
@@ -15,7 +16,7 @@ what revision 2 established about it and is carried forward unchanged.
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 5 — the P5-E1 editorial corrections. Supersedes revision 4 (P5-E).
+**Revision:** 6 — three micro editorial corrections applied on top of P5-E1. Supersedes revision 5 (P5-E1).
 
 **What this file is.** Every substantive claim in the Chinese article **about Jev, about this bench's
 measurements, or about what TypeSafe has published**, classified against the contract's three classes —
@@ -98,6 +99,37 @@ revision 3).
 **No figure was lost.** All 18 bilingual tokens in §4.2 were re-checked against the P5-E1 text and all 18
 are present. `DO_NOT_STATE_ZH` remains **0**.
 
+### 1.6 The three micro corrections, and the one that needs the owner's eye
+
+Three sentences were corrected on top of P5-E1, one line each, and nothing else in the article changed.
+Two of them are unambiguously tightening. **The third removes a number the article never set up, and in
+doing so leaves the antecedent of 这些候选 doing work it did not do before.** That is recorded here rather
+than resolved here, because it is an editorial judgment and the owner is about to make it.
+
+| Correction | Was | Now | Effect on the audit |
+|---|---|---|---|
+| **The mechanisms sentence** | 这些机制让说出假话更难，它们没有让解释真话变得可能 | 这些机制让说出假话更难，但不会自动让维护者获得独立解释、验证这些事实的能力 | **C-75 added.** The old form was an aphorism with no subject; the new form names the party and the capability. Slightly longer, strictly narrower. |
+| **The state-string lead-in** | 发布的时候，这个仓库的诚实总结是这样一行状态 | 到这里，这个仓库能给出的最诚实总结，是这样一行状态 | **No row change, but it removes an inaccuracy.** *发布的时候* implies a publication event; nothing in this repository has been published, which docs/README says in one line. *到这里* is the accurate frame and the state string is unchanged. |
+| **The candidate count** | 七个候选跑完对抗性审查，只剩一个 | 这些候选逐个做完对抗性审查，最后只剩一个问题 | **C-66 scoped, and a reading risk recorded.** See below. |
+
+**The candidate-count correction.** The article describes four candidates in detail (第一/第二/第三/第四个候选,
+then 四个候选连起来看). The sentence that was replaced was the only place it stated the triage's total of
+seven, and it stated it as a jump the article never set up. Replacing *七个候选* with *这些候选* removes an
+unestablished number, which is the tightening the correction was for.
+
+**What it costs.** The nearest antecedent of *这些候选* is now the four just discussed, not the seven-candidate
+triage they were drawn from. Under that reading the sentence says the four went through adversarial review
+and one of them survived — which is not what happened: all four were retired, and the surviving question
+(`07_instruction_precision`, C-34) was a different candidate that passed triage. Under the intended reading,
+*这些候选* is the triage set and the sentence is exactly right.
+
+**Both readings are available and the text does not force one.** This is the same class of thing §7's
+checklist asks about — *does any sentence read bigger with the qualifier deleted?* — except the direction
+is reversed: here a **number** was deleted and the sentence is now smaller than the record rather than
+larger, so it cannot over-claim. It can only be read as claiming less, or as claiming something adjacent.
+**It is entered as a scope note on C-66, not as a defect**, and the owner's read of this version decides it.
+If it needs a fourth line, the smallest fix is to restore the set without the count.
+
 ---
 
 ## 2. The audit
@@ -172,7 +204,7 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-63 | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`; every large local effect restates a documented behaviour or is this repository's own policy | **B** — state of the science, stated as novelty | Freeze §5.3 | 结尾 | §16 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-64 | License: MIT | A — release fact | `LICENSE`; `pyproject.toml` | 附录 | §16 | n/a | n/a | `SAFE_TO_STATE` |
 | C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic; still wanting to look at NAS | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's | 开头, 测量台, 分析器, NAS | — | n/a | n/a | `SAFE_TO_STATE` |
-| C-66 | The narrative device: seven candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
+| C-66 | The narrative device: candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked. **The article described four in detail and, after the micro correction, no longer states the triage total of seven**; the count lives in P2 §5–§6 and not in the prose (see §1.6 for the reading risk this leaves) | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
 | C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry (carried by 一个用来检验发现的仓库…在做它该做的事，而不是在累积战利品); what it accumulates is that ability (carried by 这个仓库真正积累的，不是故事。是删故事的能力。). **P5-E1 deleted a third sentence that restated the first half ahead of the second**; the claim is unchanged and both halves still stand, one sentence apart. | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-68 | The project reads as training in model evaluation and agent engineering rather than as a model benchmark, and most of the learning was not on Jev's side | A — the author's own assessment | The author's first-hand account of the work | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
 | C-69 | Not looking for applications because you already hold the tool | A — aphorism attached to the NAS non-claim | The NAS non-claim is C-62; this adds no factual content | NAS | — | n/a | n/a | `SAFE_TO_STATE` |
@@ -181,30 +213,31 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-72 | Every state is synthetic; there is no real personal, customer or proprietary data here | A — contract rule | Repository practice; freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
 | C-73 | The bench keeps **two** canonical logs: the core phases write `results/usage.jsonl`, P3 writes its own `results/p3_boundary_locus/usage.jsonl`, and the two are not merged | A — canonical log identity | Freeze §3 names both hashes; both logs re-hashed during this audit | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
 | C-74 | Latency is recorded as end-to-end local wall-clock; it is a measurement, **not** a model-inference latency benchmark | A — non-claim about what the latency figure means | `findings.md`; the transport-attempt rule in `CLAUDE.md`; freeze §3.3 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
+| C-75 | External mechanisms — canonical logs, preregistration, claim audit, errata, the evidence freeze, offline tests — make false statements harder to make; **they do not by themselves give a maintainer the ability to independently explain and verify the facts they hold** | A — non-claim about what the mechanisms do | Freeze §7; the process attribution audit §6 domain separation | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
 
 ---
 
 ## 3. Totals
 
-| Verdict | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (frozen r2) |
-|---|---:|---:|---:|---:|
-| `SAFE_TO_STATE` | **47** | 45 | 46 | **42** |
-| `SAFE_WITH_SCOPE` | **25** | 25 | 24 | **22** |
-| `DO_NOT_STATE` | **0** | **0** | **0** | **0** |
-| **Substantive claims audited** | **72** | 70 | 70 | **64** |
+| Verdict | Chinese (r6) | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (frozen r2) |
+|---|---:|---:|---:|---:|---:|
+| `SAFE_TO_STATE` | **48** | 47 | 45 | 46 | **42** |
+| `SAFE_WITH_SCOPE` | **25** | 25 | 25 | 24 | **22** |
+| `DO_NOT_STATE` | **0** | **0** | **0** | **0** | **0** |
+| **Substantive claims audited** | **73** | 72 | 70 | 70 | **64** |
 
 **`DO_NOT_STATE_ZH = 0`.** Nothing in the article had to be deleted or rewritten for asserting something
 the evidence does not carry. The one class change is a **tightening**, not a new defect: C-05 moved from
 `A` to `B` because the display-precision caveat is now load-bearing, and a reader who drops it would read
 a false sentence. Repairing a claim by requiring its scope is the contract working, not failing.
 
-**The two rows P5-E1 added are both `A`, and neither is a new assertion.** C-73 and C-74 make explicit
-what the article previously left implicit — that there are two logs rather than one, and that a latency
-figure is a wall-clock measurement rather than a benchmark. An implicit statement that a reader could
-complete wrongly is the same defect as an explicit one, which is why they are entered as rows rather than
-counted as wording.
+**The three rows P5-E1 and the micro corrections added are all `A`, and none is a new assertion.** C-73,
+C-74 and C-75 make explicit what the article previously left implicit — that there are two logs rather than
+one, that a latency figure is a wall-clock measurement rather than a benchmark, and that external
+mechanisms do not confer comprehension. An implicit statement that a reader could complete wrongly is the
+same defect as an explicit one, which is why they are entered as rows rather than counted as wording.
 
-**Every one of the 72 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`.
+**Every one of the 73 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`.
 
 **The English total stays at 64** because the English document did not change. **This is a consequence of
 the freeze, not a parity result**, and it is why §4's parity gate is reported as suspended rather than
@@ -260,9 +293,11 @@ not reported as passing.
 | `0.55` | ✓ | | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET` | ✓ |
 
 9 of 9 first-column tokens and 9 of 9 second-column tokens present in the Chinese. **This was re-run
-against the P5-E1 text** — the nine editorial corrections removed no figure, and the token that came
-closest to being at risk, `54`, is carried by the sentence P5-E1 rewrote and is still present. The frozen
-English still contains all 18 as of revision 2, and nothing in P5-D, P5-E or P5-E1 touched it.
+against the P5-E1 text and again after the micro corrections** — neither pass removed any of the 18, and
+the token that came closest to being at risk, `54`, is carried by the sentence P5-E1 rewrote and is still
+present. Note that `七` is *not* one of the 18 and never was: the count of triage candidates was prose, not
+a parity token, which is why deleting it moves C-66's scope and not this table. The frozen English still
+contains all 18 as of revision 2, and nothing in P5-D, P5-E or P5-E1 touched it.
 
 ---
 
@@ -326,6 +361,10 @@ Two exclusions worth naming, because the revisions made them *more* tempting rat
   "seven stories were deleted" is one compression away from "seven discoveries were disproved", which
   would be false. **Repair B tightened this further**: the four candidates that fell did not fall for one
   reason, and the article now says which fell to prior art and which were never findings about Jev at all.
+  **The micro correction then removed the count itself**: the article no longer says how many candidates
+  the triage held, so the paraphrase "seven stories were deleted" is now a statement about P2 rather than
+  about the prose. That is a further tightening of the same kind, and it is why §1.6 records the antecedent
+  reading rather than treating the correction as costless.
   **P5-E1 removed one of the two restatements of the device** — the closing callback used to make the same
   point twice, and now makes it once, immediately before 但还有一个故事要删. That is a change in how
   often the device is *said*, not in what it asserts: C-67's two halves still both stand, one sentence
