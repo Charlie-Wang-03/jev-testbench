@@ -1,15 +1,19 @@
 """The frozen evidence release must verify, and the verifier must actually be able to fail.
 
 A verifier that has only ever been observed passing is not evidence of anything. So the tests below
-do two separate jobs: they assert that the shipped release verifies, and they assert that a
-deliberately damaged manifest does **not**. The second job is the one that makes the first one mean
-something.
+do three separate jobs: they assert that the shipped release verifies, they assert that a
+deliberately damaged manifest does **not**, and -- in ``TestReleaseVerification`` -- they assert the
+version-lifecycle property that the first two cannot express: that a release is verified against
+its own Git tree and keeps verifying after the working tree has moved on.
 
 Everything here is offline. The suite blocks sockets outright (see ``conftest.py``), so a test that
-reached the network would fail rather than pass quietly.
+reached the network would fail rather than pass quietly. The Git plumbing these tests use is local
+``git`` on a temporary repository; nothing is fetched.
 """
 
+import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -57,8 +61,16 @@ def _write_tampered(tmp_path: Path, mutate) -> Path:
 
 
 class TestTheFreezeVerifies:
-    def test_the_shipped_manifest_passes(self, capsys):
-        assert ef.verify_manifest(echo=lambda *_: None) == 0
+    def test_the_shipped_release_verifies_against_its_own_tag(self):
+        """The published release, checked the way a reader checks it: from the tag.
+
+        This is the assertion CI depends on. It fails if the tag is absent from the clone rather
+        than skipping, because a release whose verification silently did not run is worse than one
+        whose verification is red.
+        """
+        release = ef.Release.for_tag(ef.PLANNED_GIT_TAG)
+        with ef.GitTreeSource(ef.PLANNED_GIT_TAG) as source:
+            assert ef.verify_manifest(echo=lambda *_: None, source=source, release=release) == 0
 
     def test_building_twice_produces_identical_bytes(self, tmp_path):
         """Determinism is the property the whole manifest rests on.
@@ -70,12 +82,21 @@ class TestTheFreezeVerifies:
         second = ef.write_manifest(tmp_path / "b.json")
         assert first.read_bytes() == second.read_bytes()
 
-    def test_the_committed_manifest_is_what_the_code_builds(self, tmp_path):
-        """A stale committed manifest would verify against itself and mean nothing."""
-        rebuilt = ef.write_manifest(tmp_path / "rebuilt.json")
-        assert rebuilt.read_text(encoding="utf-8") == MANIFEST.read_text(encoding="utf-8"), (
-            "the committed manifest is not what `evidence_freeze build` produces; "
-            "run it and commit the result (or, if the release is already tagged, open a new version)"
+    def test_the_committed_manifest_is_what_the_code_builds_from_the_release(self):
+        """A stale committed manifest would verify against itself and mean nothing.
+
+        Built from the *tagged tree*, not the working tree. That is the invariant that survives a
+        post-release branch: the manifest must be reproducible from the release alone, so a later
+        rewrite of a README cannot make the manifest look like something nobody could have produced.
+        """
+        with ef.GitTreeSource(ef.PLANNED_GIT_TAG) as source:
+            rebuilt = json.dumps(
+                ef.build_manifest(source), indent=2, sort_keys=True, ensure_ascii=False
+            ) + "\n"
+        assert rebuilt == MANIFEST.read_text(encoding="utf-8"), (
+            "the committed manifest is not what `evidence_freeze build` produces from "
+            f"{ef.PLANNED_GIT_TAG}; run it against that tag and commit the result "
+            "(or, if the release is already tagged, open a new version)"
         )
 
 
@@ -204,3 +225,268 @@ class TestTheFreezeMatchesTheEvidence:
         assert errata["ERR-002"]["verdict_changed"] is False
         assert errata["ERR-001"]["status"] == "DOCUMENTED"
         assert errata["ERR-001"]["verdict_impact"] == "none"
+
+
+# ---------------------------------------------------------------------------
+# The version-lifecycle property
+# ---------------------------------------------------------------------------
+#
+# A release is the tree its tag points at. The tests below build real, tiny Git repositories to
+# check that, because the property is about *history* -- it cannot be shown on a working tree that
+# only ever has one state. Two commits and a tag are enough: commit A is tagged, commit B moves the
+# branch on, and the release at A must still verify.
+
+SYNTHETIC_EXPERIMENT = "00_synthetic"
+
+
+def _git(repo: Path, *args: str) -> str:
+    proc = subprocess.run(
+        ["git", *args], cwd=repo, capture_output=True, check=False, text=True
+    )
+    assert proc.returncode == 0, f"git {' '.join(args)} failed in the fixture: {proc.stderr}"
+    return proc.stdout
+
+
+def _synthetic_files() -> dict[str, str]:
+    """The smallest tree that is structurally a release of this repository.
+
+    Every marker the verifier looks for is a real constant from ``evidence_freeze``, so a marker
+    being renamed fails here rather than passing against a stale literal.
+    """
+    record = {
+        "schema_version": 4,
+        "experiment": SYNTHETIC_EXPERIMENT,
+        "model_requested": "jev-latest",
+        "model_resolved": "jev-1.13.0",
+        "status": "ok",
+        "timestamp_utc": "2026-01-01T00:00:00Z",
+        "answers": {"q": {"type": "choice", "answer": "x"}},
+    }
+    markers = "\n".join(
+        [ef.SCIENTIFIC_STATE, ef.P3_VERDICT, *ef.INHERITED_VERDICTS, *ef.NON_CLAIMS]
+    )
+    return {
+        "src/jev_lab/experiments.py": (
+            "# The registry, as this release defined it.\n"
+            "EXPERIMENTS: dict[str, object] = {\n"
+            f'    "{SYNTHETIC_EXPERIMENT}": object(),\n'
+            "}\n"
+        ),
+        "docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md": f"# Freeze\n\n{markers}\n",
+        "docs/EVIDENCE_PROVENANCE.md": f"# Provenance\n\n{ef.SCIENTIFIC_STATE}\n",
+        "docs/audits/P3_BOUNDARY_LOCUS_RESULT.md": f"# Result\n\n{ef.P3_VERDICT}\n",
+        "docs/experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md": "# Preregistration\n",
+        "docs/experiments/EXPERIMENT_REGISTRY.md": (
+            "# Registry\n\nACTIVE_REGISTRY_HAS_ZERO_UNRUN_EXPERIMENTS\n"
+        ),
+        "README.md": "# The release README\n",
+        "docs/README.md": "# The release docs index\n",
+        "LICENSE": 'MIT License\n\nTHE SOFTWARE IS PROVIDED "AS IS"\n',
+        "CITATION.cff": "cff-version: 1.2.0\nversion: 0.1.0\nlicense: MIT\n",
+        "pyproject.toml": '[project]\nversion = "0.1.0"\n',
+        "results/usage.jsonl": json.dumps(record) + "\n",
+    }
+
+
+def _synthetic_manifest(root: Path, files: dict[str, str]) -> dict:
+    def digest(relative: str) -> str:
+        return hashlib.sha256((root / relative).read_bytes()).hexdigest()
+
+    return {
+        "schema_version": 1,
+        "release_version": "0.1.0",
+        "planned_git_tag": "v0.1.0",
+        "freeze_date": "2026-01-01",
+        "project": {"license": "MIT"},
+        "model_scope": {},
+        "official_claim_snapshot": {},
+        "canonical_measurements": {
+            "results/usage.jsonl": {
+                "stage": "P0",
+                "records": 1,
+                "sha256": digest("results/usage.jsonl"),
+                "answers_by_type": {"choice": 1},
+                "noul_answers_carrying_confidence": 0,
+                "model_resolved": ["jev-1.13.0"],
+            }
+        },
+        "evidence_documents": {
+            relative: {"sha256": digest(relative), "class": "canonical_evidence"}
+            for relative in (
+                "docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md",
+                "docs/EVIDENCE_PROVENANCE.md",
+                "docs/audits/P3_BOUNDARY_LOCUS_RESULT.md",
+                "docs/experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md",
+            )
+        },
+        "public_documentation": {
+            relative: {"sha256": digest(relative), "class": "public_documentation"}
+            for relative in ("README.md", "docs/README.md")
+        },
+        "release_metadata": {
+            relative: {"sha256": digest(relative)}
+            for relative in ("LICENSE", "CITATION.cff", "pyproject.toml")
+        },
+        "historical_commits": [],
+        "known_errata": [],
+        "experiment_registry": {
+            "registered": 1,
+            "with_records": 1,
+            "unrun": [],
+            "registered_names": [SYNTHETIC_EXPERIMENT],
+            "retired_before_release": [],
+        },
+        "scientific_state": {
+            "state": ef.SCIENTIFIC_STATE,
+            "p3_verdict": ef.P3_VERDICT,
+            "inherited_verdicts": ef.INHERITED_VERDICTS,
+            "primary_null": "",
+            "non_claims": ef.NON_CLAIMS,
+        },
+    }
+
+
+def _make_release_repo(root: Path, *, tag_points_at_the_moved_tree: bool = False) -> Path:
+    """Commit A, tag it, then move the branch on with commit B.
+
+    ``tag_points_at_the_moved_tree`` moves the tag onto B instead -- a tag whose tree its own
+    manifest does not describe. Nothing here touches the real repository or the real tag.
+    """
+    files = _synthetic_files()
+    for relative, text in files.items():
+        path = root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8", newline="\n")
+    manifest = _synthetic_manifest(root, files)
+    (root / ef.Release.for_tag("v0.1.0").manifest_path).write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n"
+    )
+
+    _git(root, "-c", "init.defaultBranch=main", "init", "-q")
+    # Pinned so the fixture's bytes are the same on every platform: the manifest hashes files, and
+    # a CRLF checkout would change them for reasons that have nothing to do with the test.
+    _git(root, "config", "core.autocrlf", "false")
+    _git(root, "config", "user.email", "test@example.invalid")
+    _git(root, "config", "user.name", "Synthetic Test")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-q", "-m", "the release")
+    _git(root, "tag", "-a", "-m", "synthetic release", "v0.1.0")
+
+    (root / "README.md").write_text("# Rewritten after the release\n", encoding="utf-8", newline="\n")
+    (root / "docs/README.md").write_text("# Index, reworded\n", encoding="utf-8", newline="\n")
+    _git(root, "add", "-A")
+    _git(root, "commit", "-q", "-m", "post-release documentation")
+
+    if tag_points_at_the_moved_tree:
+        _git(root, "tag", "-f", "-a", "-m", "moved", "v0.1.0", "HEAD")
+    return root
+
+
+def _verify_in(repo: Path, *, tag: str = "v0.1.0", echo=None) -> tuple[int, str]:
+    source = ef.GitTreeSource(tag, repo_root=repo)
+    out: list[str] = []
+    with source:
+        code = ef.verify_manifest(
+            echo=(echo or out.append), source=source, release=ef.Release.for_tag(tag)
+        )
+    return code, "\n".join(out)
+
+
+class TestReleaseVerification:
+    """`verify <tag>` answers the historical question; `verify-current` answers the other one."""
+
+    def test_the_release_still_verifies_after_the_worktree_moves_on(self, tmp_path):
+        """The regression this module was reshaped for.
+
+        The tag was created before commit B rewrote ``README.md`` and ``docs/README.md``. Both are
+        listed in the manifest. Verifying the release must nonetheless pass, because what a
+        citation points at is the tree the tag commits to, not whatever the branch says later.
+        """
+        repo = _make_release_repo(tmp_path / "repo")
+        assert (repo / "README.md").read_text(encoding="utf-8") == "# Rewritten after the release\n"
+
+        code, output = _verify_in(repo)
+        assert code == 0, output
+        assert f"Verified historical evidence release: {ef.PLANNED_GIT_TAG}" in output
+
+    def test_the_release_reads_the_registry_its_own_tree_defined(self, tmp_path):
+        """A name added to today's registry must not retroactively break a past release.
+
+        The synthetic tree registers exactly one experiment. The live registry in this process
+        registers ten. If the verifier consulted the live code -- as it used to -- the counts could
+        never agree, and no release could survive the next experiment being written.
+        """
+        repo = _make_release_repo(tmp_path / "repo")
+        with ef.GitTreeSource("v0.1.0", repo_root=repo) as source:
+            assert source.registry_names() == [SYNTHETIC_EXPERIMENT]
+        assert len(ef.WorktreeSource(REPO_ROOT).registry_names()) > 1
+
+        code, output = _verify_in(repo)
+        assert code == 0, output
+
+    def test_current_tree_mode_reports_the_drift_instead(self, tmp_path):
+        """Same repository, the other question -- and the honest answer here is "no longer equal"."""
+        repo = _make_release_repo(tmp_path / "repo")
+        out: list[str] = []
+        code = ef.verify_manifest(echo=out.append, source=ef.WorktreeSource(repo))
+        text = "\n".join(out)
+        assert code == 1
+        assert "README.md" in text
+        assert "docs/README.md" in text
+        # The message has to say that presentation moving on is the expected shape of a
+        # post-release branch, or the next person to see this red will "fix" it by rewriting a
+        # frozen release. It has to say the opposite about evidence, and close the
+        # regenerate-the-manifest door explicitly.
+        assert "allowed to move on" in text
+        assert "may not" in text
+        assert "regenerated manifest" in text
+        assert f"verify {ef.PLANNED_GIT_TAG}" in text
+
+    def test_a_tag_whose_tree_does_not_match_its_manifest_fails(self, tmp_path):
+        """Corruption inside a tagged tree is still a hard failure, not a special case."""
+        repo = _make_release_repo(tmp_path / "repo", tag_points_at_the_moved_tree=True)
+        code, output = _verify_in(repo)
+        assert code == 1
+        assert "README.md" in output
+        assert "does not match the manifest it carries" in output
+
+    def test_a_manifest_naming_a_different_release_is_rejected(self, tmp_path):
+        """The tag and the manifest have to agree about which release this is."""
+        repo = _make_release_repo(tmp_path / "repo")
+        manifest_path = repo / ef.Release.for_tag("v0.1.0").manifest_path
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["planned_git_tag"] = "v0.2.0"
+        manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
+        _git(repo, "add", "-A")
+        _git(repo, "commit", "-q", "-m", "a manifest describing a different release")
+        _git(repo, "tag", "-f", "-a", "-m", "moved", "v0.1.0", "HEAD")
+
+        code, output = _verify_in(repo)
+        assert code == 1
+        assert "planned_git_tag" in output
+
+    def test_a_missing_tag_fails_closed_and_says_how_to_get_it(self, tmp_path):
+        """Offline means offline: no tag, no verification, and no fetch behind the user's back."""
+        repo = _make_release_repo(tmp_path / "repo")
+        with pytest.raises(ef.ReleaseTagNotFound):
+            ef.GitTreeSource("v0.9.9", repo_root=repo)
+
+        out: list[str] = []
+        assert ef.source_for_tag("v0.9.9", echo=out.append, repo_root=repo) is None
+        text = "\n".join(out)
+        assert "EVIDENCE" not in text  # no invented marker; the tag name is the identifier
+        assert "git fetch --tags" in text
+        assert "offline" in text
+
+    def test_an_explicit_manifest_path_is_not_mixed_with_a_tagged_source(self, tmp_path):
+        """Two ways of saying where the manifest is would leave the question ambiguous."""
+        repo = _make_release_repo(tmp_path / "repo")
+        source = ef.GitTreeSource("v0.1.0", repo_root=repo)
+        with source:
+            assert (
+                ef.verify_manifest(
+                    manifest_path=tmp_path / "whatever.json", source=source, echo=lambda *_: None
+                )
+                == 1
+            )
+

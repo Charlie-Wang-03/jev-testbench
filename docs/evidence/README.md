@@ -46,19 +46,59 @@ touched. That property is worth more than a tidier file.
 
 ## Verifying a freeze
 
-Offline, from a clone of the tagged tree. No API key, no network:
+Offline, from any checkout. No API key, no network:
 
 ```console
-git checkout v0.1.0
 uv sync --locked
-uv run python -m jev_lab.evidence_freeze verify
+uv run python -m jev_lab.evidence_freeze verify v0.1.0
 ```
 
-The command reads the manifest, recomputes the SHA-256 of every file it lists, re-counts both
-canonical logs from disk, and re-checks the release's structural invariants — the experiment registry
-has no unrun design, the license is present, the project version matches, the P3 verdict is
-unchanged. Any mismatch is a non-zero exit.
+The command reads `v0.1.0`'s manifest **out of the `v0.1.0` Git tree**, recomputes the SHA-256 of
+every file it lists at `v0.1.0:<path>`, re-counts both canonical logs, and re-checks the release's
+structural invariants — the experiment registry has no unrun design, the license is present, the
+project version matches the P3 verdict is unchanged. Any mismatch is a non-zero exit.
 
-CI runs the same command on every push, so a later change to a canonical log, an audit or the
-preregistration fails the build until a new versioned freeze is created for it. That is the mechanism
-that keeps this directory from quietly going stale.
+**You do not have to check the tag out first, and you do not have to be on it.** A release is the
+tree its tag points at, so the verification goes to the tag and ignores the branch you are on. That
+is what lets this directory be immutable *and* lets `main` keep moving — two properties that look
+like they conflict until they are separated.
+
+CI runs the same command on every push, against the tag. So a change to a canonical log, an audit or
+the preregistration *inside the release* fails the build, while a README or a guide may be reworded
+on `main` without a new release. The fix for a red run is never to edit `docs/evidence/v0.1.0/` to
+match, and never to move the tag.
+
+---
+
+## Two questions, and why they are two commands
+
+| Command | Question it answers | Expected after the release |
+|---|---|---|
+| `verify v0.1.0` | Is the published release still exactly what was published? | **PASS** |
+| `verify-current` | Does this working tree still equal the release tree? | **Non-zero**, once anything has been reworded |
+
+`verify-current` exiting non-zero is not a defect and is not a reason to change anything. It is the
+honest answer to a different question, and it is useful exactly once: when a failure names a
+canonical log, an audit, the preregistration or `ERRATA.md`, evidence has drifted on a branch it
+should not have drifted on. When it names a README or an index, it has told you what changed and
+there is nothing to fix.
+
+Keeping the two apart matters more than it sounds. One command that checked the current tree against
+a frozen manifest would make "someone reworded the docs" and "someone edited the evidence" produce
+the identical red build — so the second, which is the one worth being told about, would be buried
+under the first.
+
+---
+
+## What may change after a release
+
+| Layer | After the release |
+|---|---|
+| **Presentation** — READMEs, this index, the guides, the blog | May be reworded or extended. No new release needed. |
+| **Evidence** — the canonical logs, the audits, the preregistration, `ERRATA.md`, a release's own documents | May not change. A new version directory supersedes it. |
+
+The split is not a rule anyone has to remember, because it is enforced: the first row is hashed as
+`public_documentation`, the second as `evidence_documents` and `canonical_measurements`, and
+`verify v0.1.0` recomputes both against the tag. This page is itself in the second row — the copy in
+the release is frozen, and the copy you are reading may be reworded, which is what the verifier was
+taught to tell apart.

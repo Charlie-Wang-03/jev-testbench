@@ -47,7 +47,17 @@ jobs:
       # moves it would be running in this job. Both SHAs were read from the actions' own
       # repositories -- `actions/checkout` v6 is a lightweight tag on a commit, `astral-sh/setup-uv`
       # v6 is an annotated tag, and the SHA below is the commit it dereferences to.
+      #
+      # `fetch-tags: true` is load-bearing: the freeze step below verifies release `v0.1.0` out of
+      # its own tag, which needs the tag object and the tree it commits to. The default checkout
+      # fetches neither -- it leaves a synthetic tip with no tags. Depth stays at 1: a release is a
+      # tree, and a tree needs no ancestors, so there is no reason to pull the full history in. If a
+      # future step needs an older commit, widen this deliberately rather than reaching for
+      # `fetch-depth: 0` as a reflex.
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          fetch-tags: true
 
       - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
@@ -78,13 +88,25 @@ jobs:
         run: git diff --exit-code -- results/JEV_LOCAL_EVALUATION_FINAL.md
 
       # The release freeze, checked rather than trusted. This recomputes the SHA-256 of every file
-      # `docs/evidence/v0.1.0/evidence-manifest.json` lists, re-counts both canonical logs, and
-      # re-checks the registry, licence, version and P3-verdict invariants -- offline, with no key.
+      # the `v0.1.0` manifest lists, re-counts both canonical logs, and re-checks the registry,
+      # licence, version and P3-verdict invariants -- offline, with no key.
       #
-      # What this step is for: `v0.1.0` is a published, citable release whose whole value is that its
-      # numbers do not move. Without this gate, editing a canonical log, an audit or the
-      # preregistration on `main` would break no build and invalidate every citation silently. With
-      # it, such an edit fails here until a *new versioned* freeze is created for it. The fix for a
-      # red run is never to edit `docs/evidence/v0.1.0/` to match.
-      - name: Verify the frozen evidence manifest
-        run: uv run --no-sync python -m jev_lab.evidence_freeze verify
+      # It reads that manifest and those artifacts out of the `v0.1.0` Git tree, not out of this
+      # checkout. That distinction is the whole gate. Verified against the tagged tree, the step
+      # asserts the property a citation depends on -- the published release has not moved -- while
+      # leaving `main` free to reword a README, add a guide or index a blog post. Verified against
+      # the working tree instead, as it once was, it would have quietly meant the opposite: that
+      # nothing in `main` may ever be reworded, and, worse, that editing a canonical log on `main`
+      # looks identical to editing it in the release.
+      #
+      # What it still catches: a canonical log, an audit, the preregistration or the registry
+      # changing *inside the release*, which can only happen by moving the tag or rewriting
+      # history. The fix for a red run is never to edit `docs/evidence/v0.1.0/` to match, and never
+      # to move the tag.
+      #
+      # `verify-current` exists and is deliberately not run here. It answers "does this checkout
+      # still equal the release tree?", and on a branch after the release the honest answer is no
+      # -- presentation is allowed to move on. A permanently red step would train people to ignore
+      # the one that is not.
+      - name: Verify the frozen evidence release, from its tag
+        run: uv run --no-sync python -m jev_lab.evidence_freeze verify v0.1.0
