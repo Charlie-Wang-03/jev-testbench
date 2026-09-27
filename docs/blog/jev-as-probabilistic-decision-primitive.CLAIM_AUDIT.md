@@ -1,18 +1,21 @@
 # Claim audit — the technical blog
 
 **Audited document:** [`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
-(the Chinese text). It was rewritten as a narrative in P5-D and revised in P5-E: five human-review-confirmed
+(the Chinese text). It was rewritten as a narrative in P5-D, revised in P5-E (five human-review-confirmed
 factual repairs, a reduction in punchline density, and a new closing movement on AI involvement and
-cognitive debt.
+cognitive debt), and corrected again in P5-E1 — nine narrowly-scoped editorial corrections, no structural
+change. §1.5 records what P5-E1 changed and which rows it moved.
 **Second document, tracked but not re-audited:**
 [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md)
-(the English adaptation). **It is frozen and was not modified in P5-D or P5-E.** Its column below records
+(the English adaptation). **It is frozen and was not modified in P5-D, P5-E or P5-E1.** The P5-E1
+corrections were applied to the Chinese only, and the English blob is byte-identical to its P5-B state.
+Its column below records
 what revision 2 established about it and is carried forward unchanged.
 **Standard:** [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md)
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 4 — the P5-E revision. Supersedes revision 3 (Chinese narrative rewrite, P5-D).
+**Revision:** 5 — the P5-E1 editorial corrections. Supersedes revision 4 (P5-E).
 
 **What this file is.** Every substantive claim in the Chinese article **about Jev, about this bench's
 measurements, or about what TypeSafe has published**, classified against the contract's three classes —
@@ -72,6 +75,29 @@ expected rather than a defect.
 The publication index records the status in one line: *English adaptation pending re-alignment after
 **Chinese human editorial approval**.* `ENGLISH_REALIGNMENT: NOT_STARTED`.
 
+### 1.5 What P5-E1 changed, and which rows it moved
+
+P5-E1 is an editorial correction pass, not a rewrite: no new structure, no new thesis, no new experiment,
+no new evidence, and no change to the English document. Nine passages were corrected. Three of them
+carried claim content, and those are the ones recorded here.
+
+| Correction | Was | Now | Effect on the audit |
+|---|---|---|---|
+| **§3 — what counts as a local measurement** | 只有 `results/usage.jsonl` 里由真实调用写出来的一行，才算本地测量 | 只有真实调用写进 canonical log 的记录才算本地测量。核心阶段用 `results/usage.jsonl`，P3 用独立的 `results/p3_boundary_locus/usage.jsonl`，两个日志分开，不合并 | **C-11 re-worded, and C-73 added.** The old sentence named one log while the bench has two. The corrected sentence names the mechanism rather than a filename, and states the separation explicitly. No class change — both logs are frozen evidence. |
+| **§4 — how cost and latency are classified** | 成本和延迟是本地推的，明确标成本地推导，不当事测量结果 | 成本由 token 用量和价格表推算，是本地推导，不是账单。延迟记录的是端到端本地 wall-clock，它是测量值，但不能被读成模型自身的推理延迟 benchmark | **C-15 re-worded, and C-74 added.** The old sentence put cost and latency in one bucket. They are not the same kind of statement: cost is a derived calculation, latency is a measurement with a confounded window. Splitting them is a tightening, and C-74 is what keeps the split from being read as a latency claim. |
+| **§5 — the 0.61 gate** | 正好越过代码里设的 0.60 门槛，于是被判成 accept | 而代码里的 demonstration threshold 是 0.60，因此 Python policy 判成 accept | **C-26 re-worded, no class change.** The article now uses the constant's own label (*demonstration threshold*) and attributes the verdict to the policy that computes it, rather than to a threshold the case "crossed". Nothing about C-27's arithmetic changed. |
+
+The other six corrections are style, attribution or precision-of-phrasing edits with no claim content:
+§6 turns an agent-vs-human speed comparison into a **rate mismatch** (process attribution audit, not this
+contract); §7 replaces a precise audit count with 多套审计、一份预注册和一套冻结证据, which is *less*
+assertive, not more; §8 replaces 还有谁活着 with 维护者还能够独立解释、验证或重建; §9 deletes one of two
+near-identical 删故事 paragraphs, leaving C-67's content intact in the survivor; and §15 forbids adding
+any new colloquial device, so the style metrics were permitted to fall (they fell by one; style audit
+revision 3).
+
+**No figure was lost.** All 18 bilingual tokens in §4.2 were re-checked against the P5-E1 text and all 18
+are present. `DO_NOT_STATE_ZH` remains **0**.
+
 ---
 
 ## 2. The audit
@@ -92,11 +118,11 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-08 | One `01_primitives` answer had winning probability 0.45 and confidence 0.26 | A — a named single record | Log: `01_primitives`/`department`, `choice: other`, `0.45` / `0.26` | 背景 | §2 | n/a | n/a | `SAFE_TO_STATE` |
 | C-09 | Typed output solves the schema problem, not the semantic one | A — non-claim | `NO_BROAD_HALLUCINATION_BENCHMARK`, `NO_GENERAL_ACCURACY_CLAIM` | 背景 | §2 | n/a | n/a | `SAFE_TO_STATE` |
 | C-10 | The vendor's known-limitations page lists literal reading, weak numerics, date comparison, indirection, large state, and puts control flow in code | A — official, attributed | `TS-DOC-JAG`, `TS-DOC-BUILD` | 背景 | §2 | yes | yes | `SAFE_TO_STATE` |
-| C-11 | Vendor figures are claims about *their* workload; only a log line is a local measurement; separating the evidence layer is what keeps a convenient story from looking reasonable | A — repository practice | Freeze §7, no vendor-claim adjudication | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
+| C-11 | Vendor figures are claims about *their* workload; **only a record written by a real call into a canonical log** is a local measurement; separating the evidence layer is what keeps a convenient story from looking reasonable | A — repository practice | Freeze §7, no vendor-claim adjudication | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
 | C-12 | The two logs' SHA-256 are `38e67630…` / `17f36f75…` and never changed | A — canonical log identity | Freeze §3; re-hashed during this audit | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
 | C-13 | 42 records requested `jev-latest` and resolved `jev-1.13.0` | A — provenance | Log: `model_resolved = jev-1.13.0` on 42/42 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
 | C-14 | CI regenerates derived artifacts and fails on any difference | A — engineering | `.github/workflows/ci.yml`; freeze §5.2 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-15 | The 54 calls cost ≈ **$0.001** by local estimate | B — cost figures | Sum of `estimated_cost_usd` over both logs = `0.001084566` | 测量台 | §3 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-15 | The 54 calls cost ≈ **$0.001** by local estimate; **cost is derived from token usage and the price table and is not a bill** | B — cost figures | Sum of `estimated_cost_usd` over both logs = `0.001084566`; `pricing.py` | 测量台 | §3 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-16 | 10 registered experiments, all executed, 42 core records | A — registry | Freeze §4; `EXPERIMENT_REGISTRY.md` | 批处理 | §4 | n/a | n/a | `SAFE_TO_STATE` |
 | C-17 | `04_confidence` has 2 cases; `12_function_routing` makes 4 calls | A — registry | Registry tables | 路由, 三条经验 | §4 | yes | yes | `SAFE_TO_STATE` |
 | C-18 | None of the 10 left a conclusion both new relative to TypeSafe's public material and supported by the data | **B** — novelty, scoped | P2 §6; freeze §5.3 | 四个候选 | §4 | yes | yes | `SAFE_WITH_SCOPE` |
@@ -107,7 +133,7 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-23 | 13b: label unchanged 5/5; top-2 margin moved ≤ 0.07; `Score` 1.58–1.63; `confidence` 0.24–0.30; one exact tie | B — local measurement + a novelty claim that may only be scoped | Log: margins `0.07, 0.06, 0.02, 0.03, 0.00`; scores `1.58–1.63`; `department` confidences `0.24–0.30`; `ambiguous_5` `other 0.45 = billing 0.45` | 稳定标签 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-24 | Official cookbook reports label flips on 2 of 8 questions and per-label std dev (mean 0.0098, max 0.0515) | B — official, attributed | P2 §4.1 (A); the vendor cookbook | 稳定标签 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-25 | A public chaos test sent the identical request five times and got `0.03, 0.03, 0.03, 0.04, 0.04`, with jitter floors over ~1,490 calls | B — third-party, cited as third-party | P2 §4.8 | 稳定标签 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-26 | The 0.60 gate is this repository's own constant, labelled a demonstration threshold, never calibrated | B — our own policy | `experiments.py` `CONFIDENCE_GATE_THRESHOLD`; P2 §4.1 (C) | 0.61 门槛 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-26 | The 0.60 gate is this repository's own constant, **named in the article by its own label, `demonstration threshold`**, never calibrated; the verdict is the Python policy's, not the model's | B — our own policy | `experiments.py` `CONFIDENCE_GATE_THRESHOLD`; P2 §4.1 (C) | 0.61 门槛 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-27 | The ambiguous case returned 0.61 against a 0.74 vs 0.26 margin; the published k=3 expression reproduces 0.61 exactly | B — local measurement + derived | The `04` record; P2 §4.1 (C) | 0.61 门槛 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-28 | Two official pages use different `confidence` thresholds for the same worked example, and both say thresholds are domain-specific | A — official sources; a recorded divergence | Freeze §8; `TS-DOC-CONF` vs `TS-DOC-CONFROUTE` | 0.61 门槛 | §6 | yes | yes | `SAFE_TO_STATE` |
 | C-29 | Routing: 4/4 function matches, 4/4 argument matches, 4/4 suppressed, handler never entered | B — our architecture | The `12` records; P2 §4.1 (G) | 路由, 三条经验 | §6, §12.3 | yes | yes | `SAFE_WITH_SCOPE` |
@@ -147,30 +173,38 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-64 | License: MIT | A — release fact | `LICENSE`; `pyproject.toml` | 附录 | §16 | n/a | n/a | `SAFE_TO_STATE` |
 | C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic; still wanting to look at NAS | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's | 开头, 测量台, 分析器, NAS | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-66 | The narrative device: seven candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
-| C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry; what it accumulates is that ability | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
+| C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry (carried by 一个用来检验发现的仓库…在做它该做的事，而不是在累积战利品); what it accumulates is that ability (carried by 这个仓库真正积累的，不是故事。是删故事的能力。). **P5-E1 deleted a third sentence that restated the first half ahead of the second**; the claim is unchanged and both halves still stand, one sentence apart. | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-68 | The project reads as training in model evaluation and agent engineering rather than as a model benchmark, and most of the learning was not on Jev's side | A — the author's own assessment | The author's first-hand account of the work | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
 | C-69 | Not looking for applications because you already hold the tool | A — aphorism attached to the NAS non-claim | The NAS non-claim is C-62; this adds no factual content | NAS | — | n/a | n/a | `SAFE_TO_STATE` |
 | C-70 | The author is willing to put a name to the frozen state string | **B** — novelty-adjacent | Freeze §5.3; the string is quoted in the same paragraph and restated in scope around it | 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
 | C-71 | No adjudication of vendor claims: incommensurable, not "the vendor is wrong" and not "the local run proves them right" | A — contract rule | `BLOG_CLAIM_CONTRACT.md`; P1 audit | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
 | C-72 | Every state is synthetic; there is no real personal, customer or proprietary data here | A — contract rule | Repository practice; freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
+| C-73 | The bench keeps **two** canonical logs: the core phases write `results/usage.jsonl`, P3 writes its own `results/p3_boundary_locus/usage.jsonl`, and the two are not merged | A — canonical log identity | Freeze §3 names both hashes; both logs re-hashed during this audit | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
+| C-74 | Latency is recorded as end-to-end local wall-clock; it is a measurement, **not** a model-inference latency benchmark | A — non-claim about what the latency figure means | `findings.md`; the transport-attempt rule in `CLAUDE.md`; freeze §3.3 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
 
 ---
 
 ## 3. Totals
 
-| Verdict | Chinese (r4) | Chinese (r3) | English (frozen r2) |
-|---|---:|---:|---:|
-| `SAFE_TO_STATE` | **45** | 46 | **42** |
-| `SAFE_WITH_SCOPE` | **25** | 24 | **22** |
-| `DO_NOT_STATE` | **0** | **0** | **0** |
-| **Substantive claims audited** | **70** | 70 | **64** |
+| Verdict | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (frozen r2) |
+|---|---:|---:|---:|---:|
+| `SAFE_TO_STATE` | **47** | 45 | 46 | **42** |
+| `SAFE_WITH_SCOPE` | **25** | 25 | 24 | **22** |
+| `DO_NOT_STATE` | **0** | **0** | **0** | **0** |
+| **Substantive claims audited** | **72** | 70 | 70 | **64** |
 
 **`DO_NOT_STATE_ZH = 0`.** Nothing in the article had to be deleted or rewritten for asserting something
 the evidence does not carry. The one class change is a **tightening**, not a new defect: C-05 moved from
 `A` to `B` because the display-precision caveat is now load-bearing, and a reader who drops it would read
 a false sentence. Repairing a claim by requiring its scope is the contract working, not failing.
 
-**Every one of the 70 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`.
+**The two rows P5-E1 added are both `A`, and neither is a new assertion.** C-73 and C-74 make explicit
+what the article previously left implicit — that there are two logs rather than one, and that a latency
+figure is a wall-clock measurement rather than a benchmark. An implicit statement that a reader could
+complete wrongly is the same defect as an explicit one, which is why they are entered as rows rather than
+counted as wording.
+
+**Every one of the 72 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`.
 
 **The English total stays at 64** because the English document did not change. **This is a consequence of
 the freeze, not a parity result**, and it is why §4's parity gate is reported as suspended rather than
@@ -209,8 +243,9 @@ pass would be reporting the wrong thing. `ENGLISH_REALIGNMENT: NOT_STARTED`.
 
 Revision 2 checked 18 tokens in both languages. **That check is suspended**, for the same reason: its
 subject is a pair that is not currently aligned. The Chinese article was verified to contain all 18 tokens
-after the P5-E edits, so no figure was lost to the factual repairs, the density reduction or the new
-closing movement — but the gate as a *parity* gate is not reported as passing.
+after the P5-E edits, and again after the P5-E1 corrections, so no figure was lost to the factual repairs,
+the density reduction, the new closing movement or the editorial pass — but the gate as a *parity* gate is
+not reported as passing.
 
 | Token | Chinese | | Token | Chinese |
 |---|---|---|---|---|
@@ -224,8 +259,10 @@ closing movement — but the gate as a *parity* gate is not reported as passing.
 | `0.20` | ✓ | | `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION` | ✓ |
 | `0.55` | ✓ | | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET` | ✓ |
 
-9 of 9 first-column tokens and 9 of 9 second-column tokens present in the Chinese. The frozen English still
-contains all 18 as of revision 2, and nothing in P5-D or P5-E touched it.
+9 of 9 first-column tokens and 9 of 9 second-column tokens present in the Chinese. **This was re-run
+against the P5-E1 text** — the nine editorial corrections removed no figure, and the token that came
+closest to being at risk, `54`, is carried by the sentence P5-E1 rewrote and is still present. The frozen
+English still contains all 18 as of revision 2, and nothing in P5-D, P5-E or P5-E1 touched it.
 
 ---
 
@@ -289,6 +326,11 @@ Two exclusions worth naming, because the revisions made them *more* tempting rat
   "seven stories were deleted" is one compression away from "seven discoveries were disproved", which
   would be false. **Repair B tightened this further**: the four candidates that fell did not fall for one
   reason, and the article now says which fell to prior art and which were never findings about Jev at all.
+  **P5-E1 removed one of the two restatements of the device** — the closing callback used to make the same
+  point twice, and now makes it once, immediately before 但还有一个故事要删. That is a change in how
+  often the device is *said*, not in what it asserts: C-67's two halves still both stand, one sentence
+  apart. The compression risk it carries is unchanged and is why the class stays `B`-adjacent rather than
+  being entered as a finding.
 
 ---
 

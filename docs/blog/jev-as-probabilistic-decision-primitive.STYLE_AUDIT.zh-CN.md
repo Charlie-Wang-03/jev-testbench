@@ -1,4 +1,4 @@
-# Style audit — the Chinese narrative rewrite (P5-E)
+# Style audit — the Chinese narrative rewrite (P5-E1)
 
 **Audited document:** [`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
 **Style source:** `khazix-writer/SKILL.md` (414 lines), `references/style_examples.md` (428 lines),
@@ -7,9 +7,9 @@
 (`SKILL.md` §"自检输出格式"), run by hand against the rewritten text.
 **Article archetype:** `调查实验型 × 方法论分享型`, primary 调查实验型. Recorded before writing; unchanged in P5-E.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 2 — recomputed in P5-E against the P5-E text. Supersedes the P5-D revision, whose two
-colloquial-expression counts (11 and 35) contradicted each other and are withdrawn; see §"What
-changed in this revision".
+**Revision:** 3 — recomputed in P5-E1 against the P5-E1 text, and extended with an **Over-stylization
+check** that revision 2 did not have. Supersedes revision 2 (P5-E), which superseded the P5-D revision,
+whose two colloquial-expression counts (11 and 35) contradicted each other and are withdrawn.
 
 **What this file is not.** It is not a claim audit. Whether a sentence is *permitted* is decided by
 [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md) and recorded in
@@ -30,24 +30,49 @@ owner actually took, per the process attribution audit.
 
 ## What changed in this revision
 
-**The P5-D numbers were wrong, and are replaced rather than adjusted.** Revision 1 reported
-colloquial expressions as "35 个不同条目" in one table and "11 个" in the summary of the same layer —
-an internal contradiction that P5-E's work order named and required be resolved by recomputation
-from the current text. Every figure below was recounted against the P5-E article. The count is now
-one number, **33**, with the full list printed in L2-3 so a reader can check it rather than trust it.
+**P5-E1 was a subtraction pass, and the style metrics were allowed to fall.** Nine passages were
+corrected, none was added, and the work order forbade introducing any new colloquial device —
+no new catchphrase, no new self-deprecation, no new `？？？`, no new one-line punchline. The explicit
+instruction was that **style serves content, not the reverse**, and that a metric which drops because a
+sentence got more accurate is a metric that did its job. One metric did drop: **口语化表达 33 → 32**.
+The lost entry is `撑不住`, which lived in a 删故事 paragraph that P5-E1 deleted as a duplicate. Nothing
+was added to replace it, and nothing should have been.
 
-**The article got longer while getting less dense.** 13,172 → 14,789 characters. This is the
-intended direction of the P5-E work order §22: the deliberate punchline and one-line-reversal
-density came down by roughly a third, while the closing movement — the AI-involvement disclosure,
-the cognitive-debt working concept, and the metaphor — was added. The added matter carries content
-rather than beat, so length is not the quantity the §22 instruction was about.
+**The article got longer, which is the opposite of what a subtraction pass looks like.** 14,789 →
+14,928 characters (narrative body 14,252 → 14,391). Three corrections are longer than what they
+replaced — the canonical-log sentence, the cost/latency sentence and the manifest sentence each trade a
+compressed phrase for a precise one. This is the trade the stage was asked to make, and the length
+change is a consequence of it rather than a target.
 
-**Two headline style figures moved because the text moved.** `不是。` as an independent paragraph:
-5 → 1, and the single survivor is the one §23 protects. The four-instance `第N个故事没了` drumbeat
-is gone entirely; the deletion device is now carried once, by the four-candidate passage, and once
-more by the closing callback. Fullwidth colons in prose: 0 → 7 in the P5-E draft, all seven caught
-by this audit and rewritten to 0 before the audit was finalised, leaving one in the H1 (a heading,
-recorded as a technical exception).
+**The figures that moved, and the figures that did not.**
+
+| Figure | P5-E | P5-E1 | Direction |
+|---|---:|---:|---|
+| 口语化表达 | 33 | **32** | down — one deleted with its sentence, none added |
+| 单句成段 | 107 | **106** | down — one paragraph deleted, none split |
+| 15 字以内短拍 | 34 | **34** | flat — the deleted paragraph's `是删故事的能力。` survives as a beat |
+| 扣主线句 | 10 | **10** | flat |
+| 疑问句刹车 | 6 个 / 7 次 | **6 个 / 7 次** | flat |
+| 正文中文冒号 | 0 | **0** | flat |
+| 破折号 / 弯引号 | 0 / 0 | **0 / 0** | flat |
+| 独立成段的 `不是。` | 1 | **1** | flat |
+| 情绪标点 | 0 | **0** | flat, by rule |
+
+**The P5-D revision's numbers were wrong, and that history still matters.** Revision 1 reported
+colloquial expressions as "35 个不同条目" in one table and "11 个" in the summary of the same layer — an
+internal contradiction that P5-E's work order named and required be resolved by recomputation from the
+current text. Every figure below is recounted from the P5-E1 article by the same script that reproduced
+revision 2's numbers exactly, so the deltas above compare like with like. The count is one number, **32**,
+with the full list printed in L2-3 so a reader can check it rather than trust it.
+
+**Context from P5-E, retained because P5-E1 did not change it.** The P5-D → P5-E movement was
+13,172 → 14,789 characters, and it was the intended direction of P5-E's own §22: deliberate punchline and
+one-line-reversal density came down by roughly a third while the closing movement — the AI-involvement
+disclosure, the cognitive-debt working concept, and the metaphor — was added. `不是。` as an independent
+paragraph went 5 → 1, and the single survivor is the one §23 protects. The four-instance `第N个故事没了`
+drumbeat is gone entirely. Fullwidth colons in prose went 0 → 7 in the P5-E draft, all seven caught by
+revision 2 and rewritten to 0 before that audit was finalised, leaving one in the H1 (a heading, recorded
+as a technical exception). **P5-E1 introduced no colon and inherited none.**
 
 ---
 
@@ -65,9 +90,9 @@ recorded as a technical exception).
 **L2 风格一致性** ✅
 
 - 开头 ✅
-- 节奏 ✅（单句成段 107 处，其中 15 字以内的短拍 34 处；扣主线句 10 处；疑问句刹车 6 个不同问句 /
+- 节奏 ✅（单句成段 106 处，其中 15 字以内的短拍 34 处；扣主线句 10 处；疑问句刹车 6 个不同问句 /
   7 次出现；无小标题）
-- 口语化 ✅（不同口语化表达 33 个，全表列出；论述中的故意打破 5 处；自嘲/承认不足 4 处；
+- 口语化 ✅（不同口语化表达 32 个，全表列出；论述中的故意打破 5 处；自嘲/承认不足 4 处；
   情绪标点 0 处 —— 这是 L2-3 四项里唯一未做到的一项，理由见 §"Evidence-contract overrides"）
 - 标点禁令二次确认 ✅
 
@@ -91,9 +116,68 @@ recorded as a technical exception).
 **总评**：4 层全部通过。L2-3 四项中有一项按规则未做，这是唯一一处低于满分的地方，理由记在
 §"Evidence-contract overrides"。L1 与 L2-4 是全项零命中，不是"接近通过"。
 
-**修复优先级**：无强制修复项。P5-D 记下的两条可选打磨项中，(1) 结尾删故事回扣"收得略快"在 P5-E
-已被重写，回扣现在落在最后一个 `不是。` 上并接披露段；(2) 三条工程经验仍以"第一件/第二件/第三件"
-分条，仍是全文最接近结构化写法的一处，保留。
+**修复优先级**：无强制修复项，**P5-E1 也没有新增任何一项**。P5-D 记下的两条可选打磨项中，(1) 结尾
+删故事回扣"收得略快"在 P5-E 已被重写，回扣现在落在最后一个 `不是。` 上并接披露段，P5-E1 又把两处
+近义回扣压到一处，这一项现在比 P5-E 更干净；(2) 三条工程经验仍以"第一件/第二件/第三件"分条，仍是
+全文最接近结构化写法的一处，保留。
+
+---
+
+## Over-stylization check
+
+《SKILL.md》的自检是**下限检查**：够不够口语、够不够短、够不够有节奏。它不回答反过来的问题 ——
+**这些手段是不是已经开始盖住内容本身。** 这一节是 P5-E1 按工作令要求新增的反向检查，四个问题逐条回答，
+答案是这四项里的任意一项。
+
+**问题一：一行反转是不是过密？**
+
+**不是。11 处，平均每 46 行一处**（正文 505 行）。逐处列出，位置是行号：
+
+`所以这是复现，不是发现。`(105)、`这个读法站不住。`(137)、`效应很大 ≠ 原因已确定。`(288)、
+`实验没坏。`(312)、`分析器坏了。`(314)、`答案是不要。`(386)、`但这个仓库现在没有资格回答。`(420)、
+`但这个结果比预期好。`(436)、`但还有一个故事要删。`(454)、`不是。`(462)、
+`但它们不会自动变成人的理解。`(490)。
+
+判定依据不是这个数小，而是**分布**：间隔为 32 / 151 / 24 / **2** / 72 / 34 / 16 / 18 / 8 / 28 行。
+唯一一处相邻反转是 312 与 314 的 `实验没坏。` / `分析器坏了。`，那是有意成对的一组 —— 先否定"结果坏了"，
+再给出真正坏掉的东西，拆开会失去对照。其余最小间隔 8 行（`但还有一个故事要删。` 与 `不是。`），
+那是全文最大的两次反转，靠得近是对的。**最大间隔 151 行，说明反转是落在关键节点上的，不是按节拍铺的。**
+
+**问题二：`不是。` 是不是只出现在必要处？**
+
+**是，只有一处，而且它是全文唯一一处非它不可的地方。** P5-D 有 5 处独立成段的 `不是。`，P5-E 压到 1 处，
+P5-E1 没有动它。剩下的这一处在 AI 参与披露段：前一句是 `它是这样的。这是一个完全掌握之后亲手做出来的
+项目。`，这一处 `不是。` 否掉的是**文章自己刚立起来的一个论断**，而不是一个外部对手的观点。
+换成 `并非如此。` 或并入下一段都会削弱这个自我否定。**这是一处结构性的必要，不是口头禅。**
+
+**问题三：`故事` 回扣是不是重复？**
+
+**P5-E 时是重复的，P5-E1 修掉了，现在是 6 次出现、一条线。** 出现位置：163（四个候选的结算）、
+434（`54 次调用之后，最好看的几个故事基本都没留下来。`）、438（`后来才发现，这个仓库真正积累的，
+不是故事。`）、440（`是删故事的能力。`）、454（`但还有一个故事要删。`）、458（`这个故事是关于这个
+项目本身的。`）。**434 到 458 是一个连续的回扣段，P5-E 在这个段里说了两遍同一件事** —— 438–442 那三行
+（`因为一个评估仓库真正应该帮你做的…` / `后来才发现…` / `是删故事的能力。`）里，第一行与后两行是同一个
+意思的两种说法。P5-E1 删掉了第一行。**删掉之后，回扣变成一次命名（438/440）接一次升级（454），中间不再
+有第二遍铺垫**，`但还有一个故事要删。` 因此比以前更直接地跟着 `这个仓库积累的是删故事的能力` 出现。
+**这一条是这次检查里唯一一处真正的过密，也是 P5-E1 唯一一处风格上的净删减。**
+
+**问题四：口语化手段是不是开始盖住内容？**
+
+**没有，而且这一版是往反方向走的。** 三条证据：
+
+1. **口语化总数下降，且没有补位。** 33 → 32，减少的一项（`撑不住`）随它所在的句子一起被删，没有为了
+   维持计数而新加一个。工作令明确允许甚至预期这个数下降。
+2. **本版改动的方向是把口语换成精确。** 三处最长的修改 —— canonical log 那句、成本/延迟那句、
+   manifest 那句 —— 都是把模糊的短说法换成更长的准确说法（`本地推的` → `由 token 用量和价格表推算，
+   是本地推导，不是账单`）。**这是"内容压过风格"的直接证据**，也是这篇文章变长的唯一原因。
+3. **技术术语进入了正文而不是被口语替换掉。** `demonstration threshold`、`Python policy`、
+   `canonical log`、`wall-clock`、`benchmark` 五个英文术语现在直接写在散文里。它们在 L2 的"口语化"
+   这一层是减分的，在 L3 的"知识输出"和 claim 准确性这一层是加分的。**这里风格让位，是这次检查
+   要确认的那件事。**
+
+**这一节的结论。** 四个问题里，只有一个（回扣重复）在 P5-E 答案是"是"，P5-E1 把它变成了"否"。另外三个
+在 P5-E 就已经是否定的，P5-E1 没有让它们变差。**本版审计的判断是：这篇文章的风格现在服务于内容，而不是
+反过来 —— 判据不是 32 这个数，而是这一版每一次风格指标下降都能指到一句因此变准确的话。**
 
 ---
 
@@ -130,7 +214,7 @@ Jev 的时候`，P5-E 改成了这一版**，理由不是风格而是归属：�
 
 **L2-2 节奏。**
 
-- 单句成段：107 处；其中 15 字以内的短拍 34 处（`54 次。` / `漂亮。` / `不是。` / `实验没坏。` /
+- 单句成段：106 处；其中 15 字以内的短拍 34 处（`54 次。` / `漂亮。` / `不是。` / `实验没坏。` /
   `分析器坏了。` / `到底是谁动的？` / `为什么？` / `答案是不要。` / `关于这件事，有一个比喻。` 等）。
   规则要求 3 次，实际是其 35 倍以上，本项不存在"接近不达标"的问题。
 - 扣主线句：10 处（`先说一分钟背景` / `好，回到实验。` / `到这一步` / `写到这里` / `跑完这些` /
@@ -143,16 +227,21 @@ Jev 的时候`，P5-E 改成了这一版**，理由不是风格而是归属：�
 
 **L2-3 口语化。**
 
-口语化表达 **33 个不同条目**（规则要求 8–10 个），逐条在文中确认存在后列出：`压根`、`完了`、
+口语化表达 **32 个不同条目**（规则要求 8–10 个），逐条在文中确认存在后列出：`压根`、`完了`、
 `稍微绕`、`差点搞混`、`挺直白`、`最要命`、`顺便说一句`、`漂亮`、`吃掉`、`稳如泰山`、
 `底下的水一直在晃`、`挺尴尬`、`挺狠`、`顺带一提`、`顺手`、`一个字都没多`、`锤子`、`钉子`、
 `愿意签字`、`混了`、`走回去`、`站不住`、`扎心`、`撞上`、`朴素`、`反过来`、`晃`、`拍板`、
-`撑不住`、`好看`、`挺`、`搞`、`硬`。
+`好看`、`挺`、`搞`、`硬`。
 
 **这张表是这一版审计的产物。** P5-D 那一版在同一层给出了 11 和 35 两个互相矛盾的数，且都没有列出
 可核对的清单。现在两个数合成一个，方法也写清楚：先声明候选条目，再逐条回文确认，未出现的候选不计入
 （因此这个数只会因为清单变化而变化，不会因为重新数一遍而变化）。若把通用高频词（`就是`、`其实`、
 `直接`、`根本`）也算进来，数字会更大，但那些词不是口语化标记，计入会让这个指标失去意义。
+
+**P5-E → P5-E1 的减少一项，逐项说明。** 减少的是 `撑不住`，它只出现在被 P5-E1 删掉的那句
+（`删掉那些证据撑不住的故事`）里。**没有为补位新增任何一项**，这是工作令 §15 的直接要求。注意文中
+仍有 `支撑不了` 两处（`不能…` 与 `n = 3…` 两段），但那是标准书面表达，从来不在本清单里，也不应
+因为这一处删除而被追认为口语化标记 —— 清单不变，数字只会随文本变。
 
 论述中的故意打破 5 处：`这个读法站不住。` 独立成段打断一个正在成立的论断；`实验没坏。` 与
 `分析器坏了。` 两段之间没有连接词；`12 次。一条都不许多。` 用重复加强而不是推进；
@@ -300,6 +389,15 @@ P5-D 用四个同构的段落收掉四个候选，读者得到的是一个整齐
 `删故事` 离 `否定了七项发现` 只有一次压缩的距离，而后者是假的 —— 七个候选里没有一个是"被证伪的发现"，
 它们全部是**没有通过分诊的候选**。因此它在 claim audit 里被单独列成 C-66 并归入 `B` 类而不是 `A` 类。
 P5-E 保住了它作为叙事装置的地位（正文一次、结尾一次），同时把它的断言力压在候选清单的范围内。
+**P5-E1 把结尾那一次从两遍压到一遍**，装置的断言力没有变化，但重复的次数少了一次 —— 见 §"Over-stylization
+check" 问题三。
+
+**9. P5-E1 新增：风格指标被允许下降，而且真的降了一项。**
+工作令 §15 明令禁止为了维持计数而新增任何口语化手段，并写明"风格指标可以下降，人的阅读质量优先"。
+本版执行的结果是口语化 33 → 32、单句成段 107 → 106，两项都降。**这是这篇文章第一次出现风格指标下降
+而没有任何补偿性新增**，值得记在这里：它说明前面那些数字不是在追求一个下限，而是文本的副产品 ——
+文本变准，数字随之变化，哪个方向都可以接受。**如果哪一天这两个数为了回到某个旧值而被重新推高，
+那才是这一层真正出事的时候。**
 
 ---
 
@@ -308,4 +406,8 @@ P5-E 保住了它作为叙事装置的地位（正文一次、结尾一次），
 `STYLE_AUDIT` 回答"有没有太刻意"，而不只是"有没有达到最低数量"。就这个问题而言，本版审计的结论是：
 **L1 与 L2-4 是零命中，不是接近通过；L2-2 的各项远超下限，不存在凑数的风险；唯一需要人工判断的地方
 是 L1-4 的那一个泛指"模型"，已经在明细里写明。** 反过来，本版审计没有发现任何一处"为了达到数量而
-硬塞"的痕迹 —— 这在 33 个口语化条目和 107 个单句成段的规模上是一个真实的结论，不是一句客气话。
+硬塞"的痕迹 —— 这在 32 个口语化条目和 106 个单句成段的规模上是一个真实的结论，不是一句客气话。
+
+**P5-E1 增加的反向检查见上面的 §"Over-stylization check"。** 那一节的结论和这一节是同一条：四个
+过密问题里三个从一开始就是否，一个在 P5-E 是"是"、在 P5-E1 被修成"否"，而修的方式是**删掉一句**而不是
+补一句。**这一版审计没有任何一个数字是因为想让文章"更像"而变动的。**

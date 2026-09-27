@@ -1,11 +1,12 @@
-# Process attribution audit — the Chinese article (P5-E)
+# Process attribution audit — the Chinese article (P5-E1)
 
 **Audited document:** [`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
 **Basis of this audit:** `OWNER_DECLARED_PROJECT_PROCESS` — the owner's declaration of who did what,
 recorded in [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) §2.
 **Not a basis:** the `v0.1.0` frozen evidence. See §6.
 **Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 1 — introduced in P5-E.
+**Revision:** 2 — re-verified in P5-E1 against the editorially-corrected text. Supersedes revision 1 (P5-E).
+The re-verification is recorded in §9; the findings of revision 1 stand unchanged.
 
 ---
 
@@ -115,7 +116,7 @@ anchor, since the article has no numbered sections.
 | 8 | The batching measurement, 816 vs 3,480 | `AI_EXECUTION` | Passive/impersonal: 合计吃掉 816 输入 token. No 我 measured. |
 | 9 | The repeatability measurement, 5 identical requests | `AI_EXECUTION` | 一份逐字节相同的 512-token 请求发了五次 — passive. |
 | 10 | Reading the official cookbook and finding the prior art | `HUMAN_DECISION` + `AI_EXECUTION` | 然后去翻官方 cookbook，找到了它 — bare verb, no 我. The decision to check prior art is the owner's; the retrieval is the agent's. |
-| 11 | The `04_confidence` ambiguous case and its 0.61 | `AI_EXECUTION` | Described as a property of the experiment (有一个特意设计的模糊用例), not of the author. |
+| 11 | The `04_confidence` ambiguous case and its 0.61 | `AI_EXECUTION` | Described as a property of the experiment (有一个特意设计的模糊用例), not of the author. **P5-E1 re-worded the verdict clause** to 因此 Python policy 判成 accept, which moves the last trace of agency off the case and onto the code that evaluates it. |
 | 12 | `12_function_routing` and the four suppressions | `AI_EXECUTION` | 让模型把请求路由到… — the experiment is the subject. |
 | 13 | The finding that the four suppressions trace to `routing.py` | `PROJECT_OBSERVATION` | 四个拦截全部能追溯到 `routing.py` — the artifact is the subject. |
 | 14 | The four candidates all falling | `PROJECT_OBSERVATION` | Stated about the candidate list, with the differing reasons separated. |
@@ -133,6 +134,7 @@ anchor, since the article has no numbered sections.
 | 26 | Cognitive debt, its definition and the repayment argument | `AUTHORIAL_REFLECTION` | The owner's working concept, explicitly labelled as one. |
 | 27 | The gorilla and fire metaphor | `AUTHORIAL_REFLECTION` | Used once, as a figure. |
 | 28 | 这篇文章是开始偿还的第一笔 | `AUTHORIAL_REFLECTION` | Editorial stance about the article itself. |
+| 29 | The rate divergence: implementation advanced faster than the owner's comprehension of it | `AUTHORIAL_REFLECTION` | **Split out as its own row in the P5-E1 re-verification.** Revision 1 folded it into row 26 as part of the cognitive-debt argument; it is a distinct process statement and is now counted as one. The P5-E1 wording made it *more* precise rather than less: the P5-E form (实施的速度主要由 agent 决定，而理解的速度仍然由人决定) named a generic 人 as the second party, and the corrected form (agent 把实施推进得远快于 owner 消化这些工作的速度) names the role. Neither form attributes an execution to the owner. |
 
 **No row is unresolved.** Every statement either names an owner-level act, is impersonal with the
 artifact or the rule as its subject, or is explicitly framed as reflection. `PROCESS_ATTRIBUTION_UNRESOLVED = 0`.
@@ -180,14 +182,14 @@ process layer, this audit would be claiming a rigour it does not have — §1 sa
 
 ## 7. Totals
 
-| Result | P5-D | P5-E |
-|---|---:|---:|
-| First-person singular pronouns (我, excluding 我们) | **92** | **2** |
-| …of which assert an action performed in this project | 88 | **0** |
-| …of which are quotations rather than assertions | 4 | **2** |
-| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** |
-| Process statements classified | — | **28** |
-| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** |
+| Result | P5-D | P5-E | P5-E1 |
+|---|---:|---:|---:|
+| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** |
+| …of which assert an action performed in this project | 88 | **0** | **0** |
+| …of which are quotations rather than assertions | 4 | **2** | **2** |
+| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** |
+| Process statements classified | — | 28 | **29** |
+| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** |
 
 **The two survivors are both quotations, and neither is an assertion by the article.** One is
 「我觉得它有时候不太行」, a reader's impression being ruled out inside a subordinate clause. The
@@ -214,8 +216,45 @@ figures survive.
 - **Per-line or per-sentence attribution.** The declaration itself disclaims this: 每一行代码、每一
   句话都无法被精确归属. A claim of per-line accuracy in either direction would be false, so this audit
   works at the level of actions the article actually asserts.
-- **The English article.** It is frozen at P5-B and was not modified or re-attributed in P5-E. It
-  still contains the P5-B first-person framing, and any statement here about the Chinese is not a
+- **The English article.** It is frozen at P5-B and was not modified or re-attributed in P5-E or P5-E1.
+  It still contains the P5-B first-person framing, and any statement here about the Chinese is not a
   statement about it.
 - **Jev claims.** Nothing here bears on whether a sentence about Jev is permitted. That is the claim
   audit's job, and the two are deliberately not merged.
+
+---
+
+## 9. The P5-E1 re-verification
+
+P5-E1 corrected nine passages across the article. Its work order named one failure mode for this audit to
+check for specifically: **that the editorial pass did not reintroduce an owner-performed-agent-execution
+misattribution.** The whole search was therefore re-run against the corrected text, not spot-checked.
+
+**Result: no drift.** `PROCESS_ATTRIBUTION_UNRESOLVED = 0`, and the counts in §7 are unchanged from
+revision 1 in every row that existed in revision 1.
+
+| Check | P5-E | P5-E1 | Note |
+|---|---:|---:|---|
+| The ten first-person action phrases | 9 of 10 absent | **9 of 10 absent** | 我跑了 still appears once, still only as the construction the article names and refuses. |
+| 我 occurrences read in context | 3 | **3** | Same three lines. Two of the nine corrections touched lines that contain 我 — §3's canonical-log sentence and §6's rate-mismatch sentence — and neither added or removed one. |
+| 我 as a total character count | 4 (2 singular + 2 我们) | **4 (2 singular + 2 我们)** | Unchanged. |
+| Sentences attributing an execution to the owner | 0 | **0** | None. |
+
+**Two of the nine corrections moved attribution in the right direction rather than merely preserving it.**
+
+- **§6** replaced a sentence in which a generic 人 was the party whose understanding had to keep up
+  (理解的速度仍然由人决定) with one that names the role (owner 消化这些工作的速度). The old form was not
+  an owner-execution claim, but it was vaguer than the declaration it rests on, and vagueness in
+  attribution is the failure mode one step removed from the one this audit exists to catch.
+- **§5** moved the verdict on the `04_confidence` case from the case itself (于是被判成 accept) to the
+  code that evaluates it (因此 Python policy 判成 accept). The case is a state; a state does not decide
+  anything. The correction removes the last grammatical agent from a sentence that had been carrying one
+  by ellipsis.
+
+**What the pass did not do.** It did not delete a sentence to make attribution easier, and the check for
+that is the same one revision 1 used: the four passages most tempting to remove are all still present in
+full. One of the nine corrections *is* a deletion — the 删故事 compression, work order §9 — but it is a
+*style* deletion, removing one of two near-identical statements of the device, and C-67's content survives
+it (claim audit §1.5). It removed no actor and no action. The agent-execution
+disclosure paragraph, the owner's four-part role list, and the 我跑了 refusal are all byte-for-byte what
+revision 1 classified.
