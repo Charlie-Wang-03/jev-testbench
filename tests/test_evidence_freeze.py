@@ -543,6 +543,18 @@ class TestReleaseVerification:
                 == 1
             )
 
+    def test_a_release_that_declares_no_identity_fails_rather_than_raising(self, tmp_path):
+        """Identity is read out of the tree, so a tree without one is a verdict, not a traceback."""
+        repo = _make_release_repo(tmp_path / "repo")
+        (repo / "pyproject.toml").unlink()
+        _git(repo, "add", "-A")
+        _git(repo, "commit", "-q", "-m", "the release loses its pyproject.toml")
+        _git(repo, "tag", "-f", "-a", "-m", "moved", "v0.1.0", "HEAD")
+
+        code, output = _verify_in(repo)
+        assert code == 1
+        assert "pyproject.toml" in output
+
     def test_a_release_keeps_the_identity_its_own_tree_declared(self, tmp_path):
         """The fixture renames the project in commit B. The release at A keeps its own name.
 

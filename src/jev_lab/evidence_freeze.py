@@ -847,8 +847,25 @@ def _check_release_metadata(
     """
     if not source.is_file("pyproject.toml"):
         failures.append(f"no pyproject.toml in {source.label}")
-    elif f'version = "{release.version}"' not in _read_text(source, "pyproject.toml"):
-        failures.append(f"pyproject.toml does not declare version {release.version!r}")
+    else:
+        if f'version = "{release.version}"' not in _read_text(source, "pyproject.toml"):
+            failures.append(f"pyproject.toml does not declare version {release.version!r}")
+        # The name a release records is the name its own tree declared. A mismatch is not
+        # cosmetic: it means the manifest describes a project the release never was, which is
+        # exactly what a hard-coded identity in the builder produces once the project is renamed
+        # on `main`. A tree that declares no name at all is reported rather than raised -- a
+        # damaged release is a verdict, and a traceback is not one.
+        try:
+            declared_name, _ = project_identity(source)
+        except ValueError as error:
+            failures.append(str(error))
+        else:
+            recorded_name = manifest.get("project", {}).get("name")
+            if recorded_name != declared_name:
+                failures.append(
+                    f"manifest records project name {recorded_name!r}, but pyproject.toml in "
+                    f"{source.label} declares {declared_name!r}"
+                )
 
     if not source.is_file("LICENSE"):
         failures.append("no LICENSE file at the repository root")
@@ -870,17 +887,6 @@ def _check_release_metadata(
             failures.append("CITATION.cff claims a DOI; this release has none")
     if manifest.get("project", {}).get("license") != "MIT":
         failures.append("manifest does not record the license as MIT")
-
-    # The name a release records is the name its own tree declared. A mismatch is not cosmetic: it
-    # means the manifest describes a project the release never was, which is exactly what a
-    # hard-coded identity in the builder produces once the project is renamed on `main`.
-    declared_name, _ = project_identity(source)
-    recorded_name = manifest.get("project", {}).get("name")
-    if recorded_name != declared_name:
-        failures.append(
-            f"manifest records project name {recorded_name!r}, but pyproject.toml in "
-            f"{source.label} declares {declared_name!r}"
-        )
 
 
 def _check_scientific_state(
