@@ -54,6 +54,14 @@ ENGLISH_ONLY_EVIDENCE = [
     "docs/experiments/EXPERIMENT_REGISTRY.md",
     "docs/sources/TYPESAFE_OFFICIAL_SOURCES.md",
     "docs/EVIDENCE_PROVENANCE.md",
+    "docs/ERRATA.md",
+    # The released freeze is an evidence artifact, and the strongest one: it is the set a citation
+    # points at. A second-language copy would be a second text making the same promises about
+    # hashes, with no mechanism keeping the two in step.
+    "docs/evidence/README.md",
+    "docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md",
+    "docs/evidence/v0.1.0/RELEASE_NOTES.md",
+    "docs/evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md",
 ]
 
 # Facts that must be identical on both sides of a pair. A number that appears in one language and
@@ -75,7 +83,6 @@ SHARED_FACTS = [
     "42",
     "12",
     "10",
-    "1054",
     "21,767",
     "3,594",
     "816",
@@ -96,6 +103,10 @@ SHARED_FACTS = [
     # Model identity.
     "jev-1.13.0",
     "jev-latest",
+    # The released evidence freeze. Both halves must name the same version: a README pair that
+    # disagrees about which release is frozen is a citation waiting to point at the wrong tree.
+    "v0.1.0",
+    "docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md",
 ]
 
 # Authoring markers that mean a document is unfinished. Deliberately narrow: `placeholder` is a

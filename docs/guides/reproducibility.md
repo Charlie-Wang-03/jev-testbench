@@ -30,7 +30,7 @@ uv sync --locked
 uv run pytest
 ```
 
-**1054 tests pass and no socket is opened.** The suite blocks sockets outright, so an accidental API
+**The full offline suite passes and no socket is opened.** The suite blocks sockets outright, so an accidental API
 call fails loudly rather than quietly spending your money. The tests use `httpx2.MockTransport`
 against the real SDK where they need to exercise the client.
 

@@ -11,8 +11,9 @@ Jev 不是聊天模型。它接收一段 `state` 和一组**类型化问题**，
 本仓库就是这个原语的测量台。每一次真实 API 调用都会向一个只追加的 JSONL 日志写入且仅写入一行，
 而所有文档里的每一句话都被标注为：厂商官方说法、设计假设、本地测量、本地推导，或局限性。
 
-**状态：** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **测试：** 1054 个全部通过，完全离线 ·
-**证据：** [42 条核心记录](results/usage.jsonl) + [12 条 P3 记录](results/p3_boundary_locus/usage.jsonl)
+**状态：** `CORE_CAPABILITY_EXPLORATION_CLOSED` · **测试：** 完整离线测试套件全部通过 ·
+**证据：** [42 条核心记录](results/usage.jsonl) + [12 条 P3 记录](results/p3_boundary_locus/usage.jsonl) ·
+**发布：** [v0.1.0 证据冻结](docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md)
 
 ---
 
@@ -163,7 +164,7 @@ confidence 用例只是*说明*了这层限定，无法检验它。本地的警�
 
 ```console
 uv sync --locked
-uv run pytest                                    # 1054 个测试，socket 被封锁
+uv run pytest                                    # 完整离线测试套件，socket 被封锁
 uv run python -m jev_lab report                  # summary.csv, summary.md
 uv run python -m jev_lab snapshot                # capability_snapshot.md
 uv run python -m jev_lab final-report            # JEV_LOCAL_EVALUATION_FINAL.md

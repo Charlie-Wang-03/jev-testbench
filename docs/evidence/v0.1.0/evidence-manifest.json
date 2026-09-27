@@ -1,0 +1,393 @@
+{
+  "canonical_measurements": {
+    "results/p3_boundary_locus/usage.jsonl": {
+      "answers_by_type": {
+        "noul": 12
+      },
+      "description": "P3 boundary-locus log. Kept separate so P0's published digest stays valid.",
+      "model_requested": [
+        "jev-1.13.0"
+      ],
+      "model_resolved": [
+        "jev-1.13.0"
+      ],
+      "noul_answers_carrying_confidence": 0,
+      "recorded_window_utc": [
+        "2026-09-22T15:37:30Z",
+        "2026-09-22T15:37:35Z"
+      ],
+      "records": 12,
+      "schema_versions_present": [
+        3
+      ],
+      "sha256": "17f36f7551d598a4724f4557d8b235d810ec4fb259d8d4b842eabc8f34c5d78e",
+      "stage": "P3",
+      "status": [
+        "ok"
+      ]
+    },
+    "results/usage.jsonl": {
+      "answers_by_type": {
+        "choice": 45,
+        "noul": 45,
+        "score": 29
+      },
+      "description": "Core evaluation log. Frozen P0 evidence; append-only in name only, never extended.",
+      "model_requested": [
+        "jev-latest"
+      ],
+      "model_resolved": [
+        "jev-1.13.0"
+      ],
+      "noul_answers_carrying_confidence": 0,
+      "recorded_window_utc": [
+        "2026-09-20T15:29:51Z",
+        "2026-09-21T14:20:51Z"
+      ],
+      "records": 42,
+      "schema_versions_present": [
+        1,
+        3
+      ],
+      "sha256": "38e67630a7c345f1719795401ceaf7de43b1c5ec16da2adb568fb7ef8dc40b1b",
+      "stage": "P0",
+      "status": [
+        "ok"
+      ]
+    }
+  },
+  "evidence_documents": {
+    "docs/ERRATA.md": {
+      "class": "canonical_evidence",
+      "sha256": "ff1c0c7913dcf5a7a54fd7c45ccabdf16205151444b1cabacd18027fb76c98cb"
+    },
+    "docs/EVIDENCE_PROVENANCE.md": {
+      "class": "canonical_evidence",
+      "sha256": "6315247d6018c56097239bb18520b60ff271a2825dba8907827179440c4c3c6c"
+    },
+    "docs/audits/P1_OFFICIAL_CLAIMS_LOCAL_EVIDENCE.md": {
+      "class": "canonical_evidence",
+      "sha256": "890cb682bddb047e0af635c7bb17050720088ca2f5fa7987644ef454b89fbbc8"
+    },
+    "docs/audits/P2_JEV_INSIGHT_TRIAGE.md": {
+      "class": "canonical_evidence",
+      "sha256": "45fd4af450f451cf58b955fd0ec85126db19024e6e202f14a6915c5dd468eecd"
+    },
+    "docs/audits/P3_BOUNDARY_LOCUS_RESULT.md": {
+      "class": "canonical_evidence",
+      "sha256": "f832b6f75f7687783fca9bb8b24b66c21451cf1c2430fb7ae319b48d6bf61e4d"
+    },
+    "docs/evidence/README.md": {
+      "class": "canonical_evidence",
+      "sha256": "4755a4302b585ee4e6c6547758cd648638020d5b4f0642b691ace100aa7a8d0b"
+    },
+    "docs/evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md": {
+      "class": "canonical_evidence",
+      "sha256": "2a7de481c8d4059f95dcad3c07fb204f909829fe953296584f7fde8c772ebb7e"
+    },
+    "docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md": {
+      "class": "canonical_evidence",
+      "sha256": "3b8ffb3a2cf2536ad7241f06d4cead1b3bc27b19d3ff328142dac20a2c059348"
+    },
+    "docs/evidence/v0.1.0/RELEASE_NOTES.md": {
+      "class": "canonical_evidence",
+      "sha256": "122cddcb9876b0f1a3eed0a34890e1c196c4dddc66aa7bc8952448cb43a3ee56"
+    },
+    "docs/experiments/EXPERIMENT_REGISTRY.md": {
+      "class": "canonical_evidence",
+      "sha256": "7bade9eb9193946bb01bdd42b323049f99f8d1e8ae7e5904872be28b4e29f98b"
+    },
+    "docs/experiments/P3_BOUNDARY_LOCUS_PREREGISTRATION.md": {
+      "class": "canonical_evidence",
+      "sha256": "f38e6a0f4d794cad7524af9384e401d482ac816d19517b42f8d105892be433f5"
+    },
+    "docs/findings/findings.md": {
+      "class": "canonical_evidence",
+      "sha256": "9f3fa4604e44e538c854f432ab6da9e1210345255063055d9ad1342e655cf6f3"
+    },
+    "docs/sources/TYPESAFE_OFFICIAL_SOURCES.md": {
+      "class": "canonical_evidence",
+      "sha256": "f823fc9f0d2f3464544daf43c264506785962ca0de9e8236b6c572a2775e47f3"
+    },
+    "results/JEV_LOCAL_EVALUATION_FINAL.md": {
+      "class": "canonical_evidence",
+      "sha256": "542373eb22c777f0a327b4b765c6f1fad2f4da38f0b884b701ee9dbf52a43bcd"
+    }
+  },
+  "experiment_registry": {
+    "invariant": "ACTIVE_REGISTRY_HAS_ZERO_UNRUN_EXPERIMENTS",
+    "p3_in_registry": false,
+    "registered": 10,
+    "registered_names": [
+      "01_primitives",
+      "02_structured_addressing",
+      "03_parallel_questions",
+      "04_confidence",
+      "05_speculative_fanout",
+      "06_composite_scoring",
+      "07_instruction_precision",
+      "12_function_routing",
+      "13_repeatability",
+      "13b_ambiguous_repeatability"
+    ],
+    "registry_document": "docs/experiments/EXPERIMENT_REGISTRY.md",
+    "registry_document_states_invariant": true,
+    "retired_before_release": [
+      "00_model_info",
+      "08_literal_reading",
+      "09_numeric_limits",
+      "10_state_length",
+      "11_language_pair"
+    ],
+    "unrun": [],
+    "with_records": 10
+  },
+  "freeze_date": "2026-09-27",
+  "historical_commit_note": "SHAs are listed with what each one is. A commit type here is a claim about the diff, checkable with `git show`. The distinction that matters most: an ANALYSIS commit may change code that reads a log, and may never change the log.",
+  "historical_commits": [
+    {
+      "sha": "e20fad5",
+      "stage": "P0",
+      "type": "MEASUREMENT",
+      "what_it_is": "The 42-record core freeze."
+    },
+    {
+      "sha": "e9d54ca",
+      "stage": "P0",
+      "type": "ANALYSIS",
+      "what_it_is": "Derived-report integrity fix for confidence gating. No record changed."
+    },
+    {
+      "sha": "77357d9",
+      "stage": "P0",
+      "type": "ANALYSIS",
+      "what_it_is": "Closes residual derived-report integrity gaps. No record changed."
+    },
+    {
+      "sha": "ec04cb6",
+      "stage": "P1",
+      "type": "ANALYSIS",
+      "what_it_is": "Audits official claims against the frozen evidence. No API call."
+    },
+    {
+      "sha": "3125281",
+      "stage": "P1",
+      "type": "DOCUMENTATION",
+      "what_it_is": "Repairs the P1 audit's own HEAD provenance. Findings not edited."
+    },
+    {
+      "sha": "373e259",
+      "stage": "P2",
+      "type": "ANALYSIS",
+      "what_it_is": "Novelty triage; seven candidates retired, two on prior art. No API call."
+    },
+    {
+      "sha": "db7d06f",
+      "stage": "P3",
+      "type": "PREREGISTRATION",
+      "what_it_is": "db7d06f = preregistration + original analyzer, frozen before the first request."
+    },
+    {
+      "sha": "c0fc9cc",
+      "stage": "P3",
+      "type": "MEASUREMENT",
+      "what_it_is": "c0fc9cc = immutable measurements + discovered defect disclosure."
+    },
+    {
+      "sha": "bdcb637",
+      "stage": "P3",
+      "type": "ANALYSIS",
+      "what_it_is": "bdcb637 = post-run analyzer repair, no new measurement."
+    },
+    {
+      "sha": "cc778be",
+      "stage": "P3.5",
+      "type": "DOCUMENTATION",
+      "what_it_is": "Reorganises public documentation."
+    },
+    {
+      "sha": "c3f468d",
+      "stage": "P3.5",
+      "type": "DOCUMENTATION",
+      "what_it_is": "Adds bilingual project documentation."
+    },
+    {
+      "sha": "56eb159",
+      "stage": "P3.5",
+      "type": "ENGINEERING",
+      "what_it_is": "Adds offline CI and repository quality gates."
+    },
+    {
+      "sha": "251c883",
+      "stage": "P3.5",
+      "type": "ENGINEERING",
+      "what_it_is": "Hardens repository for public release."
+    },
+    {
+      "sha": "ad1dff4",
+      "stage": "P3.6",
+      "type": "DOCUMENTATION",
+      "what_it_is": "MIT license, opaque-identifier decision, experiment retirement."
+    },
+    {
+      "sha": "44fbbb1",
+      "stage": "P3.6",
+      "type": "DOCUMENTATION",
+      "what_it_is": "States the verified test count, not the pre-commit one."
+    }
+  ],
+  "known_errata": [
+    {
+      "artifact": "docs/audits/P1_OFFICIAL_CLAIMS_LOCAL_EVIDENCE.md",
+      "corrected_value": "45 of 45 Noul answers carry no confidence field",
+      "correction_is_historical": true,
+      "id": "ERR-001",
+      "incorrect_text": "42 of 42 Noul answers carry no confidence field",
+      "row": "TS-JEV-SEM-004",
+      "status": "DOCUMENTED",
+      "verdict_impact": "none"
+    },
+    {
+      "artifact": "src/jev_lab/p3_boundary_locus.py at c0fc9cc",
+      "current_head_is_affected": false,
+      "defect": "GO-1 and GO-2 were evaluated as a single conjunction, so the pair (GO-1 PASS, GO-2 FAIL) was unrepresentable.",
+      "id": "ERR-002",
+      "measurement_changed": false,
+      "resolved_in": "bdcb637",
+      "status": "RESOLVED",
+      "threshold_or_rule_changed": false,
+      "verdict_changed": false,
+      "verdict_impact": "none"
+    }
+  ],
+  "model_scope": {
+    "model_requested_by_default": "jev-latest",
+    "model_resolved_in_frozen_logs": "jev-1.13.0",
+    "note": "A requested alias can move; only the response says which model answered. Both fields are recorded on every record, and every statement in this release is scoped to the resolved model observed here."
+  },
+  "official_claim_snapshot": {
+    "accessed": "2026-09-22",
+    "jev_version_where_stated": "jev-1.13 / jev-1.13.0",
+    "note": "'The official docs as audited on 2026-09-22' and 'the official docs today' are different objects. This release is audited against the dated snapshot only, and does not track later changes to TypeSafe's documentation.",
+    "registered_ids": 35,
+    "registry_path": "docs/sources/TYPESAFE_OFFICIAL_SOURCES.md",
+    "registry_sha256": "f823fc9f0d2f3464544daf43c264506785962ca0de9e8236b6c572a2775e47f3",
+    "statement": "TypeSafe official claim snapshot: as observed during P1 audit / accessed: 2026-09-22.",
+    "tier1_documents": 28
+  },
+  "planned_git_tag": "v0.1.0",
+  "project": {
+    "description": "A measurement bench for TypeSafe's Jev model and the audit trail of what it measured. The product is the trustworthiness of the evidence, not a discovery.",
+    "license": "MIT",
+    "license_file": "LICENSE",
+    "name": "jev-test",
+    "python_requires": ">=3.13",
+    "repository": "https://github.com/Charlie-Wang-03/jev-test"
+  },
+  "public_documentation": {
+    "CLAUDE.md": {
+      "class": "public_documentation",
+      "sha256": "0eafc769192a205476bb2fc9d309b2ec086351fe5bb108dc1c2e42bbc7b92b4c"
+    },
+    "CONTRIBUTING.md": {
+      "class": "public_documentation",
+      "sha256": "f3092c8ba9d0e4d8a23899379d3055f397ce8c1b356ef9fe384dd3d785025401"
+    },
+    "FREEZE.md": {
+      "class": "public_documentation",
+      "sha256": "4f45ea061362b97ebabe0b182b118b69b3284f65c1aa1042c27bfcea0a447dcb"
+    },
+    "README.md": {
+      "class": "public_documentation",
+      "sha256": "f04a981f8fd6276392558b7a1c24e5c354ee5eb0c4db6e0ac2df424bf25c0b18"
+    },
+    "README.zh-CN.md": {
+      "class": "public_documentation",
+      "sha256": "8515d0ee3880ecdaf7b416ff6af140fc683a5b0cb65968bc17a34bdf5a106b0c"
+    },
+    "SECURITY.md": {
+      "class": "public_documentation",
+      "sha256": "09cccd5f879d5412357ebc63e5c2ac6173597249dec0eb22f7875d227f82ef8c"
+    },
+    "docs/OPEN_SOURCE_LICENSE_DECISION.md": {
+      "class": "public_documentation",
+      "sha256": "ebe5481ce5915038c94f6a56c3a4b6ce571c03ca7c62234e639db4691fc51626"
+    },
+    "docs/README.md": {
+      "class": "public_documentation",
+      "sha256": "42c00389bc6786686130e5d2a02539dfeed4f3eecf42358b7887d4d5c4c5c617"
+    },
+    "docs/architecture/architecture.md": {
+      "class": "public_documentation",
+      "sha256": "5efb39895b94a4458991849a689bcd7b6a8e6dd64fbf20bb718abc9a754e0b0c"
+    },
+    "docs/architecture/architecture.zh-CN.md": {
+      "class": "public_documentation",
+      "sha256": "87499c53b8332d912a8f12ee6ab1378d204b948da022aa6444867d47e2ed375f"
+    },
+    "docs/findings/findings.zh-CN.md": {
+      "class": "public_documentation",
+      "sha256": "f0d1cf02c87b61858a8892075fe020cfa8e8b81a4cf85e4b038c42a47cffd3c5"
+    },
+    "docs/guides/credentials.md": {
+      "class": "public_documentation",
+      "sha256": "49bdcf95a893c35cc03d98c677ef7642155f302fb1ee08b8ddecc5728b3ab146"
+    },
+    "docs/guides/credentials.zh-CN.md": {
+      "class": "public_documentation",
+      "sha256": "29f1007403fefd46933d43c464c4344fc9f0b02b4a6f08f0d1d1ec1d4ae488a2"
+    },
+    "docs/guides/reproducibility.md": {
+      "class": "public_documentation",
+      "sha256": "bad71a4f889b6c3b07e07e67830405efdf85f2706d313700ac21572f9c3a84eb"
+    },
+    "docs/guides/reproducibility.zh-CN.md": {
+      "class": "public_documentation",
+      "sha256": "e9718f1e422683f975d06f89de94ffdb665cedf7b536f3d0edc396645bd9ffdc"
+    },
+    "docs/methodology/evaluation.md": {
+      "class": "public_documentation",
+      "sha256": "93914ab974420bb5b737d6cb5042319d13e5282b14c279c989fbd9f375007683"
+    },
+    "docs/methodology/evaluation.zh-CN.md": {
+      "class": "public_documentation",
+      "sha256": "21058672fe49399c00ed8aa3bbcd765e6b722dc89f23e8d3ecac5f5e9d957461"
+    }
+  },
+  "release_metadata": {
+    "CITATION.cff": {
+      "sha256": "38f91c4af1cb3a9b14c04c29d11f2c9ad33ec8a1a335446af13bf745c3bde60b"
+    },
+    "LICENSE": {
+      "sha256": "0d849b00def2ab988c51f799f88c950becfeee75292c187db6f55386d43104eb"
+    },
+    "pyproject.toml": {
+      "sha256": "8917855a3b24fca930e14ec68adb38853a41b85e28f017afcf9a6aeb323b0657"
+    }
+  },
+  "release_version": "0.1.0",
+  "schema_version": 1,
+  "scientific_state": {
+    "freeze_document_states_state": true,
+    "inherited_verdicts": [
+      "P1_OFFICIAL_LOCAL_AUDIT_PASS",
+      "P2_TRIAGE_PASS",
+      "CORE_CAPABILITY_EXPLORATION_CLOSED"
+    ],
+    "non_claims": [
+      "NO_GENERAL_ACCURACY_CLAIM",
+      "NO_CALIBRATION_VALIDATION",
+      "NO_MODEL_LATENCY_BENCHMARK",
+      "NO_UNIVERSAL_BATCHING_RATIO",
+      "NO_DETERMINISM_VERDICT",
+      "NO_BROAD_HALLUCINATION_BENCHMARK",
+      "NO_PRODUCTION_SAFETY_CERTIFICATION",
+      "NO_GENERAL_INSTRUCTION_VS_CRITERIA_FIELD_PREFERENCE",
+      "NO_NAS_CLAIM"
+    ],
+    "p3_verdict": "P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION",
+    "primary_null": "The original instruction-precision effect could not be attributed to `instructions` or `criteria` alone under the preregistered one-payload 2x2 design.",
+    "state": "NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET",
+    "state_documented_in": "docs/EVIDENCE_PROVENANCE.md"
+  }
+}

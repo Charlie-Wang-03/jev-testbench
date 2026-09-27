@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you cite this release, cite the tag v0.1.0. It is a frozen evidence set; `main` will move."
+title: "jev-test: local evaluation bench and evidence freeze for TypeSafe Jev 1.13.0"
+abstract: >-
+  A measurement bench for TypeSafe's Jev model and the audit trail of what it measured:
+  two frozen canonical logs (42 core records, 12 P3 records), a dated official-claims
+  audit, a novelty triage, and a preregistered two-field experiment that returned a null.
+  The scientific state at this release is NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET; the
+  primary P3 verdict is P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION. No general accuracy,
+  calibration, latency, batching-ratio, determinism or production-safety claim is made.
+type: software
+authors:
+  - family-names: Wang
+    given-names: Yichuan
+    email: 133667618+Charlie-Wang-03@users.noreply.github.com
+version: 0.1.0
+date-released: 2026-09-27
+license: MIT
+repository-code: "https://github.com/Charlie-Wang-03/jev-test"
+url: "https://github.com/Charlie-Wang-03/jev-test/tree/v0.1.0"
+keywords:
+  - typesafe
+  - jev
+  - llm-evaluation
+  - reproducibility
+  - preregistration
+  - negative-results
+  - evidence-provenance

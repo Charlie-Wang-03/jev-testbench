@@ -42,12 +42,14 @@ jobs:
       # Nothing depends on it: conftest.py redirects the secret-file loader and blocks sockets.
       TYPESAFE_API_KEY: ""
     steps:
-      # Tags, not commit SHAs. A tag is mutable, so this is the weaker of the two pinning styles;
-      # pinning the SHAs would be the hardening step, and it is worth doing once these versions
-      # are settled.
-      - uses: actions/checkout@v6
+      # Pinned to commit SHAs, with the human-readable version in the comment. A tag is mutable: the
+      # tag that resolved to this code today can be moved to different code tomorrow, and whoever
+      # moves it would be running in this job. Both SHAs were read from the actions' own
+      # repositories -- `actions/checkout` v6 is a lightweight tag on a commit, `astral-sh/setup-uv`
+      # v6 is an annotated tag, and the SHA below is the commit it dereferences to.
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           enable-cache: true
 
@@ -74,3 +76,15 @@ jobs:
       # change that silently altered the published report would surface as a diff in this step.
       - name: The committed derived report must match a fresh regeneration
         run: git diff --exit-code -- results/JEV_LOCAL_EVALUATION_FINAL.md
+
+      # The release freeze, checked rather than trusted. This recomputes the SHA-256 of every file
+      # `docs/evidence/v0.1.0/evidence-manifest.json` lists, re-counts both canonical logs, and
+      # re-checks the registry, licence, version and P3-verdict invariants -- offline, with no key.
+      #
+      # What this step is for: `v0.1.0` is a published, citable release whose whole value is that its
+      # numbers do not move. Without this gate, editing a canonical log, an audit or the
+      # preregistration on `main` would break no build and invalidate every citation silently. With
+      # it, such an edit fails here until a *new versioned* freeze is created for it. The fix for a
+      # red run is never to edit `docs/evidence/v0.1.0/` to match.
+      - name: Verify the frozen evidence manifest
+        run: uv run --no-sync python -m jev_lab.evidence_freeze verify

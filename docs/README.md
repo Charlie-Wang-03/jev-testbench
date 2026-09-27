@@ -11,6 +11,10 @@ drift apart.
 > **License: MIT.** See [`LICENSE`](../LICENSE) and the [license
 > decision](OPEN_SOURCE_LICENSE_DECISION.md). One license covers the code, the two canonical logs,
 > and the derived reports.
+>
+> **Released evidence: [`v0.1.0`](evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md).** If you are citing
+> this repository, cite the tag, not `main`. The frozen set, its manifest and the rules for what may
+> be said about it are under [`docs/evidence/`](evidence/README.md).
 
 ---
 
