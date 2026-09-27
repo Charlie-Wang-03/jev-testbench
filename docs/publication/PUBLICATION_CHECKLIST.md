@@ -11,7 +11,8 @@ Nothing in the third group is pre-approved by anything in the first.
 
 ## 1. Already passed
 
-Established by running things, not by asserting them. Each is re-runnable offline, with no API key.
+Established by running things, not by asserting them. None of it needs a TypeSafe API key or makes a
+Jev inference call; installing dependencies is the only step that needs network access.
 
 | Gate | Evidence |
 |---|---|
@@ -25,8 +26,8 @@ Established by running things, not by asserting them. Each is re-runnable offlin
 | **Tag verification** | `verify v0.1.0` reads the tag tree, not the working tree, so `main` may move while the release stays fixed. |
 | **Offline test suite** | Green on Windows (development) and on Linux (CI). |
 
-**Also already true, and worth stating:** no API call has been made since the freeze. The P5-A, P5-B
-and P5-C stages produced presentation and infrastructure only.
+**Also already true, and worth stating:** no API call has been made since the freeze. The P5-A, P5-B,
+P5-C and P5-C1 stages produced presentation and infrastructure only.
 
 ---
 
@@ -89,7 +90,6 @@ None of these has been taken. Each is a decision, not a task that was missed.
 - [ ] **Send the TypeSafe V1 documentation feedback?** — Draft in
       [`TYPESAFE_FEEDBACK_DRAFT.md`](TYPESAFE_FEEDBACK_DRAFT.md). Every item is marked
       `NEEDS_FRESH_RECHECK_BEFORE_SEND` and nothing has been sent.
-- [ ] **Decide about P4.** It is not authorized and not started.
 
 ---
 
@@ -102,9 +102,6 @@ none of it should be treated as gating.**
 - [ ] GitHub Pages for the blog, if option B or C in the venue comparison is chosen.
 - [ ] A DOI via Zenodo, if the release should be citable by DOI rather than by tag.
 - [ ] `CITATION.cff` review — it exists and points at the tag; a DOI would change it.
-- [ ] A Chinese-language README for the repository as a whole. The repository's default README is
-      English and the docs index is English-first, which is a reasonable default for a code
-      repository; this would be a policy change, not a fix.
 - [ ] Renaming the repository from `jev-test`. It reads as a scratch name. A rename is disruptive
       (redirects, citation links, the freeze's own URLs) and is the owner's call; P5-C does not
       rename it and suggests no name.

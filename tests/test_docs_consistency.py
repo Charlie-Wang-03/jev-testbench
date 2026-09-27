@@ -367,3 +367,111 @@ class TestTheRegistryHasNoUnrunExperiment:
         from jev_lab.experiments import EXPERIMENTS
 
         assert not [name for name in self.RETIRED if name in EXPERIMENTS]
+
+
+class TestThePublicationPackStaysConsistent:
+    """The pack the owner decides against must not contradict the release it describes.
+
+    Everything in `docs/publication/` is decision support: a release body, a venue comparison, a
+    metadata proposal, a feedback draft and a checklist. It is read *before* the decision, not after
+    -- so a stale line here is read as fact at exactly the moment it matters.
+
+    Two failure modes are worth a mechanical guard, and the link checker catches neither:
+
+    * **A claim that outruns the freeze.** The state string is
+      `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET` and the public-novelty check is
+      `PUBLIC_NOVELTY_UNRESOLVED`. Prose saying "no discovery" settles a question the evidence
+      deliberately leaves open, and it is a *stronger* statement than the string it paraphrases.
+      This is the overclaim that is easy to miss, because it reads as modesty.
+    * **A task that is already done.** A checklist item asking the owner to decide something that
+      was resolved before the pack existed spends their attention on a non-decision, and makes the
+      items around it less trustworthy.
+
+    The refusal forms stay legal: the release draft quotes "nobody has done this" in the sentence
+    that *declines* the claim, which is the opposite of making it. Only the assertive forms are
+    forbidden, so this checks for `nobody has found`.
+    """
+
+    # Wording that states more than the frozen release supports, in the negative direction.
+    OVERCLAIMS = [
+        "no discovery",
+        "nothing new exists",
+        "there are no discoveries",
+        "nobody has found",
+    ]
+
+    # Work finished before this pack existed, so it is not an open owner decision.
+    RESOLVED_TASKS = [
+        "Decide about P4",
+        "Chinese-language README",
+    ]
+
+    # Every document here is able to say what it is. One of these must be present.
+    UNPUBLISHED_MARKERS = [
+        "not published",
+        "nothing has been published",
+        "not sent",
+        "nothing has been sent",
+        "proposal only",
+        "decision support only",
+    ]
+
+    def _pack_files(self) -> list[Path]:
+        return sorted((REPO_ROOT / "docs/publication").glob("*.md"))
+
+    def test_the_pack_is_the_five_documents_the_index_lists(self):
+        """A sixth file would need its own status line and its own index row."""
+        assert {path.name for path in self._pack_files()} == {
+            "PUBLICATION_CHECKLIST.md",
+            "GITHUB_RELEASE_DRAFT.md",
+            "BLOG_PUBLICATION_OPTIONS.md",
+            "REPOSITORY_METADATA_PROPOSAL.md",
+            "TYPESAFE_FEEDBACK_DRAFT.md",
+        }
+
+    @pytest.mark.parametrize("phrase", OVERCLAIMS)
+    def test_no_pack_document_outruns_the_frozen_novelty_state(self, phrase):
+        for path in self._pack_files():
+            assert phrase not in read(f"docs/publication/{path.name}"), (
+                f"{path.name} contains {phrase!r}. The freeze records that no *strong Jev-specific "
+                "novel* finding survived scrutiny, and the public-novelty check is UNRESOLVED. "
+                "Neither licenses a statement that nothing exists."
+            )
+
+    def test_the_release_draft_carries_the_states_that_scope_it(self):
+        """The guard above forbids the overclaim; this requires the honest version be present."""
+        text = read("docs/publication/GITHUB_RELEASE_DRAFT.md")
+        assert "NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET" in text
+        assert "PUBLIC_NOVELTY_UNRESOLVED" in text
+        assert "P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION" in text
+
+    @pytest.mark.parametrize("task", RESOLVED_TASKS)
+    def test_no_pack_document_asks_for_a_decision_already_taken(self, task):
+        for path in self._pack_files():
+            assert task not in read(f"docs/publication/{path.name}"), (
+                f"{path.name} still carries {task!r} as an open item. P4 finished with the v0.1.0 "
+                "freeze, and README.zh-CN.md exists and is linked from both README switchers, so "
+                "neither is a decision left to make."
+            )
+
+    def test_every_pack_document_says_in_its_status_line_that_it_is_unpublished(self):
+        """'Draft' that reads as 'live' is the failure that matters in this directory.
+
+        The check is on the status line rather than on the whole file. A document can say "nothing
+        has been sent" in a closing paragraph while its header reads as though it went out, and the
+        header is the part a skimming reader takes away -- so a whole-file scan would pass on a
+        document whose first line claims it is live.
+        """
+        for path in self._pack_files():
+            status = next(
+                (
+                    line
+                    for line in read(f"docs/publication/{path.name}").splitlines()
+                    if line.startswith("**Status:")
+                ),
+                None,
+            )
+            assert status is not None, f"{path.name} has no `**Status:` line"
+            assert any(marker in status.lower() for marker in self.UNPUBLISHED_MARKERS), (
+                f"{path.name} has a status line that does not say it is unpublished: {status!r}"
+            )

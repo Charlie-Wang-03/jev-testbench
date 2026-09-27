@@ -31,11 +31,14 @@ not to `main`. The release is the tree that tag points at.
 > NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET
 > ```
 >
-> This release contains no discovery about Jev. Across 42 core records and the official behaviours
-> audited, nothing here is both new relative to TypeSafe's published material and supported by this
-> repository's own data. Every large local effect either restates a documented behaviour or is an
-> artifact of this repository's own Python-side policy. Seven triage candidates were retired,
-> including the two with the largest local effect sizes — killed on prior art, not on weak data.
+> None of the candidate findings in this release survived scrutiny as a strong Jev-specific novel
+> finding. Across 42 core records and the official behaviours audited, nothing here is both new
+> relative to TypeSafe's published material and supported by this repository's own data. The
+> public-novelty check behind that question came back `PUBLIC_NOVELTY_UNRESOLVED` — recorded as
+> unresolved, not as "nobody has done this". Every large local effect either restates a documented
+> behaviour or is an artifact of this repository's own Python-side policy. Seven triage candidates
+> were retired, including the two with the largest local effect sizes — killed on prior art, not on
+> weak data.
 >
 > **The one experiment that was run**
 >
@@ -74,10 +77,13 @@ not to `main`. The release is the tree that tag points at.
 > uv run python -m jev_lab.evidence_freeze verify v0.1.0
 > ```
 >
-> Offline, no key, no network. The verifier recomputes every SHA-256 in the manifest, re-counts both
-> logs, and re-checks the registry, license, version and P3-verdict invariants.
+> The verifier requires no TypeSafe API key and makes no Jev inference call, and the test suite runs
+> without either once dependencies are installed. Initial dependency installation (`git clone`,
+> `uv sync --locked`) may require network access; that is the only step here that touches the network.
+> The verifier recomputes every SHA-256 in the manifest, re-counts both logs, and re-checks the
+> registry, license, version and P3-verdict invariants.
 >
-> **License:** MIT, covering the code, both canonical logs and the derived reports.
+> **License:** MIT — see [`LICENSE`](https://github.com/Charlie-Wang-03/jev-test/blob/v0.1.0/LICENSE).
 >
 > Cite the tag, not `main`. Citation metadata is in `CITATION.cff`.
 
@@ -91,7 +97,7 @@ that a release announcement would normally reach for. Each was left out on purpo
 
 | Not said | Why |
 |---|---|
-| "major breakthrough", "novel findings" | There are none. The state string says so. |
+| "major breakthrough", "novel findings" | None of the candidates survived as a strong Jev-specific novel finding; the state string says so. |
 | "production ready" | Every handler is inert; `ACTUAL_HANDLER_EXECUTION_UNTESTED`. |
 | "benchmark", "leaderboard" | There is no ground truth anywhere in this bench. |
 | "13× cheaper", any batching multiplier | The local ratio belongs to one payload and is not commensurable with the vendor's published figures. |
