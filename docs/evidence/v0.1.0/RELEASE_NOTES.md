@@ -140,10 +140,16 @@ The verifier recomputes every SHA-256 in the freeze manifest, re-counts both log
 registry, license, version and P3-verdict invariants. It exits non-zero on any mismatch, which is
 also how CI prevents a later change to the logs or the audits from silently invalidating this freeze.
 
-**The offline suite contains 1,086 tests at this revision**, all passing, with sockets blocked
-outright. That number is recorded here and nowhere else on purpose: it belongs to one immutable
-revision, and a test count carried in a README is a number that goes stale the next time someone
-adds a test. Everything else in this repository says "the full offline suite" and means it.
+**The offline suite contains 1,091 tests at this revision**, all passing, with sockets blocked
+outright, measured on the committed tree. That number is recorded here and nowhere else on purpose:
+it belongs to one immutable revision, and a test count carried in a README is a number that goes
+stale the next time someone adds a test. Everything else in this repository says "the full offline
+suite" and means it.
+
+The qualifier is not decoration. `test_docs_consistency` parametrizes its link check over
+`git ls-files "*.md"`, so a markdown file that is written but not yet tracked contributes one fewer
+test. Measured before this release's own documents were staged, the suite collected 1,086; the same
+tree, measured after staging, collects 1,091. Five documents, five tests.
 
 **Citation metadata:** [`CITATION.cff`](../../../CITATION.cff). Cite the tag, not `main`.
 

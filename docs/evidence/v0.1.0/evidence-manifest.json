@@ -91,7 +91,7 @@
     },
     "docs/evidence/v0.1.0/RELEASE_NOTES.md": {
       "class": "canonical_evidence",
-      "sha256": "122cddcb9876b0f1a3eed0a34890e1c196c4dddc66aa7bc8952448cb43a3ee56"
+      "sha256": "7cab41e724726058c5a3e9ba85e3b596e5e015bd1a8ef489ca09fe1ea6a98aff"
     },
     "docs/experiments/EXPERIMENT_REGISTRY.md": {
       "class": "canonical_evidence",
