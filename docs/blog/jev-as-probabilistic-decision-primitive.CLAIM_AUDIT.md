@@ -1,39 +1,46 @@
 # Claim audit — the technical blog
 
-**Audited document:** [`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
-(the Chinese text). It was rewritten as a narrative in P5-D, revised in P5-E (five human-review-confirmed
-factual repairs, a reduction in punchline density, and a new closing movement on AI involvement and
-cognitive debt), and corrected again in P5-E1 — nine narrowly-scoped editorial corrections, no structural
-change, followed by three one-line micro corrections and one further correction that closes the reading
-risk the third of those opened. **It then had a scope cleanup that removed two matters the project no
-longer covers** — the internal governance status at the top of the article, and the whole NAS topic. §1.5
-through §1.8 record what each pass changed and which rows it moved.
-**Second document, tracked but not re-audited:**
+**Audited documents — a bilingual pair, audited as a pair for the first time since revision 2.**
+[`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
+is the **source narrative**. It was rewritten as a narrative in P5-D, revised in P5-E (five
+human-review-confirmed factual repairs, a reduction in punchline density, and a new closing movement on AI
+involvement and cognitive debt), corrected again in P5-E1 — nine narrowly-scoped editorial corrections, no
+structural change — given three one-line micro corrections plus a fourth that closed the reading risk the
+third of those opened, given a scope cleanup that removed two matters the project no longer covers (the
+internal governance status at the top of the article, and the whole NAS topic), and finally closed as an
+exploratory narrative rather than an evaluation standard. **It was then approved by the owner and frozen.**
+It is byte-identical to its `f0ae65e` state and was not touched by this revision; §1.5 through §1.9 record
+what each pass changed and which rows it moved.
 [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md)
-(the English adaptation). **It is frozen and was not modified in P5-D, P5-E or P5-E1.** The P5-E1
-corrections were applied to the Chinese only, and the English blob is byte-identical to its P5-B state.
-Its column below records
-what revision 2 established about it and is carried forward unchanged.
+is the **English adaptation, written fresh from the approved Chinese in P5-F**. It is an adaptation rather
+than a translation, and it replaces the frozen P5-B file wholesale rather than patching it. Its column
+below is no longer revision 2's finding carried forward: every cell was re-established against the new
+text. The one row that could not be located in either document is retired, and §1.9 records it.
 **Standard:** [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md)
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
-**Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 9 — the narrative positioning closure. One sentence of the preregistration block is re-stated
-as a fact plus a counterfactual instead of as an impossibility, so the article describes its own practice
-rather than laying a rule on the reader. **No row is added, retired, moved or reclassified, and the totals
-are unchanged** at 71. Supersedes revision 8, which was the blog boundary cleanup — the first revision in
-which the totals table goes down, retiring C-62 and C-69 and narrowing C-65.
+**Audit date:** 2026-09-28 · **Auditor:** the author · **API calls made during the audit: 0.**
+**Revision:** 10 — the bilingual re-audit. The English was rewritten from the approved Chinese, its column
+was re-established section by section against the new text, and the parity checks that could not be run
+while the pair was out of step are real gates again — all three of them, and all three pass. **One row is
+retired:** C-68 described a sentence that had already left the Chinese in P5-E and that the English never
+carried, so it had no location left in either document to describe. §1.9 records it. Totals:
+**70 substantive claims — 45 `A` + 25 `B` + 0 `C`** — in both languages. Supersedes revision 9 (the
+narrative positioning closure, which moved no row) and revision 8 (the blog boundary cleanup, the first
+revision in which the totals table goes down).
 
-**What this file is.** Every substantive claim in the Chinese article **about Jev, about this bench's
+**What this file is.** Every substantive claim in **either article** **about Jev, about this bench's
 measurements, or about what TypeSafe has published**, classified against the contract's three classes —
 `A` (`SAFE_TO_STATE`), `B` (`SAFE_WITH_SCOPE`), `C` (`DO_NOT_STATE`) — with the evidence it rests on,
-where it sits in the article, and whether the scope that class requires is actually present.
+where it sits in each language, and whether the scope that class requires is actually present in both.
 
 **What it deliberately does not cover.** The article's process statements — who built this, who ran the
 calls, what cognitive debt is — are **outside this contract by construction**, and §5 records that
 separation rather than stretching the contract to reach them. They are audited in
 [`…PROCESS_ATTRIBUTION_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.zh-CN.md)
-against the owner's process declaration.
+for the Chinese and
+[`…PROCESS_ATTRIBUTION_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.en.md)
+for the English, both against the owner's process declaration.
 
 **How the numbers were checked.** Every figure was re-derived from `results/usage.jsonl` and
 `results/p3_boundary_locus/usage.jsonl`, not copied from the work order that commissioned the revision
@@ -81,6 +88,11 @@ expected rather than a defect.
 
 The publication index records the status in one line: *English adaptation pending re-alignment after
 **Chinese human editorial approval**.* `ENGLISH_REALIGNMENT: NOT_STARTED`.
+
+> **Superseded in revision 10.** The freeze described above ended when the English was rewritten from the
+> approved Chinese. The pair is symmetric again, the English column is no longer P5-B's, and the parity
+> gates are reported as results rather than as suspensions. This section is kept as the record of what
+> revision 5 changed.
 
 ### 1.5 What P5-E1 changed, and which rows it moved
 
@@ -188,6 +200,10 @@ article prose. The handoff also carries the one instruction that follows from de
 not be carried into the new English adaptation.** The frozen English still contains it (§15), and removing
 it there is a realignment task, not a cleanup task — the English file was not touched in this revision.
 
+> **Discharged in revision 10.** The realignment was carried out, the NAS material was not carried into the
+> new English adaptation, and the handoff now records `ENGLISH_REALIGNMENT = COMPLETE` / `PARITY = PASS`.
+> This section is kept as the record of what revision 8 removed and why.
+
 ### 1.8 The narrative positioning closure: one sentence, and why no row moves
 
 **Exactly one sentence of the body changed in this pass.** The preregistration block closed on an
@@ -220,45 +236,89 @@ C-69 — are still absent from §2, and the `C-62`/`C-69` gaps in the ID sequenc
 The removal was a scope decision, and a later pass that edits one sentence for tone is not a reason to revisit
 it. The same goes for the header governance note: it stays out of the prose.
 
+### 1.9 The bilingual re-audit: a fresh English text, and one row that had no location left
+
+**What this revision is.** P5-F replaced the English file with an adaptation written from the approved
+Chinese — not a patched P5-B, and not a translation. The English column therefore could not be carried
+forward: every row was re-located in the new English by reading it, and every scope cell was re-decided
+there rather than inherited. §2's column key says what the cells mean.
+
+**The one row that failed the check, and how it failed.** C-68 read *the project reads as training in
+model evaluation and agent engineering rather than as a model benchmark, and most of the learning was not
+on Jev's side*. Its Chinese column has said 结尾 since the row was entered. **That statement is not in the
+Chinese article.** It was in the P5-D text (`5d37f15`): 说实话，这个项目对我更像一次 model evaluation 和
+Agent engineering 的训练，而不是一次 model benchmark。我学到的大部分东西不在 Jev 那一侧。 P5-E removed it
+as part of the cull of psychological and biographical assertions, and the row was carried forward through
+revisions 5 to 9 without being re-checked against the article — which is the failure mode this file exists
+to prevent, one layer in. The frozen English did carry its own form of the same statement, as a closing
+italic note after its appendix; the new English does not carry it, because the approved Chinese it was
+adapted from does not.
+
+**Why retirement rather than restoration.** Two reasons, and the second decides it. The rows in this file
+describe claims *in the articles*, and a row with no location in either document is not a claim this audit
+can classify — the scope column has nothing to point at. And restoring the sentence to the English would
+mean writing a claim into the adaptation that the approved Chinese does not contain. The source narrative
+is frozen and the adaptation's job is to carry it, not to add to it. **This is not a claim defect and not a
+scope decision:** the sentence was class `A`, nothing about it was unsafe, it left the Chinese in P5-E as
+an editorial deletion, and neither article now argues for it or against it.
+
+**C-68 is removed, not renumbered.** `C-62`, `C-68` and `C-69` are absent from §2, and the three gaps in
+the ID sequence are the record of what was taken out. Every other ID still means what it meant in
+revision 2.
+
+**What the retirement does to the totals.** 71 → **70**, and the class that falls is `A`: **45 `A` +
+25 `B` + 0 `C`**. Nothing was reclassified, nothing was added, and no verdict flipped. `DO_NOT_STATE_ZH`
+was already 0 and stays 0.
+
+**What it does not do.** It does not reopen any English cell. C-68 was absent from the English in both its
+old and new forms, so the retirement changes a Chinese-column row into a gap and leaves the English column
+untouched.
+
+**The check the other 70 rows passed.** Each row was located in the new English, and each class-`B` row's
+scope was checked in the English sentence itself rather than assumed from the Chinese. **No row is
+`MISSING` in either language**, and the three gates in §4 are the mechanical form of that check.
+
 ---
 
 ## 2. The audit
 
 **Column key.** *ZH* gives the location in the Chinese article, by named anchor, since it has no numbered
-sections. *EN* gives the section of the frozen English adaptation in that document's own numbering, or `—`
-where the statement is not in it. *Scope* is `yes` (the class-B scope is present in the same or immediately
-adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the claim would be a defect).
+sections. *EN* gives the section of the English adaptation, which **is** numbered — `intro` and `appendix`
+are its unnumbered first and last sections. Every row now carries a populated English cell; the dash is
+retired along with C-68, the only row that ever needed it. *Scope* is `yes` (the class-`B` scope is present
+in the same or immediately adjacent sentence, in that language), `n/a` (the class does not require one), or
+`MISSING` (the claim would be a defect in that language).
 
 | Claim ID | Semantic claim | Contract class | Evidence | Chinese | English | Scope in ZH | Scope in EN | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| C-01 | 54 API calls in total | A — the release | 42 core + 12 P3 records in the two frozen logs | 开头, 测量台 | intro, §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-03 | **The release reached `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`** | **B** — anything about novelty | Freeze §5.3; `BLOG_CLAIM_CONTRACT.md` novelty rule | 开头, 结尾 | intro, §16 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-04 | A Jev call is `state + typed questions → typed answers`; all questions see the same state and are evaluated independently | A — official, attributed | `TS-DOC-STATE` | 背景 | §2 | yes | yes | `SAFE_TO_STATE` |
-| C-05 | `Choice` returns a label plus a distribution over options; `choice` is the argmax; **the API's displayed values are quantised, so two-decimal sums need not equal exactly 1** | **B** — official semantics plus a display-precision caveat that is load-bearing | `TS-DOC-CHOICE`; recomputed during this audit: 1 of 74 Choice answers sums to `0.99` | 背景 | §2 | yes | n/a | `SAFE_WITH_SCOPE` |
-| C-06 | `Score` returns a value plus `confidence`, defined as the probability-weighted mean of the levels | A — official | `TS-DOC-SCORE` | 背景 | §2 | yes | yes | `SAFE_TO_STATE` |
-| C-07 | `Noul` is a single probability with no separate `confidence`; **45 of 45** locally | B — typed output semantics; the 45/45 count needs the erratum | Log: `noul` carrying `confidence`: **0**. `ERR-001` | 背景, 勘误 | §2, §11 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-08 | One `01_primitives` answer had winning probability 0.45 and confidence 0.26 | A — a named single record | Log: `01_primitives`/`department`, `choice: other`, `0.45` / `0.26` | 背景 | §2 | n/a | n/a | `SAFE_TO_STATE` |
-| C-09 | Typed output solves the schema problem, not the semantic one | A — non-claim | `NO_BROAD_HALLUCINATION_BENCHMARK`, `NO_GENERAL_ACCURACY_CLAIM` | 背景 | §2 | n/a | n/a | `SAFE_TO_STATE` |
-| C-10 | The vendor's known-limitations page lists literal reading, weak numerics, date comparison, indirection, large state, and puts control flow in code | A — official, attributed | `TS-DOC-JAG`, `TS-DOC-BUILD` | 背景 | §2 | yes | yes | `SAFE_TO_STATE` |
-| C-11 | Vendor figures are claims about *their* workload; **only a record written by a real call into a canonical log** is a local measurement; separating the evidence layer is what keeps a convenient story from looking reasonable | A — repository practice | Freeze §7, no vendor-claim adjudication | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-12 | The two logs' SHA-256 are `38e67630…` / `17f36f75…` and never changed | A — canonical log identity | Freeze §3; re-hashed during this audit | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-13 | 42 records requested `jev-latest` and resolved `jev-1.13.0` | A — provenance | Log: `model_resolved = jev-1.13.0` on 42/42 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-14 | CI regenerates derived artifacts and fails on any difference | A — engineering | `.github/workflows/ci.yml`; freeze §5.2 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-15 | The 54 calls cost ≈ **$0.001** by local estimate; **cost is derived from token usage and the price table and is not a bill** | B — cost figures | Sum of `estimated_cost_usd` over both logs = `0.001084566`; `pricing.py` | 测量台 | §3 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-16 | 10 registered experiments, all executed, 42 core records | A — registry | Freeze §4; `EXPERIMENT_REGISTRY.md` | 批处理 | §4 | n/a | n/a | `SAFE_TO_STATE` |
-| C-17 | `04_confidence` has 2 cases; `12_function_routing` makes 4 calls | A — registry | Registry tables | 路由, 三条经验 | §4 | yes | yes | `SAFE_TO_STATE` |
-| C-18 | None of the 10 left a conclusion both new relative to TypeSafe's public material and supported by the data | **B** — novelty, scoped | P2 §6; freeze §5.3 | 四个候选 | §4 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-19 | Batching: 816 vs **3,480** input tokens; **4.2647×**; **76.55%** saved | B — batching ratio | Log: batched `[408, 408]`; separate sum `3480`; ratio `4.2647` | 批处理 | §5 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-20 | 10/10 selected values identical, largest absolute difference 0.0 | B — same row | Log: the five values repeat across both cycles and both arms | 批处理 | §5 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-21 | The local 4.26× must not be compared with the vendor's 12.2× | A — contract rule | `BLOG_CLAIM_CONTRACT.md` class B; P1 audit | 批处理 | §5 | yes | yes | `SAFE_TO_STATE` |
-| C-22 | Public third-party measurements varied batch size and published an accuracy curve | B — third-party, cited as third-party | P2 §4.1 (D), P2 §7 `BLOG_CORE` | 批处理 | §5 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-23 | 13b: label unchanged 5/5; top-2 margin moved ≤ 0.07; `Score` 1.58–1.63; `confidence` 0.24–0.30; one exact tie | B — local measurement + a novelty claim that may only be scoped | Log: margins `0.07, 0.06, 0.02, 0.03, 0.00`; scores `1.58–1.63`; `department` confidences `0.24–0.30`; `ambiguous_5` `other 0.45 = billing 0.45` | 稳定标签 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-24 | Official cookbook reports label flips on 2 of 8 questions and per-label std dev (mean 0.0098, max 0.0515) | B — official, attributed | P2 §4.1 (A); the vendor cookbook | 稳定标签 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-25 | A public chaos test sent the identical request five times and got `0.03, 0.03, 0.03, 0.04, 0.04`, with jitter floors over ~1,490 calls | B — third-party, cited as third-party | P2 §4.8 | 稳定标签 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-26 | The 0.60 gate is this repository's own constant, **named in the article by its own label, `demonstration threshold`**, never calibrated; the verdict is the Python policy's, not the model's | B — our own policy | `experiments.py` `CONFIDENCE_GATE_THRESHOLD`; P2 §4.1 (C) | 0.61 门槛 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-27 | The ambiguous case returned 0.61 against a 0.74 vs 0.26 margin; the published k=3 expression reproduces 0.61 exactly | B — local measurement + derived | The `04` record; P2 §4.1 (C) | 0.61 门槛 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-28 | Two official pages use different `confidence` thresholds for the same worked example, and both say thresholds are domain-specific | A — official sources; a recorded divergence | Freeze §8; `TS-DOC-CONF` vs `TS-DOC-CONFROUTE` | 0.61 门槛 | §6 | yes | yes | `SAFE_TO_STATE` |
-| C-29 | Routing: 4/4 function matches, 4/4 argument matches, 4/4 suppressed, handler never entered | B — our architecture | The `12` records; P2 §4.1 (G) | 路由, 三条经验 | §6, §12.3 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-01 | 54 API calls in total | A — the release | 42 core + 12 P3 records in the two frozen logs | 开头, 测量台 | intro, §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-03 | **The release reached `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`** | **B** — anything about novelty | Freeze §5.3; `BLOG_CLAIM_CONTRACT.md` novelty rule | 开头, 结尾 | §15 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-04 | A Jev call is `state + typed questions → typed answers`; all questions see the same state and are evaluated independently | A — official, attributed | `TS-DOC-STATE` | 背景 | §1 | yes | yes | `SAFE_TO_STATE` |
+| C-05 | `Choice` returns a label plus a distribution over options; `choice` is the argmax; **the API's displayed values are quantised, so two-decimal sums need not equal exactly 1** | **B** — official semantics plus a display-precision caveat that is load-bearing | `TS-DOC-CHOICE`; recomputed during this audit: 1 of 74 Choice answers sums to `0.99` | 背景 | §1 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-06 | `Score` returns a value plus `confidence`, defined as the probability-weighted mean of the levels | A — official | `TS-DOC-SCORE` | 背景 | §1 | yes | yes | `SAFE_TO_STATE` |
+| C-07 | `Noul` is a single probability with no separate `confidence`; **45 of 45** locally | B — typed output semantics; the 45/45 count needs the erratum | Log: `noul` carrying `confidence`: **0**. `ERR-001` | 背景, 勘误 | §1, §11 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-08 | One `01_primitives` answer had winning probability 0.45 and confidence 0.26 | A — a named single record | Log: `01_primitives`/`department`, `choice: other`, `0.45` / `0.26` | 背景 | §1 | n/a | n/a | `SAFE_TO_STATE` |
+| C-09 | Typed output solves the schema problem, not the semantic one | A — non-claim | `NO_BROAD_HALLUCINATION_BENCHMARK`, `NO_GENERAL_ACCURACY_CLAIM` | 背景 | §1 | n/a | n/a | `SAFE_TO_STATE` |
+| C-10 | The vendor's known-limitations page lists literal reading, weak numerics, date comparison, indirection, large state, and puts control flow in code | A — official, attributed | `TS-DOC-JAG`, `TS-DOC-BUILD` | 背景 | §1 | yes | yes | `SAFE_TO_STATE` |
+| C-11 | Vendor figures are claims about *their* workload; **only a record written by a real call into a canonical log** is a local measurement; separating the evidence layer is what keeps a convenient story from looking reasonable | A — repository practice | Freeze §7, no vendor-claim adjudication | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-12 | The two logs' SHA-256 are `38e67630…` / `17f36f75…` and never changed | A — canonical log identity | Freeze §3; re-hashed during this audit | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-13 | 42 records requested `jev-latest` and resolved `jev-1.13.0` | A — provenance | Log: `model_resolved = jev-1.13.0` on 42/42 | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-14 | CI regenerates derived artifacts and fails on any difference | A — engineering | `.github/workflows/ci.yml`; freeze §5.2 | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-15 | The 54 calls cost ≈ **$0.001** by local estimate; **cost is derived from token usage and the price table and is not a bill** | B — cost figures | Sum of `estimated_cost_usd` over both logs = `0.001084566`; `pricing.py` | 测量台 | §2 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-16 | 10 registered experiments, all executed, 42 core records | A — registry | Freeze §4; `EXPERIMENT_REGISTRY.md` | 批处理 | §3 | n/a | n/a | `SAFE_TO_STATE` |
+| C-17 | `04_confidence` has 2 cases; `12_function_routing` makes 4 calls | A — registry | Registry tables | 路由, 三条经验 | §5, §6 | yes | yes | `SAFE_TO_STATE` |
+| C-18 | None of the 10 left a conclusion both new relative to TypeSafe's public material and supported by the data | **B** — novelty, scoped | P2 §6; freeze §5.3 | 四个候选 | §3–§6, §15 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-19 | Batching: 816 vs **3,480** input tokens; **4.2647×**; **76.55%** saved | B — batching ratio | Log: batched `[408, 408]`; separate sum `3480`; ratio `4.2647` | 批处理 | §3 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-20 | 10/10 selected values identical, largest absolute difference 0.0 | B — same row | Log: the five values repeat across both cycles and both arms | 批处理 | §3 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-21 | The local 4.26× must not be compared with the vendor's 12.2× | A — contract rule | `BLOG_CLAIM_CONTRACT.md` class B; P1 audit | 批处理 | §3 | yes | yes | `SAFE_TO_STATE` |
+| C-22 | Public third-party measurements varied batch size and published an accuracy curve | B — third-party, cited as third-party | P2 §4.1 (D), P2 §7 `BLOG_CORE` | 批处理 | §3 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-23 | 13b: label unchanged 5/5; top-2 margin moved ≤ 0.07; `Score` 1.58–1.63; `confidence` 0.24–0.30; one exact tie | B — local measurement + a novelty claim that may only be scoped | Log: margins `0.07, 0.06, 0.02, 0.03, 0.00`; scores `1.58–1.63`; `department` confidences `0.24–0.30`; `ambiguous_5` `other 0.45 = billing 0.45` | 稳定标签 | §4 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-24 | Official cookbook reports label flips on 2 of 8 questions and per-label std dev (mean 0.0098, max 0.0515) | B — official, attributed | P2 §4.1 (A); the vendor cookbook | 稳定标签 | §4 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-25 | A public chaos test sent the identical request five times and got `0.03, 0.03, 0.03, 0.04, 0.04`, with jitter floors over ~1,490 calls | B — third-party, cited as third-party | P2 §4.8 | 稳定标签 | §4 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-26 | The 0.60 gate is this repository's own constant, **named in the article by its own label, `demonstration threshold`**, never calibrated; the verdict is the Python policy's, not the model's | B — our own policy | `experiments.py` `CONFIDENCE_GATE_THRESHOLD`; P2 §4.1 (C) | 0.61 门槛 | §5 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-27 | The ambiguous case returned 0.61 against a 0.74 vs 0.26 margin; the published k=3 expression reproduces 0.61 exactly | B — local measurement + derived | The `04` record; P2 §4.1 (C) | 0.61 门槛 | §5 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-28 | Two official pages use different `confidence` thresholds for the same worked example, and both say thresholds are domain-specific | A — official sources; a recorded divergence | Freeze §8; `TS-DOC-CONF` vs `TS-DOC-CONFROUTE` | 0.61 门槛 | §5 | yes | yes | `SAFE_TO_STATE` |
+| C-29 | Routing: 4/4 function matches, 4/4 argument matches, 4/4 suppressed, handler never entered | B — our architecture | The `12` records; P2 §4.1 (G) | 路由, 三条经验 | §6, §12 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-30 | Route confidences 0.76 / 0.58 / 0.72 / 1.0 against a 0.8 floor; the 1.0 case withheld by `needs_human_review` 0.94 ≥ 0.5 | B — our own policy; thresholds are demonstration parameters | Log: the four `function` answers carry those confidences; `needs_human_review` = 0.94 | 路由 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-31 | `07`: an 82-byte byte-identical state, `Noul` 0.75 → 0.20, a 0.55 move | B — the `07` illustration | Log: `state_utf8_bytes = 82`; vague `0.75`, explicit `0.20` | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-32 | The official remedy for the literal-reading edge is given as a bundle and never decomposed | A — official | `TS-DOC-JAG`; P2 §4.3 | 07 | §7 | yes | yes | `SAFE_TO_STATE` |
@@ -279,42 +339,51 @@ adjacent sentence), `n/a` (the class does not require one), or `MISSING` (the cl
 | C-47 | The analyzer defect, its disclosure in the commit that recorded the measurement, its post-run repair, the deliberate preservation of the incorrect rendering in Git history, and the invariance of every measurement, threshold and verdict | A — engineering + provenance | `ERR-002`; P3 result, "Post-run analyzer correction provenance" | 分析器 | §11 | n/a | n/a | `SAFE_TO_STATE` |
 | C-48 | `ERR-001`: P1 states 42 of 42; the correct figure is 45 of 45; P1's text was not edited | B — the corrected count, which requires citing the erratum | Log recount; `ERRATA.md` | 勘误 | §11 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-49 | The 42 records carry 119 answers between them | A — canonical log | Log: 119 answers total | 勘误 | §11 | n/a | n/a | `SAFE_TO_STATE` |
-| C-50 | 42/42 responses were schema-valid; that is the weakest kind of type-safety evidence | A — non-claim | `findings.md` §1 | 三条经验 | §12.1 | yes | yes | `SAFE_TO_STATE` |
-| C-51 | In `06_composite_scoring`, one dimension scored 1.62 on a 0–3 rubric at confidence 0.24 and carried 97.4% of that state's composite risk | A — local measurement, one named case | Log: `evidence_quality` raw 1.62, confidence 0.24; recomputed share **97.41%** | 三条经验 | §12.2 | n/a | n/a | `SAFE_TO_STATE` |
-| C-52 | Official calibration is group-scoped; confidence "describes the model's answer, not a guarantee that the answer is correct" | A — official, attributed | `TS-DOC-SYS1`, `TS-DOC-CONF` | 三条经验 | §12.2 | yes | yes | `SAFE_TO_STATE` |
-| C-53 | This project neither validated nor falsified calibration, in either direction | A — non-claim | `NO_CALIBRATION_VALIDATION` | 三条经验 | §12.2 | n/a | n/a | `SAFE_TO_STATE` |
-| C-54 | Semantic routing ≠ execution authorization; 4/4 is a count not a rate; handlers are inert; `ACTUAL_HANDLER_EXECUTION_UNTESTED` | A — our architecture + non-claims | `findings.md` §2; `12` records | 三条经验 | §12.3 | yes | yes | `SAFE_TO_STATE` |
-| C-55 | Batch economics are workload-dependent; amortisation needs a shared state | A — scope restated | Freeze §5.1 | 批处理 | §12.4 | yes | yes | `SAFE_TO_STATE` |
-| C-57 | `retry_count` is permanently `null` and means "not reported"; `transport_attempt_count` licenses exactly one sentence | A — engineering limitation | Freeze §3.3; `findings.md` §2 | 三条经验 | §12.6 | yes | yes | `SAFE_TO_STATE` |
+| C-50 | 42/42 responses were schema-valid; that is the weakest kind of type-safety evidence | A — non-claim | `findings.md` §1 | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
+| C-51 | In `06_composite_scoring`, one dimension scored 1.62 on a 0–3 rubric at confidence 0.24 and carried 97.4% of that state's composite risk | A — local measurement, one named case | Log: `evidence_quality` raw 1.62, confidence 0.24; recomputed share **97.41%** | 三条经验 | §12 | n/a | n/a | `SAFE_TO_STATE` |
+| C-52 | Official calibration is group-scoped; confidence "describes the model's answer, not a guarantee that the answer is correct" | A — official, attributed | `TS-DOC-SYS1`, `TS-DOC-CONF` | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
+| C-53 | This project neither validated nor falsified calibration, in either direction | A — non-claim | `NO_CALIBRATION_VALIDATION` | 三条经验 | §12 | n/a | n/a | `SAFE_TO_STATE` |
+| C-54 | Semantic routing ≠ execution authorization; 4/4 is a count not a rate; handlers are inert; `ACTUAL_HANDLER_EXECUTION_UNTESTED` | A — our architecture + non-claims | `findings.md` §2; `12` records | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
+| C-55 | Batch economics are workload-dependent; amortisation needs a shared state | A — scope restated | Freeze §5.1 | 批处理 | §3 | yes | yes | `SAFE_TO_STATE` |
+| C-57 | `retry_count` is permanently `null` and means "not reported"; `transport_attempt_count` licenses exactly one sentence | A — engineering limitation | Freeze §3.3; `findings.md` §2 | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
 | C-58 | Five registered designs were retired before publication, never run | A — the inverse of the contract's `DO_NOT_STATE` row | Freeze §4; `EXPERIMENT_REGISTRY.md` | 退休实验 | §13 | yes | yes | `SAFE_TO_STATE` |
 | C-59 | `10_state_length`'s three defects: no ground truth, n = 1 per tier, and filler that repeats five sentences rather than accumulating content | A — registry reasoning | Registry entry for `10_state_length` | 退休实验 | §13 | yes | yes | `SAFE_TO_STATE` |
 | C-60 | `11_language_pair`'s four reasons, including that the official docs state English is primary and CJK currently has lower accuracy | A + official, attributed | Registry entry for `11_language_pair`; `TS-DOC-STATE` | 退休实验 | §13 | yes | yes | `SAFE_TO_STATE` |
 | C-61 | The nine non-claims, in natural prose rather than as markers | A — non-claims | Freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
-| C-63 | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`; every large local effect restates a documented behaviour or is this repository's own policy | **B** — state of the science, stated as novelty | Freeze §5.3 | 结尾 | §16 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-64 | License: MIT | A — release fact | `LICENSE`; `pyproject.toml` | 附录 | §16 | n/a | n/a | `SAFE_TO_STATE` |
-| C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's. **The NAS item was dropped in revision 8** with the rest of the NAS material — it was a framing clause, not a separate claim | 开头, 测量台, 分析器 | — | n/a | n/a | `SAFE_TO_STATE` |
-| C-66 | The narrative device: candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked. **The article describes four in detail and states the triage total of seven once**, in the closing movement, where the survivor is named as 一个值得继续追的问题 rather than as a finding — so the prose carries the count *and* the survivor's open status (see §1.6 for the reading risk the first form of that sentence opened and the fourth correction closed) | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
-| C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry (carried by 一个用来检验发现的仓库…在做它该做的事，而不是在累积战利品); what it accumulates is that ability (carried by 这个仓库真正积累的，不是故事。是删故事的能力。). **P5-E1 deleted a third sentence that restated the first half ahead of the second**; the claim is unchanged and both halves still stand, one sentence apart. | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
-| C-68 | The project reads as training in model evaluation and agent engineering rather than as a model benchmark, and most of the learning was not on Jev's side | A — the author's own assessment | The author's first-hand account of the work | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
-| C-70 | The author is willing to put a name to the frozen state string | **B** — novelty-adjacent | Freeze §5.3; the string is quoted in the same paragraph and restated in scope around it | 结尾 | — | yes | n/a | `SAFE_WITH_SCOPE` |
+| C-63 | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`; every large local effect restates a documented behaviour or is this repository's own policy | **B** — state of the science, stated as novelty | Freeze §5.3 | 结尾 | §15 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-64 | License: MIT | A — release fact | `LICENSE`; `pyproject.toml` | 附录 | appendix | n/a | n/a | `SAFE_TO_STATE` |
+| C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's. **The NAS item was dropped in revision 8** with the rest of the NAS material — it was a framing clause, not a separate claim | 开头, 测量台, 分析器 | §1, §11, §13 | n/a | n/a | `SAFE_TO_STATE` |
+| C-66 | The narrative device: candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked. **The article describes four in detail and states the triage total of seven once**, in the closing movement, where the survivor is named as 一个值得继续追的问题 rather than as a finding — so the prose carries the count *and* the survivor's open status (see §1.6 for the reading risk the first form of that sentence opened and the fourth correction closed) | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | §6, §7 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry (carried by 一个用来检验发现的仓库…在做它该做的事，而不是在累积战利品); what it accumulates is that ability (carried by 这个仓库真正积累的，不是故事。是删故事的能力。). **P5-E1 deleted a third sentence that restated the first half ahead of the second**; the claim is unchanged and both halves still stand, one sentence apart. | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | §15 | n/a | n/a | `SAFE_TO_STATE` |
+| C-70 | The author is willing to put a name to the frozen state string | **B** — novelty-adjacent | Freeze §5.3; the string is quoted in the same paragraph and restated in scope around it | 结尾 | §15 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-71 | No adjudication of vendor claims: incommensurable, not "the vendor is wrong" and not "the local run proves them right" | A — contract rule | `BLOG_CLAIM_CONTRACT.md`; P1 audit | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
 | C-72 | Every state is synthetic; there is no real personal, customer or proprietary data here | A — contract rule | Repository practice; freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
-| C-73 | The bench keeps **two** canonical logs: the core phases write `results/usage.jsonl`, P3 writes its own `results/p3_boundary_locus/usage.jsonl`, and the two are not merged | A — canonical log identity | Freeze §3 names both hashes; both logs re-hashed during this audit | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-74 | Latency is recorded as end-to-end local wall-clock; it is a measurement, **not** a model-inference latency benchmark | A — non-claim about what the latency figure means | `findings.md`; the transport-attempt rule in `CLAUDE.md`; freeze §3.3 | 测量台 | §3 | n/a | n/a | `SAFE_TO_STATE` |
-| C-75 | External mechanisms — canonical logs, preregistration, claim audit, errata, the evidence freeze, offline tests — make false statements harder to make; **they do not by themselves give a maintainer the ability to independently explain and verify the facts they hold** | A — non-claim about what the mechanisms do | Freeze §7; the process attribution audit §6 domain separation | 结尾 | — | n/a | n/a | `SAFE_TO_STATE` |
+| C-73 | The bench keeps **two** canonical logs: the core phases write `results/usage.jsonl`, P3 writes its own `results/p3_boundary_locus/usage.jsonl`, and the two are not merged | A — canonical log identity | Freeze §3 names both hashes; both logs re-hashed during this audit | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-74 | Latency is recorded as end-to-end local wall-clock; it is a measurement, **not** a model-inference latency benchmark | A — non-claim about what the latency figure means | `findings.md`; the transport-attempt rule in `CLAUDE.md`; freeze §3.3 | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
+| C-75 | External mechanisms — canonical logs, preregistration, claim audit, errata, the evidence freeze, offline tests — make false statements harder to make; **they do not by themselves give a maintainer the ability to independently explain and verify the facts they hold** | A — non-claim about what the mechanisms do | Freeze §7; the process attribution audit §6 domain separation | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
 
 ---
 
 ## 3. Totals
 
-| Verdict | Chinese (r8) | Chinese (r7) | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (frozen r2) |
-|---|---:|---:|---:|---:|---:|---:|
-| `SAFE_TO_STATE` | **46** | 48 | 47 | 45 | 46 | **42** |
-| `SAFE_WITH_SCOPE` | **25** | 25 | 25 | 25 | 24 | **22** |
-| `DO_NOT_STATE` | **0** | **0** | **0** | **0** | **0** | **0** |
-| **Substantive claims audited** | **71** | 73 | 72 | 70 | 70 | **64** |
+| Verdict | Chinese (r10) | Chinese (r8) | Chinese (r7) | Chinese (r5) | Chinese (r4) | Chinese (r3) | English (r10) | English (r2, frozen) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `SAFE_TO_STATE` | **45** | 46 | 48 | 47 | 45 | 46 | **45** | 42 |
+| `SAFE_WITH_SCOPE` | **25** | 25 | 25 | 25 | 25 | 24 | **25** | 22 |
+| `DO_NOT_STATE` | **0** | **0** | **0** | **0** | **0** | **0** | **0** | **0** |
+| **Substantive claims audited** | **70** | 71 | 73 | 72 | 70 | 70 | **70** | 64 |
 
-**Revision 8 removes two rows and adds none, which is the first time this table has gone down.** C-62 and
+**The pair is symmetric for the first time since revision 2.** Both columns are 45 `A` + 25 `B` + 0 `C` =
+70, and they are the same 70 rows: every row below has a location in both documents. The English figure is
+no longer a frozen artifact's count sitting beside a live one — it is a count taken from the adaptation
+this revision audits, and it differing from the Chinese figure would be a parity failure rather than a
+consequence of the freeze. The `English (r2, frozen)` column is kept so that the change is visible.
+
+**This revision retires one row and moves no verdict.** C-68 left with the sentence it described, which had
+already left the Chinese in P5-E; §1.9 records the check that found it. 71 → 70, all of it in class `A`,
+and both languages lose the same row because neither contains the statement.
+
+**Revision 8 was the first time this table went down.** C-62 and
 C-69 were supported only by the NAS material, and the article no longer contains any; C-65 loses its NAS
 clause but keeps its row. All three changes are recorded in §1.7 rather than by renumbering, so every other
 ID in the table above still means what it meant in revision 2.
@@ -333,84 +402,161 @@ the evidence does not carry. The one class change is a **tightening**, not a new
 `A` to `B` because the display-precision caveat is now load-bearing, and a reader who drops it would read
 a false sentence. Repairing a claim by requiring its scope is the contract working, not failing.
 
+**`DO_NOT_STATE_EN = 0`.** The English was written from the approved Chinese rather than translated from
+it, so it was checked the same way the Chinese is checked, not assumed to inherit the result. Every
+class-`B` claim carries its scope in the English sentence that carries the claim (§4.3 is the row-level
+record), and nothing in the adaptation asserts more than the source narrative does. **The direction of the
+one class change is the same in both languages:** the display-quantisation caveat is load-bearing in §1 of
+each, which is why C-05 reads `B` in both columns rather than `B` in one and `A` in the other.
+
 **The three rows P5-E1 and the micro corrections added are all `A`, and none is a new assertion.** C-73,
 C-74 and C-75 make explicit what the article previously left implicit — that there are two logs rather than
 one, that a latency figure is a wall-clock measurement rather than a benchmark, and that external
 mechanisms do not confer comprehension. An implicit statement that a reader could complete wrongly is the
 same defect as an explicit one, which is why they are entered as rows rather than counted as wording.
 
-**Every one of the 71 rows carries `yes` or `n/a` in the Chinese scope column.** No row is `MISSING`. The
-two IDs this revision retired — **C-62 and C-69** — left with the material they described rather than being
-dropped from the audit; §1.7 records both, and no ID above them was renumbered.
+**Every one of the 70 rows carries `yes` or `n/a` in both scope columns.** No row is `MISSING` in either
+language. The three IDs the audit has retired across all revisions — **C-62, C-68 and C-69** — left with the
+material they described rather than being dropped from the audit; §1.7 and §1.9 record them, and no ID above
+any of them was renumbered. **C-65, C-66, C-67 and C-75 keep their rows and now carry English locations**:
+the framing they describe is not Chinese-only any more, it is carried by the adaptation in another form.
 
-**Two further gaps in the sequence pre-date this revision and are not explained here.** `C-02` and `C-56`
+**Two further gaps in the sequence pre-date this revision and are still not explained.** `C-02` and `C-56`
 have no row in §2 and no note anywhere in this file. They were already absent in revision 7, they are not
-casualties of the scope cleanup, and this audit has not established what became of them. **They are recorded
-here as an open documentation gap rather than left to look like two more removals** — a reader counting rows
-against the totals would otherwise be short by two with nothing to point at. Reconstructing them is a task
-for a future revision, not something this one should guess at.
-
-**The English total stays at 64** because the English document did not change. **This is a consequence of
-the freeze, not a parity result**, and it is why §4's parity gate is reported as suspended rather than
-passed.
+casualties of any removal recorded here, and this audit has not established what became of them. **They are
+recorded here as an open documentation gap rather than left to look like two more removals** — a reader
+counting rows against the totals would otherwise be short by two with nothing to point at. Reconstructing
+them is a task for a future revision, not something this one should guess at. The other two gaps, `C-62`
+and `C-68`, are explained; the difference between the two kinds of gap is that one kind has a record and
+this one does not.
 
 ---
 
-## 4. The two mechanical parity gates
+## 4. The three bilingual parity gates
 
-These checks exist to prevent drift between the languages. **Both are affected by the freeze, and neither
-may be reported as passing across the pair.**
+These checks exist to prevent drift between the languages. **All three are real gates again in this
+revision** — their subject is a pair that is aligned — and **all three pass**. Each is stated as what was
+checked and what the check found, so that a later revision can re-run it rather than trust it.
 
-### 4.1 Novelty parity — **within the Chinese: PASS. Across the pair: SUSPENDED**
+### 4.1 Novelty parity — **PASS**
 
-The Chinese article may not contain an equivalent of *"nothing new about Jev"*, *"no novelty exists"*,
+The check: neither article may contain an equivalent of *"nothing new about Jev"*, *"no novelty exists"*,
 *"nobody has done this"*, or *"we discovered a novel Jev behaviour"*.
 
-| Pattern | Chinese | Frozen English |
+| Pattern | Chinese | English |
 |---|---|---|
 | nothing new about Jev / 没有发现任何关于 Jev 的新东西 | absent | absent |
 | no novelty exists / 不存在新颖性 | absent | absent |
-| nobody has done this / 没有人做过 | **only in the refusal** — 记成「未解决」，而不是「没有人做过」 | **only in the refusal** — §7 |
+| nobody has done this / 没有人做过 | **only in the refusal** — 记成「未解决」，而不是「没有人做过」 | **only in the refusal** — §7: `PUBLIC_NOVELTY_UNRESOLVED`, "Recorded as *unresolved*, not as *nobody has done it*" |
 | we discovered a novel Jev behaviour | absent | absent |
 
-The third row is a true positive for the pattern and a pass for the gate: the phrase appears **only to
-refuse it**, in the sentence stating what `PUBLIC_NOVELTY_UNRESOLVED` does and does not mean.
+**PASS.** The third row is a true positive for the pattern and a pass for the gate: in both languages the
+phrase appears **only to refuse it**, in the sentence stating what `PUBLIC_NOVELTY_UNRESOLVED` does and does
+not mean. Both articles state the frozen state string in a fenced block where a reader will see it — 结尾 in
+the Chinese, §15 in the English — and both restate it in scope around the block. **Neither article carries a
+"we found something new" register anywhere.** The English's one novelty-adjacent statement is the state
+string restated as a negative, and the four candidates that fell are said to have fallen to official or
+public prior art in the same two groups in both languages.
 
-**Within the Chinese: PASS.** The article states the frozen state string in a fenced block in the closing
-movement, where a reader will see it, and restates it in scope around the block.
+### 4.2 Bilingual factual and numeric parity — **PASS**
 
-**The cross-language half of this gate is SUSPENDED, not passed.** With the English frozen and the Chinese
-revised again, that check would compare two texts that are not currently aligned, and reporting it as a
-pass would be reporting the wrong thing. `ENGLISH_REALIGNMENT: NOT_STARTED`.
+The check: every figure the two languages must agree on is present in both, and means the same thing in
+both. 50 tokens were counted mechanically in each file — a digit-boundary match, so `12` does not match
+inside `512` — and the counts include every occurrence, not just the first.
 
-### 4.2 Bilingual factual parity — **SUSPENDED**
+| Token | ZH | EN | | Token | ZH | EN | | Token | ZH | EN |
+|---|---:|---:|---|---|---:|---:|---|---|---:|---:|
+| `54` | 7 | 6 | | `42` | 9 | 9 | | `12` | 8 | 9 |
+| `45 / 45` | 2 | 2 | | `816` | 2 | 2 | | `3,480` | 2 | 2 |
+| `4.2647` | 2 | 2 | | `76.55` | 1 | 1 | | `0.75` | 4 | 4 |
+| `0.20` | 7 | 7 | | `0.55` | 7 | 7 | | `0.76` | 5 | 5 |
+| `0.31` | 4 | 4 | | `0.36` | 4 | 4 | | `0.56` | 3 | 3 |
+| `80.4` | 2 | 2 | | `71.4` | 2 | 2 | | `0.05` | 3 | 3 |
+| `0.10` | 2 | 2 | | `0.61` | 4 | 4 | | `0.60` | 3 | 3 |
+| `0.74` | 2 | 2 | | `0.26` | 2 | 2 | | `0.48` | 1 | 1 |
+| `1.58` | 1 | 1 | | `1.63` | 1 | 1 | | `0.24` | 2 | 2 |
+| `0.30` | 1 | 1 | | `0.07` | 1 | 1 | | `0.0` | 1 | 1 |
+| `0.03` | 3 | 3 | | `0.04` | 4 | 4 | | `1,490` | 1 | 1 |
+| `0.0098` | 1 | 1 | | `0.0515` | 1 | 1 | | `5 / 5` | 1 | 1 |
+| `4 / 4` | 7 | 7 | | `10 / 10` | 1 | 1 | | `119` | 1 | 1 |
+| `97.4` | 1 | 1 | | `1.62` | 1 | 1 | | `512` | 1 | 1 |
+| `0.001` | 1 | 1 | | `82` | 1 | 1 | | `0.475` | 1 | 1 |
+| `jev-1.13.0` | 1 | 1 | | `38e67630` | 1 | 1 | | `17f36f75` | 1 | 1 |
+| `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION` | 1 | 1 | | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET` | 1 | 1 | | — | — | — |
 
-Revision 2 checked 18 tokens in both languages. **That check is suspended**, for the same reason: its
-subject is a pair that is not currently aligned. The Chinese article was verified to contain all 18 tokens
-after the P5-E edits, and again after the P5-E1 corrections, so no figure was lost to the factual repairs,
-the density reduction, the new closing movement or the editorial pass — but the gate as a *parity* gate is
-not reported as passing.
+**All 50 tokens are present in both articles, and 48 of them with identical counts.** Two differ, and
+neither is a changed figure:
 
-| Token | Chinese | | Token | Chinese |
-|---|---|---|---|---|
-| `54` | ✓ | | `0.76` | ✓ |
-| `42` | ✓ | | `0.31` | ✓ |
-| `12` | ✓ | | `0.36` | ✓ |
-| `jev-1.13.0` | ✓ | | `0.56` | ✓ |
-| `4.2647` | ✓ | | `80.4` | ✓ |
-| `76.55` | ✓ | | `71.4` | ✓ |
-| `0.75` | ✓ | | `0.05` | ✓ |
-| `0.20` | ✓ | | `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION` | ✓ |
-| `0.55` | ✓ | | `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET` | ✓ |
+| Token | ZH | EN | Why they differ |
+|---|---:|---:|---|
+| `54` | 7 | 6 | **One dropped repetition.** The Chinese disclosure paragraph opens 54 次调用的实验，从头到尾的实施; the English opens *"Most of the implementation was done by AI agents — writing code, changing tests, making those 12 calls…"*. The paragraph carries the project's scale either way, and the title, the opening beat, the cost aside, the closing movement and the refusal sentence all carry `54` in both. |
+| `12` | 8 | 9 | **Eight figures in both; the English's ninth match is the section heading `## 12`** — structural numbering, not a figure. Two of its eight are spelled out where the Chinese uses digits: *Twelve calls. No extras.* (§8) and *All twelve calls succeeded.* (§9). The other six are the same six occurrences. |
 
-9 of 9 first-column tokens and 9 of 9 second-column tokens present in the Chinese. **This was re-run
-against the P5-E1 text and again after the micro corrections** — neither pass removed any of the 18, and
-the token that came closest to being at risk, `54`, is carried by the sentence P5-E1 rewrote and is still
-present. Note that `七` is *not* one of the 18 and never was: the count of triage candidates was prose, not
-a parity token. That is why dropping it in the first micro correction, and restoring it in the fourth, both
-move C-66's scope and neither moves this table — the gate is over figures the two languages must agree on,
-not over every number the prose happens to use. The frozen English still
-contains all 18 as of revision 2, and nothing in P5-D, P5-E or P5-E1 touched it.
+**Three further classes of statement were compared directly, and agree in both languages.** Every
+comparison keeps its direction (`0.05 < 0.10`, `0.61 ≥ 0.60`, `0.75 → 0.20`, a `0.56` endpoint gap); every
+derived percentage keeps its basis (`80.4%` and `71.4%` are of *this run's* gap, and both articles say they
+are descriptive arithmetic rather than part of the decision rule); and every number keeps the label that
+says where it came from (`demonstration threshold` on the `0.60`, "the vendor's" on `12.2×`, "a public
+chaos-test report" on `1,490`).
+
+**Two figures that a translation would put at risk, and that this adaptation keeps apart.** `45 / 45` and
+`42 / 42` are different numbers about different things in both languages — answers versus responses — and
+both articles carry the erratum that explains the difference. And `3,480` keeps its thousands separator in
+both, which is what makes `4.2647` reproducible by hand from either text.
+
+**One structural difference between the two documents, recorded here so it is not mistaken for drift.**
+The English appendix carries one item the Chinese appendix does not: a link to
+[Agentic Engineering and cognitive debt](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md). Both bodies link that
+document inline, twice, in the same two places; the English repeats it in the appendix list, the Chinese does
+not. **This is an appendix-list difference, not a claim difference** — no statement is present in one
+language and absent from the other — and it is the only structural difference of its kind in the pair.
+
+### 4.3 Scope parity — **PASS**
+
+The check: every class-`B` scope is present in the language it is read in, and is not carried by the other
+language on its behalf. §2's two scope columns are the row-level record; this gate is what they add up to.
+
+| Check | Chinese | English |
+|---|---:|---:|
+| Rows with a location | 70 of 70 | 70 of 70 |
+| Scope cells `yes` or `n/a` | 70 of 70 | 70 of 70 |
+| `MISSING` scope cells | **0** | **0** |
+
+**No scope is looser in the English than in the Chinese.** The scopes that carry the most weight were read
+in the English sentence itself rather than assumed from the Chinese: `C-05`'s display-quantisation caveat,
+`C-19`'s one-payload boundary and its refusal to sit beside the vendor's multiplier, `C-26`'s *our own
+constant, named by its own label, never calibrated*, `C-33`'s *unresolved, not nobody-has-done-this*,
+`C-40`'s *descriptive arithmetic, not part of the decision rule*, `C-45`'s `FIELD_ALIGNMENT_CAVEAT`,
+`C-46`'s `n = 3`, `C-48`'s erratum-carrying corrected count, and `C-54`'s inert handlers with
+`ACTUAL_HANDLER_EXECUTION_UNTESTED`. One row the frozen English did not carry at all — `C-05`'s
+display-quantisation caveat — is present in the new English with its scope, which is why its English scope
+cell reads `yes` where revision 2 recorded `n/a`.
+
+### 4.4 The two absence checks — **PASS**
+
+Both are scans over the whole of each article, body and appendix.
+
+| Check | Chinese | English |
+|---|---|---|
+| `NAS`, `Neural Architecture Search`, 神经架构搜索 | absent | absent |
+| A substitute future application for it | absent | absent |
+| `P5-B`, `P5-E`, `P5-F`, `parity`, `SUSPENDED`, `approval candidate`, `realignment` | absent | absent |
+| A claim-audit revision number, or owner-approval state | absent | absent |
+
+**NAS is gone from both and nothing was put in its place.** The removal was a subtraction, and the check is
+run as one: the scan asks both that the term is absent and that no other "what Jev could be used for later"
+statement has taken the space. Neither article reserves a future application for Jev.
+
+**The governance check is over blog-process state, not over experiment names.** `P1`, `P2`, `P3` and
+`12_function_routing` appear in both articles and are supposed to: they name the experiments and audits the
+evidence layer publishes. What is absent from both bodies is this repository's own editorial process —
+which stage the English was parked at, whether parity is suspended, which revision of which audit is
+current, and whether the owner has approved anything. **The only process-adjacent line in either body is the
+language switcher**, which names the language and nothing else.
+
+**`PARITY = PASS`.** The three gates and the two absence checks pass, and the statement is meant literally:
+the two articles carry the same claims, the same figures, the same scopes and the same novelty status, and
+neither carries material the other refuses.
 
 ---
 
@@ -430,7 +576,7 @@ process claim borrow the credibility of a measurement claim it was never checked
 
 | Material | Accountable to | Where |
 |---|---|---|
-| Who decided, who executed, who is credited | `OWNER_DECLARED_PROJECT_PROCESS` | [`…PROCESS_ATTRIBUTION_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.zh-CN.md) |
+| Who decided, who executed, who is credited | `OWNER_DECLARED_PROJECT_PROCESS` | [`…PROCESS_ATTRIBUTION_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.zh-CN.md) for the Chinese and [`…PROCESS_ATTRIBUTION_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.en.md) for the English |
 | The role table and the Agentic Engineering definition | the owner declaration | [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) §1–§2 |
 | 认知负债 as a working concept | the same, explicitly **not** a measurable quantity | [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) §3 |
 | The metaphor | nothing — it is a figure, used once | article, closing movement |
@@ -446,7 +592,7 @@ frozen verifier would be attesting to text it cannot parse.
 These are the contract's class C statements — available at no scope, because no qualifier can create the
 missing evidence. Each was excluded by construction, not caught in review:
 
-| Excluded | Where the Chinese article refuses it |
+| Excluded | Where the articles refuse it (Chinese anchors; the English locations are the corresponding sections in §2) |
 |---|---|
 | Jev is generally more (or less) accurate than anything | 非声明: no ground truth exists anywhere in the bench; "4 / 4" is a count, never a rate |
 | This project validated or falsified calibration | 三条经验: neither direction; 2 cases, no reliability diagram, no ECE, no Brier score |
@@ -497,7 +643,7 @@ Two exclusions worth naming, because the revisions made them *more* tempting rat
 
 ## 7. Self-check from the contract
 
-The contract's own seven-item list, run against the current Chinese:
+The contract's own seven-item list, run against both articles:
 
 1. **Is every figure labelled** as OFFICIAL CLAIM, LOCAL MEASUREMENT or DERIVED CALCULATION? — Yes, in
    natural language rather than as tags.
@@ -515,24 +661,31 @@ The contract's own seven-item list, run against the current Chinese:
    and repair C removed a licence-scope sentence rather than narrowing it.
 7. **Does it say what this is not?** — Yes, in prose rather than as a marker list.
 
+**The same seven items were run against the English article and answer the same way**, which is what makes
+them a parity result rather than two separate readings. Item 3's example is in §1 in both languages — the
+display-quantisation caveat — and item 5's state string is in 结尾 in the Chinese and §15 in the English,
+each restated in scope in the same paragraph.
+
 ---
 
 ## 8. What this audit does not cover
 
 - **Prose quality and style.** Audited separately in
-  [`…STYLE_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.STYLE_AUDIT.zh-CN.md), and nothing in
-  this file should be read as endorsing them. What is audited here is that no sentence claims more than
-  its evidence carries.
+  [`…STYLE_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.STYLE_AUDIT.zh-CN.md) for the Chinese
+  and [`…STYLE_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.STYLE_AUDIT.en.md) for the English,
+  and nothing in this file should be read as endorsing them. What is audited here is that no sentence
+  claims more than its evidence carries.
 - **Who did the work.** Audited separately in
-  [`…PROCESS_ATTRIBUTION_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.zh-CN.md),
+  [`…PROCESS_ATTRIBUTION_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.zh-CN.md)
+  and [`…PROCESS_ATTRIBUTION_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.en.md),
   and §5 above records why that material is not entered here.
-- **The frozen English document.** It was not read for revision, not re-scoped, and not re-aligned. Its
-  column in §2 is revision 2's finding carried forward. Any statement here about the English is a
-  statement about the text as it stood at P5-B. **This includes one known stale identifier:** the English
-  still names the bench `jev-test`, which was the project's name until the P5-E rename. P5-E forbids
-  modifying that file, so the stale name is left standing and is recorded here rather than quietly fixed.
-  It is part of what the English re-alignment will have to resolve, alongside the language parity.
-- **The frozen evidence itself.** This audit checks the article *against* `v0.1.0`. It does not re-open
+- **The English document's wording.** It is audited here for *what it claims*, not for how it reads. That
+  the adaptation is not a translation, that it does not inherit the legacy English's structure, and that
+  it does not read like a paper, a marketing page or a machine translation are separate questions with a
+  separate file. **The one identifier this audit used to record here — the frozen English naming the bench
+  `jev-test` — is gone:** the new English uses `jev-testbench` throughout, and no stale project name remains
+  in either article.
+- **The frozen evidence itself.** This audit checks the articles *against* `v0.1.0`. It does not re-open
   the release's own claims, which are frozen and immutable.
 
 **No new evidence defect was found during the revisions or this audit.** No `P5_NEW_EVIDENCE_DEFECT_FOUND`
