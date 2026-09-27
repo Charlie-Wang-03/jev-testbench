@@ -6,8 +6,6 @@ I spent 54 API calls trying to answer one question: **if a model returns typed p
 
 The conclusion first, because it determines how every section below should be read: **after 54 API calls, I did not end up with a result that survived scrutiny as a strong Jev-specific novel finding.** What did survive was more useful to me: an evaluation method someone else can audit, and a preregistered null result I had to report the way it came out.
 
-This post is about how that happened.
-
 ---
 
 ## 1. An agent-engineering question
@@ -22,7 +20,7 @@ So there is an obvious question:
 
 TypeSafe positions its Jev model as that kind of thing. Their launch post has the line I think captures the pitch most tightly — Jev as, in their words, "a frontier-intelligence function call: unstructured state in, typed probabilistic decisions out."
 
-That is **the vendor describing their own product. It is not my measurement.** This post will keep returning to that distinction, because it is the single most important discipline in the project.
+That is **the vendor describing their own product. It is not my measurement.** That distinction is the discipline this project runs on.
 
 To answer the question with something other than an impression, I built a measurement bench.
 
@@ -44,11 +42,11 @@ Questions must be one of three types, and answers have three corresponding shape
 - **Score** — a position along supplied levels. It can land between levels; the documented definition is the probability-weighted mean of the level numbers, and it comes with a `confidence`.
 - **Noul** — a single number, P(yes). With two outcomes, one probability already describes the whole distribution, so it carries **no** separate `confidence` field.
 
-Two things here are worth separating out, because I nearly blurred them myself.
+Two things here are worth separating out.
 
-**First, there is no free text in an answer.** Across the 42 core records I ran on one account at one model version, **45 of 45** Noul answers carried no `confidence` field, while every Choice and Score answer had one. That is the vendor's documented design; all I did locally was reproduce it. The 45-of-45 figure has a small story attached, and it is in §11.
+**First, there is no free text in an answer.** Across the 42 core records I ran on one account at one model version, **45 of 45** Noul answers carried no `confidence` field, while every Choice and Score answer had one. That is the vendor's documented design; all I did locally was reproduce it. The 45-of-45 figure has its own story in §11.
 
-**Second, `probability` and `confidence` are not the same thing.** `probability` is the distribution over the options. `confidence`, per the docs, is "a statistic computed from the returned distribution." Both arrive side by side in the same answer, and they are two different numbers. I hit this on my very first call (`01_primitives`): the winning option's probability was **0.45**, and the same answer's confidence was **0.26**.
+**Second, `probability` and `confidence` are not the same thing.** `probability` is the distribution over the options. `confidence`, per the docs, is "a statistic computed from the returned distribution." Both arrive side by side, and they are two different numbers. I hit this on my very first call (`01_primitives`): the winning option's probability was **0.45**, and the same answer's confidence was **0.26**.
 
 If you take one sentence from this section, take this: **typed output solves the schema problem, not the semantic one.** An answer that is perfectly well-formed is not thereby correct, and it is not thereby something you should act on.
 
@@ -58,7 +56,7 @@ The vendor's own documentation is clearer about this than its marketing might su
 
 ## 3. I didn't take the docs on faith — I built a bench first
 
-Product documentation describes how a product is supposed to behave. The gap between that and how it does behave is where the engineering cost lives. But "I have a feeling it's sometimes off" is not something you can act on.
+Product documentation describes how a product is supposed to behave. The gap between that and how it does behave is where the engineering cost lives. But "I have a feeling it's sometimes off" is not actionable.
 
 So I built `jev-test`. Its goal is not to rate Jev or build a leaderboard, but that **every conclusion can be traced back to a log line.**
 
@@ -72,7 +70,7 @@ A few hard rules came out of that:
 
 **Label anything you didn't measure directly.** Token counts come from the API's `usage` values and are never estimated. Cost and latency are local derivations, labelled as such.
 
-**Derived artifacts must not drift.** Everything under `results/` other than the two canonical logs is regenerated from them; CI does the regeneration, diffs against the committed copies, and fails on any difference. A derived report must never become a second source of truth.
+**Derived artifacts must not drift.** Everything under `results/` other than the two canonical logs is regenerated from them; CI does the regeneration, diffs against the committed copies, and fails on any difference.
 
 **Preregister before you call.** The most important rule, and §8 is about it.
 
@@ -86,7 +84,7 @@ The 54 calls came to about **$0.001** by local estimate — a thousandth of a do
 
 ## 4. What the first round actually measured
 
-Ten experiments were registered in the first round. All ten ran, producing **42 core records**. I grouped them by purpose rather than chronology, because purpose explains better what they probed:
+Ten experiments were registered in the first round. All ten ran, producing **42 core records**. I grouped them by purpose, which explains better what they probed:
 
 | Theme | Experiments | What was being probed |
 |---|---|---|
@@ -117,7 +115,7 @@ The effect is real and large. Its boundaries travel with it:
 
 The honest sentence is one line: **on this payload, the local measurement reproduced the shared-state amortisation the vendor describes.**
 
-The mechanism is also **expected**: public third-party measurements went further on the same pattern, varying batch size and publishing an accuracy curve against it. My experiment used one fixed payload and never varied a batch parameter. So this one is a reproduction, not a finding.
+The mechanism is also **expected**: public third-party measurements went further on the same pattern, varying batch size and publishing an accuracy curve against it. Mine used one fixed payload. So this one is a reproduction, not a finding.
 
 ---
 
@@ -197,7 +195,7 @@ One aside: the public-novelty check for that question came back `PUBLIC_NOVELTY_
 
 ## 8. P3: an actual preregistered experiment
 
-Before the first request went out, I wrote down the design, the order, the statistics and every threshold, and committed them. It is the habit from this project I would most want to keep.
+Before the first request went out, I wrote down the design, the order, the statistics and every threshold, and committed them.
 
 The design is a 2×2 that crosses the two fields:
 
@@ -212,7 +210,7 @@ Each arm repeats **3** times, for **12** calls — a hard ceiling written into t
 
 The fixed order was `N1 → I1 → C1 → B1 → B2 → C2 → I2 → N2 → C3 → N3 → B3 → I3`, balanced at both ends and in the middle.
 
-The preregistration also records a **design hazard** that I think matters more than the thresholds: the `I` and `C` arms must state **the same** boundary, differing only in *where it is written*. An arm whose instructions and criteria contradict each other triggers another failure mode the vendor documents, and that arm is then a protocol violation rather than a data point.
+The preregistration also records a **design hazard** that matters more than the thresholds: the `I` and `C` arms must state **the same** boundary, differing only in *where it is written*. An arm whose instructions and criteria contradict each other triggers another failure mode the vendor documents, and that arm is then a protocol violation rather than a data point.
 
 Finally, the `N` and `B` endpoint arms are three-repeat versions of the original `07` arms. Their job is **diagnostic** — to check whether the original effect is still there. Like every threshold, they were frozen before the first request, so nobody could use them to re-tune a threshold after the fact.
 
@@ -259,7 +257,7 @@ About those two percentages (80.4% and 71.4%): **they are descriptive arithmetic
 
 ## 10. Why a null result is a good result
 
-What P3 produced is not a "didn't work" result. It is a real negative result — and not a failed experiment. The original large effect **replicated**: the 0.55 move reappeared as a 0.56 gap, endpoints in the same order. What failed was the **attribution** — this design cannot say which field the effect comes from.
+What P3 produced is a real negative result, not a failed experiment. The original large effect **replicated**: the 0.55 move reappeared as a 0.56 gap, endpoints in the same order. What failed was the **attribution** — this design cannot say which field the effect comes from.
 
 There is a research lesson here that I think matters more than the experiment:
 
@@ -267,7 +265,7 @@ There is a research lesson here that I think matters more than the experiment:
 
 Looking at 0.55, the natural impulse is to write "Jev weights X more heavily." But an experiment that moved two variables together cannot answer that question, however large the effect. Answering it needs no more calls — it needs a design that **separates the variables**, fixed before you see the data, or you will keep adjusting it until it says what you want to hear.
 
-Equally important: **a null result must not be quietly retranslated into something friendlier.** For example:
+Equally important: **a null result must not be quietly retranslated into something friendlier.**
 
 - ✗ "Jev weighs both instructions and criteria." — This design cannot distinguish "both fields are doing work" from "a mixed-specificity construct is doing work." Those are different claims.
 - ✗ "Criteria are what matter." — The data says the opposite, if anything: the `I` arm moved slightly further.
@@ -297,11 +295,11 @@ Here is what I did:
 
 The check that matters most: **the primary verdict from the original analyzer is identical to the corrected one.** The only thing that moved was the GO-1 flag, whose misreport never reached the verdict — because GO-1 alone never constituted a verdict. The frozen rule requires an arm clearing GO-1 **together with** a counterpart arm inside the GO-2 band, and no such pairing exists here. K1 is evaluated before the GO block, and it fired. So the defect got wrong **the display of the reasoning**, not the decision.
 
-The point I want to make with this:
+The point:
 
 > **Preregistration cannot guarantee that your code is bug-free. Provenance can keep the repair of a bug from contaminating the measurement history.**
 
-No number was re-measured and no record was rewritten. Someone arriving later can `git show` the pre-repair rendering, see the defect, the disclosure and the repair, and judge for themselves whether it holds together. **That is why the erroneous rendering is preserved in Git history instead of erased.**
+No number was re-measured and no record was rewritten. Someone arriving later can `git show` the pre-repair rendering, see the defect, the disclosure and the repair, and judge for themselves whether it holds together.
 
 One more thing, because it belongs to the same category. A line in the P1 audit said "42 of 42 Noul answers carry no `confidence` field." An independent check found the correct figure is **45 of 45** — 42 is the number of **records**, and the sentence was about **answers**; those 42 records hold 119 answers between them.
 
@@ -315,7 +313,7 @@ Compressing 54 calls, these are the parts I think transfer.
 
 ### 1. Typed model output is not semantic truth
 
-Passing schema validation ≠ being correct. All 42 of 42 responses here passed it, and **that establishes nothing** — no ground truth, no adversarial input, only format compliance on benign payloads. The weakest possible evidence for a type-safety claim.
+Passing schema validation ≠ being correct. All 42 of 42 responses here passed it, and **that establishes nothing** — no ground truth, no adversarial input, only format compliance on benign payloads.
 
 ### 2. Confidence is not a single-sample correctness oracle
 
@@ -323,11 +321,11 @@ The docs scope calibration to **a set** of predictions: confidence "describes th
 
 Locally, in `06_composite_scoring`, one dimension scored **1.62** on a 0–3 rubric at a confidence of **0.24** — and carried **97.4%** of the state's composite risk. The arithmetic was right, the confidence was low, and those are two different questions. A policy that reads low confidence as "wrong" and high confidence as "right" is reading the wrong number.
 
-The boundary: **this project neither validated nor falsified Jev's calibration.** `04_confidence` has two cases; no reliability diagram, no ECE, no Brier score, no independent ground-truth dataset. Not in either direction.
+The boundary: **this project neither validated nor falsified Jev's calibration.** `04_confidence` has two cases; no reliability diagram, no ECE, no Brier score, no independent ground-truth dataset.
 
 ### 3. Semantic routing and execution authorization should be separate layers
 
-The most useful pattern I think came out of the project — and it came from a run that went **against** the design intent.
+The most useful pattern came out of a run that went **against** the design intent.
 
 The model did its job: 4 of 4 correct functions, 4 of 4 correct arguments. Then the Python-side policy suppressed every one of them, and no handler was ever entered.
 
@@ -375,7 +373,7 @@ That last point is this project's rule doing its job: **"this result would be po
 
 ## 14. What these experiments do not establish
 
-Every "what we can say" should come with a "what we didn't." These are things this project **cannot establish** — not a "we'll get to it later" list: the evidence structure does not support them:
+Every "what we can say" should come with a "what we didn't." These are things this project **cannot establish** — the evidence structure does not support them:
 
 - **No general accuracy of any kind.** There is no ground truth anywhere in this bench. "4 of 4" is **a count on synthetic cases, never a rate**.
 - **No validation or falsification of calibration, in either direction.** See §12.
