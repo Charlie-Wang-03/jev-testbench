@@ -1,6 +1,6 @@
 # Repository metadata proposal
 
-**Status: PROPOSAL ONLY. The description and topics below are not applied.** No GitHub description or
+**Status: PROPOSAL ONLY. The description, homepage and topics below are not applied.** No GitHub description or
 topic has been changed. These are GitHub-side fields; changing them is the owner's action, and this
 file exists so the decision can be made against exact wording.
 
@@ -12,62 +12,53 @@ P5-E and applied: `PROJECT_RENAME: OWNER_APPROVED`, `jev-test` → `jev-testbenc
 
 ## Description
 
-**Recommended:**
+**Publication Closure recommendation:**
 
 ```
-Auditable experiments on TypeSafe Jev: typed probabilistic decisions, agent control patterns,
-preregistration, and a null result kept in the record.
+A lightweight, auditable Jev testbench built through Agentic Engineering, with frozen evidence, a
+preregistered null result, and a bilingual reflection on cognitive debt.
 ```
 
-138 characters — comfortably inside GitHub's 350-character limit, and inside the length a person
-actually reads in a repository list.
-
-### Why each part is there
-
-| Phrase | Does this work |
-|---|---|
-| "Auditable experiments on TypeSafe Jev" | Says what the repository *is* and what it is *about*, and "on" rather than "by" or "for" keeps independence readable. |
-| "typed probabilistic decisions" | The subject matter, in the vendor's own term of art. |
-| "agent control patterns" | The engineering half, and the part a developer searching for it would recognise. |
-| "preregistration" | The method claim, and the least common word here — it is the distinguishing one. |
-| "a null result kept in the record" | The finding. Stated positively, and without making the null sound like a failure. |
-
-### What is deliberately absent
-
-| Not present | Why |
-|---|---|
-| Any novelty or discovery word | The release's state string is `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`. A description is the wrong place to widen that. |
-| "benchmark" / "leaderboard" | There is no ground truth anywhere in this bench. Calling it a benchmark would invite exactly the reading the repository refuses. |
-| "production-ready" / "enterprise" | Every handler is inert; `ACTUAL_HANDLER_EXECUTION_UNTESTED`. |
-| A speed, cost or accuracy number | The one batching figure belongs to a single payload and is not commensurable with the vendor's published multipliers. A number in a description has no room for its scope. |
-| "official" / "TypeSafe-approved" | It is not. This is an independent third-party evaluation. |
-
-### Alternatives, if the recommended one does not fit the owner's taste
-
-**Shorter** — for a repository list where the description is truncated anyway:
-
-```
-Independent, auditable experiments on TypeSafe Jev — and the null result they produced.
-```
-
-**More explicit about independence** — if there is any concern that "TypeSafe Jev" reads as an
-official repository:
-
-```
-Independent evaluation bench for TypeSafe Jev: preregistered experiments, canonical logs, and
-evidence anyone can re-verify offline.
-```
+This description names the current project rather than the historical `v0.1.0` release. It keeps
+`benchmark`, performance numbers, novelty language and production claims out of the repository
+metadata. `cognitive debt` is presented as a reflection topic, not as a scientific metric or a new
+standard.
 
 ---
 
+## Homepage
+
+**Recommendation: leave the GitHub repository homepage field empty for the first publication.**
+
+There is no external canonical site yet. Pointing the homepage field back to this same repository
+adds no navigation value, while choosing an external venue now would turn an optional distribution
+decision into part of the repository identity. If a durable personal/project site is published
+later, the field can be set then without changing the evidence or release semantics.
+
+---
 ## Topics
 
-GitHub allows up to 20. More than about ten stops helping and starts diluting.
+GitHub allows up to 20. The recommended set stays intentionally narrow.
 
-**Recommended set (9):**
+**Publication Closure recommendation (10):**
 
-| Topic | Why | Keep? |
-|---|---|---|
+| Topic | Why |
+|---|---|
+| `jev` | The subject itself. |
+| `typesafe` | Product/vendor namespace used by the project. |
+| `llm` | Broad discovery term for the surrounding model ecosystem. |
+| `ai-agents` | The engineering context in which the primitive is evaluated. |
+| `agentic-engineering` | The project-building/process layer explicitly documented here. |
+| `model-evaluation` | The measurement and evidence discipline. |
+| `reproducibility` | Frozen logs, deterministic derived artifacts and offline verification. |
+| `preregistration` | The defining P3 design practice. |
+| `probabilistic-ai` | The probabilistic-decision framing. |
+| `python` | Implementation language. |
+
+Not recommended: `benchmark`, `leaderboard`, `calibration`, `production-ready`, or
+`cognitive-debt`. The first four would widen or misstate the project; the last would make a
+project-level working concept look like an established technical taxonomy.
+---|---|---|
 | `jev` | The subject. Low volume, high precision — anyone searching it wants this. | Yes |
 | `typesafe` | Same. | Yes |
 | `llm` | The broad discovery term. High volume, but it is how most people would find this at all. | Yes |
@@ -107,7 +98,7 @@ What the rename did and did not touch:
 | The frozen release `v0.1.0` | **Unchanged.** It was published under the name `jev-test`, and that is a historical fact about it rather than a stale string. |
 | [`docs/evidence/v0.1.0/`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md) | **Unchanged.** Its manifest still records `"name": "jev-test"`, and `evidence_freeze verify v0.1.0` still passes. |
 | [`CITATION.cff`](../../CITATION.cff) | Keeps `version: 0.1.0` and the title it was published under; its URLs follow the repository. |
-| The English blog adaptation | Still says `jev-test` where it describes the build. It is frozen pending re-alignment, not overlooked. |
+| The bilingual blog | Current and human-approved. Historical `jev-test` mentions remain only where they describe the pre-rename project state or frozen provenance. |
 
 The one thing that must not happen is creating a new repository at `Charlie-Wang-03/jev-test`. The
 GitHub redirect from the old path to the new one is what keeps the historical links in the frozen
@@ -129,5 +120,4 @@ Name:
 - [x] The repository rename — decided in P5-E: `PROJECT_RENAME: OWNER_APPROVED`.
 - [x] Apply it: `Charlie-Wang-03/jev-test` → `Charlie-Wang-03/jev-testbench` — done by the owner.
 
-**No GitHub description or topic has been modified. The repository is `PRIVATE`, the description and
-the topics are unchanged, and `PROJECT_RENAME` is the only item here that is settled.**
+**No GitHub description, homepage or topic has been modified. The repository is `PRIVATE`; this file remains a proposal until the owner approves Publication Closure actions.**

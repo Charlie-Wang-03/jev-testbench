@@ -85,19 +85,20 @@ The cost is duplicated maintenance: two places to correct if something changes.
 
 ---
 
-## What P5-C recommends, and what it does not decide
+## Publication Closure recommendation
 
-**A recommendation, offered as a recommendation:** option **C**, with the repository as canonical
-and at most one external venue chosen per language. It preserves the property that makes the
-articles worth reading — a reader can check them — and it does not depend on any platform's
-rendering being faithful.
+**For the first publication, choose option A: the public GitHub repository with the two canonical
+Markdown articles under `docs/blog/**`.**
 
-**What is the owner's to decide, not P5-C's:**
+That is sufficient for this project's first publication because the repository is not merely a
+code host: it is also the provenance surface. The bilingual switchers, evidence links, claim audit,
+Git history and frozen tag all work best when the reader stays in the repository that produced
+them. An external venue would add reach, but it would not add evidence, reproducibility or
+publication completeness.
 
-1. Whether to publish externally at all. Option A is a complete answer, not a failure to decide.
-2. If yes, which venue, and in which language(s).
-3. Whether the two languages ship together or the Chinese one goes first, given it is the source
-   text and the intended Chinese-language audience may be the larger one.
+Option C remains a sensible **later distribution step** if reach becomes a separate goal. If that
+happens, the repository Markdown remains canonical and any platform copy stays downstream; the
+platform adaptation must not widen a claim.
 
-**Not done here:** no account created, no post drafted for any platform, no canonical-link metadata
-configured, nothing scheduled.
+**Owner decision still required:** repository-only publication versus later external syndication.
+No account has been created and nothing has been posted externally.

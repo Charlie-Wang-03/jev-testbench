@@ -68,7 +68,7 @@ decisions can be taken against exact wording rather than against a description o
 
 | Document | What it is |
 |---|---|
-| [Publication checklist](publication/PUBLICATION_CHECKLIST.md) | What has passed mechanically, the human editorial gate, and the decisions only the owner can take. **Start here.** |
+| [Publication checklist](publication/PUBLICATION_CHECKLIST.md) | The reconciled PC0–PC2 baseline, public-readiness gates, and the publication actions that still require owner approval. **Start here.** |
 | [Blog publication options](publication/BLOG_PUBLICATION_OPTIONS.md) | Repository-only, external venues, or canonical-plus-syndication; the trade-offs, without a decision. |
 | [GitHub Release draft](publication/GITHUB_RELEASE_DRAFT.md) | The exact release body that would be used, if a Release is decided on. Not published. |
 | [Repository metadata proposal](publication/REPOSITORY_METADATA_PROPOSAL.md) | Proposed description and topics, with what is deliberately absent from them. Not applied. |

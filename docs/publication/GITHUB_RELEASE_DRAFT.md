@@ -1,118 +1,102 @@
-# GitHub Release draft — `v0.1.0`
+# GitHub Release draft — candidate `v0.1.1`
 
-**Status: DRAFT. Not published.** No GitHub Release exists for this repository. This file is the
-text a Release would carry if the owner decides to create one, so that the decision can be made
-against the actual wording rather than against a description of it.
+**Status: DRAFT. Not published.** No `v0.1.1` tag or GitHub Release exists. This file is decision
+support for Publication Closure; it does not authorize tag creation or release publication.
 
-**If published, it must be attached to the existing annotated tag `v0.1.0`** — not to a new tag, and
-not to `main`. The release is the tree that tag points at.
+**Proposed release title:** `v0.1.1 — Publication Closure`
 
 ---
 
 ## Draft body
 
-> ### `v0.1.0` — evidence freeze
+> ## `v0.1.1` — Publication Closure
 >
-> The first frozen, citable evidence release from this repository: a local evaluation bench for
-> TypeSafe's Jev 1.13.0, and the results of using it honestly.
+> `v0.1.1` is the public-facing closure of `jev-testbench`: a lightweight Jev testbench built
+> through Agentic Engineering, with its evidence trail, null result and bilingual technical blog
+> kept intact.
 >
-> *This release was frozen under the project's historical name `jev-test`. The repository has since
-> been renamed `jev-testbench`, and the links below follow it. The release itself is unchanged, and
-> the frozen documents still carry the name they were published under.*
+> **This is not a new Jev scientific-evidence release.** Publication Closure made zero new Jev API
+> calls, ran zero new experiments and rewrote zero measurements.
 >
-> **What is in it**
+> ### The two releases mean different things
 >
-> - **42 core measurement records** (`results/usage.jsonl`) from ten registered experiments, each
->   one a real API call written by the recorder whether it succeeded or raised.
-> - **12 preregistered P3 records** (`results/p3_boundary_locus/usage.jsonl`) from a 2×2 design
->   committed before the first request went out.
-> - Every token count is the `usage` value the API returned. Nothing is estimated.
-> - An offline verifier that re-hashes the whole frozen set from disk, with no network and no API key.
+> - **`v0.1.0`** is the immutable historical evidence/software freeze. It was frozen under the
+>   historical project name `jev-test` and remains bound to commit
+>   `37ef2e425d5e9e534f856a7243be848ff17f0cbb`.
+> - **`v0.1.1`** is the candidate publication/presentation closure under the current project name
+>   `jev-testbench`: project identity, public-facing documentation, Agentic Engineering/process
+>   material and the human-approved bilingual blog.
+> - Genuinely new Jev scientific evidence is reserved for **`v0.2.0` or later**.
 >
-> **The result, stated plainly**
+> ### Scientific state carried forward unchanged
 >
-> ```
+> ```text
 > NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET
-> ```
->
-> None of the candidate findings in this release survived scrutiny as a strong Jev-specific novel
-> finding. Across 42 core records and the official behaviours audited, nothing here is both new
-> relative to TypeSafe's published material and supported by this repository's own data. The
-> public-novelty check behind that question came back `PUBLIC_NOVELTY_UNRESOLVED` — recorded as
-> unresolved, not as "nobody has done this". Every large local effect either restates a documented
-> behaviour or is an artifact of this repository's own Python-side policy. Seven triage candidates
-> were retired, including the two with the largest local effect sizes — killed on prior art, not on
-> weak data.
->
-> **The one experiment that was run**
->
-> ```
 > P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION
+> PUBLIC_NOVELTY_UNRESOLVED
 > ```
 >
-> A preregistered 2×2 crossed `instructions` and `criteria` on one payload, three repeats per arm.
-> The original effect replicated — the `N` and `B` endpoints came back 0.56 apart — but the two
-> single-field arms landed 0.05 apart, below the pre-registered separation, so the effect could not
-> be attributed to either field alone. The effect is real on this payload; its *attribution* is what
-> the design could not establish.
+> The canonical evidence is still exactly 42 core records plus 12 P3 records. The two published
+> SHA-256 digests remain:
 >
-> **What it is not**
+> ```text
+> results/usage.jsonl
+> 38e67630a7c345f1719795401ceaf7de43b1c5ec16da2adb568fb7ef8dc40b1b
 >
-> No general accuracy claim. No calibration validation, in either direction. No latency benchmark. No
-> universal batching ratio. No determinism verdict. No production safety certification. No claim
-> about NAS. The full list, with reasons, is in
-> [§ 7 of the freeze document](https://github.com/Charlie-Wang-03/jev-testbench/blob/v0.1.0/docs/evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md).
+> results/p3_boundary_locus/usage.jsonl
+> 17f36f7551d598a4724f4557d8b235d810ec4fb259d8d4b842eabc8f34c5d78e
+> ```
 >
-> **The method is the contribution.** Every claim is labelled as an official claim, a local
-> measurement, a derived calculation or a limitation. P3's design, thresholds and stopping rule were
-> frozen before the first call. When an analyzer defect was found afterwards it was disclosed in the
-> commit that recorded the measurements, repaired later without a new call, and the repair was shown
-> to move no measurement, no threshold and no verdict. The erroneous rendering is still in Git
-> history on purpose.
+> ### What Publication Closure adds
 >
-> **Reproducing it**
+> - the current `jev-testbench` project identity without rewriting `v0.1.0` provenance;
+> - a public-facing README and documentation index that keep the project explicitly outside the
+>   benchmark / leaderboard / production-certification category;
+> - the Agentic Engineering and cognitive-debt process record, kept separate from scientific
+>   evidence;
+> - the Chinese and English technical articles after human editorial approval;
+> - publication-readiness, security/privacy, license, CI and reproducibility checks.
+>
+> ### Reproduce the public-facing release offline
 >
 > ```console
 > git clone https://github.com/Charlie-Wang-03/jev-testbench.git
 > cd jev-testbench
-> git checkout v0.1.0
+> git checkout v0.1.1
 > uv sync --locked
 > uv run pytest
+> uv build
+> uv run python -m jev_lab report
+> uv run python -m jev_lab snapshot
+> uv run python -m jev_lab final-report
 > uv run python -m jev_lab.evidence_freeze verify v0.1.0
 > ```
 >
-> The verifier requires no TypeSafe API key and makes no Jev inference call, and the test suite runs
-> without either once dependencies are installed. Initial dependency installation (`git clone`,
-> `uv sync --locked`) may require network access; that is the only step here that touches the network.
-> The verifier recomputes every SHA-256 in the manifest, re-counts both logs, and re-checks the
-> registry, license, version and P3-verdict invariants.
+> The verifier deliberately targets `v0.1.0`: that tag is the scientific evidence anchor even when
+> the public-facing project has moved on.
 >
-> **License:** MIT — see [`LICENSE`](https://github.com/Charlie-Wang-03/jev-testbench/blob/v0.1.0/LICENSE).
+> ### Scope
 >
-> Cite the tag, not `main`. Citation metadata is in `CITATION.cff`.
+> This project does not establish general Jev accuracy, calibration validity, model latency, a
+> universal batching multiplier, determinism in either direction, or production safety. It is not a
+> Jev benchmark or leaderboard. The preregistered P3 experiment returned a null attribution result,
+> and that result remains part of the release rather than being repackaged.
+>
+> ### License and citation
+>
+> MIT. `CITATION.cff` in `v0.1.1` should identify the current `jev-testbench` publication release.
+> The `CITATION.cff` stored inside the immutable `v0.1.0` tag remains the citation metadata for the
+> historical evidence freeze.
 
 ---
 
-## What this draft deliberately does not say
+## Preconditions before this draft can be published
 
-The claim contract that governs everything public about this release
-([`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md)) rules out several phrasings
-that a release announcement would normally reach for. Each was left out on purpose:
+1. Owner approves `0.1.1.dev0 → 0.1.1`.
+2. Source version, `uv.lock`, `jev_lab.__version__` and `CITATION.cff` are updated in one ordinary
+   release commit and pass the full offline CI.
+3. Owner approves creation of the `v0.1.1` tag at that exact release commit.
+4. Owner separately approves creation of the GitHub Release against that tag.
+5. `v0.1.0` is not moved, recreated or edited.
 
-| Not said | Why |
-|---|---|
-| "major breakthrough", "novel findings" | None of the candidates survived as a strong Jev-specific novel finding; the state string says so. |
-| "production ready" | Every handler is inert; `ACTUAL_HANDLER_EXECUTION_UNTESTED`. |
-| "benchmark", "leaderboard" | There is no ground truth anywhere in this bench. |
-| "13× cheaper", any batching multiplier | The local ratio belongs to one payload and is not commensurable with the vendor's published figures. |
-| "validated calibration" | Two confidence cases. Not a validation, in either direction. |
-| "deterministic" / "non-deterministic" | A handful of repeats on two payloads is not a verdict either way. |
-
-## Owner actions before this could be published
-
-1. Decide whether a GitHub Release should exist at all. The tag alone is already the artifact; the
-   release notes argue that no Release, DOI or PyPI publication was part of the freeze.
-2. If yes, publish it **against the existing tag** `v0.1.0`, using the body above.
-3. Do not attach it to a new tag, and do not create a tag on `main`.
-
-**No part of this file is published by P5-C.**
+Until those approvals exist, this file is only a draft.
