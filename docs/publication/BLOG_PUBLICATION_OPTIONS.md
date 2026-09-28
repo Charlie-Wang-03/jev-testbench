@@ -1,8 +1,6 @@
 # Blog publication options
 
-**Status: decision support only. Nothing here has been published, and no account has been created
-on any platform.** This file compares venues so the owner can choose against specifics rather than
-against a general impression. The choice is the owner's and P5-C does not make it.
+**Status: OWNER APPROVED. Not published yet.** The first publication surface is the GitHub repository itself, with the canonical bilingual Markdown under `docs/blog/**`. No external-platform publication is part of this closure.
 
 **What is being placed.** A pair of articles —
 [Chinese source](../../docs/blog/jev-as-probabilistic-decision-primitive.zh-CN.md) and
@@ -100,5 +98,4 @@ Option C remains a sensible **later distribution step** if reach becomes a separ
 happens, the repository Markdown remains canonical and any platform copy stays downstream; the
 platform adaptation must not widen a claim.
 
-**Owner decision still required:** repository-only publication versus later external syndication.
-No account has been created and nothing has been posted externally.
+**Owner decision:** repository-only first publication. External syndication is deferred and is not part of Publication Closure. No external account has been created and nothing has been posted externally.

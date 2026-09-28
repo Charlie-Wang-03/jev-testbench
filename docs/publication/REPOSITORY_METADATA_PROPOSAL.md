@@ -1,8 +1,6 @@
 # Repository metadata proposal
 
-**Status: PROPOSAL ONLY. The description, homepage and topics below are not applied.** No GitHub description or
-topic has been changed. These are GitHub-side fields; changing them is the owner's action, and this
-file exists so the decision can be made against exact wording.
+**Status: OWNER APPROVED. Not published/applied yet.** The description and topic set below were approved for PC4; the homepage is approved to remain empty. The live GitHub fields have not yet been changed.
 
 **One item in this file is no longer a proposal.** The repository rename was decided by the owner in
 P5-E and applied: `PROJECT_RENAME: OWNER_APPROVED`, `jev-test` → `jev-testbench`. See
@@ -109,10 +107,11 @@ that redirect over and break every one of them.
 
 ## Owner actions
 
-Description and topics:
+Description, homepage and topics:
 
-- [ ] Approve, edit or reject the description above.
-- [ ] Approve, edit or reject the topic set.
+- [x] Approve the description above.
+- [x] Approve the topic set above.
+- [x] Approve leaving the homepage field empty.
 - [ ] Apply the approved metadata on GitHub.
 
 Name:
@@ -120,4 +119,4 @@ Name:
 - [x] The repository rename — decided in P5-E: `PROJECT_RENAME: OWNER_APPROVED`.
 - [x] Apply it: `Charlie-Wang-03/jev-test` → `Charlie-Wang-03/jev-testbench` — done by the owner.
 
-**No GitHub description, homepage or topic has been modified. The repository is `PRIVATE`; this file remains a proposal until the owner approves Publication Closure actions.**
+**No GitHub description, homepage or topic has been modified yet. The repository is still `PRIVATE`; only the owner decision is closed.**

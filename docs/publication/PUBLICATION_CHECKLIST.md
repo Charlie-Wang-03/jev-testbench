@@ -1,6 +1,6 @@
 # Publication checklist
 
-**Status: Publication Closure PC0–PC2 is reconciled on a private repository. Nothing has been published. The repository remains private until the owner explicitly decides otherwise.**
+**Status: OWNER_PUBLICATION_DECISIONS_APPROVED. PC4 is in progress on a private repository; nothing has been published yet.**
 
 This checklist separates three things that are easy to blur together: what has already been
 established mechanically, what only a human can establish, and what only the owner can decide.
@@ -49,25 +49,17 @@ The final English correction commit is `a2306ac7cb0c18bf9e9dd856633d50bb693e267f
 The blog bodies are not reopened for wording preference, style work, audit metrics or AI rewriting.
 
 ---
-## 3. Owner decisions required
+## 3. Owner publication decisions — APPROVED
 
-The editorial decisions above are already closed. The following publication actions remain explicit owner decisions.
+The owner approved the recommended PC3 combination. These are execution authorizations, not claims that the GitHub-side actions have already happened.
 
-- [ ] **Make the GitHub repository public?** — Currently `PRIVATE`. This is the decision with the
-      largest blast radius: it is not reversible in the sense that matters, because a public
-      repository can be cloned, indexed and mirrored.
-- [ ] **Promote `0.1.1.dev0` to `0.1.1`, or keep the development version?** — Publication Closure must decide this before any release action.
-- [ ] **Create a new `v0.1.1` tag?** — If created, it must represent publication/presentation closure, not new Jev scientific evidence.
-- [ ] **Create a GitHub Release for `v0.1.1`?** — The existing [`GITHUB_RELEASE_DRAFT.md`](GITHUB_RELEASE_DRAFT.md) is the earlier `v0.1.0` draft and is retained as decision history, not as an instruction to publish the historical tag now.
-- [ ] **Approve the repository description and topics?** — Proposal in
-      [`REPOSITORY_METADATA_PROPOSAL.md`](REPOSITORY_METADATA_PROPOSAL.md). Setting them is a GitHub
-      side change, not a repository change.
-- [ ] **Choose an external blog venue, if any?** — Comparison in
-      [`BLOG_PUBLICATION_OPTIONS.md`](BLOG_PUBLICATION_OPTIONS.md). "Repository only" is a complete
-      answer.
-- [ ] **Send the TypeSafe V1 documentation feedback?** — Draft in
-      [`TYPESAFE_FEEDBACK_DRAFT.md`](TYPESAFE_FEEDBACK_DRAFT.md). Every item is marked
-      `NEEDS_FRESH_RECHECK_BEFORE_SEND` and nothing has been sent.
+- [x] **Make the GitHub repository public.** — Approved for PC4; still `PRIVATE` until the final GitHub-side step.
+- [x] **Promote `0.1.1.dev0` to `0.1.1`.** — Executed in the release commit; this is publication/presentation closure, not new Jev evidence.
+- [x] **Create `v0.1.1`.** — Approved; the tag must point at the exact final green release commit.
+- [x] **Create a GitHub Release for `v0.1.1`.** — Approved. The canonical body is [`GITHUB_RELEASE_DRAFT.md`](GITHUB_RELEASE_DRAFT.md).
+- [x] **Apply the proposed repository description and topics; leave homepage empty.** — Approved; GitHub-side application is still pending.
+- [x] **First publication surface: repository-hosted bilingual blog only.** — No external platform publication in this closure.
+- [x] **TypeSafe contact: `NO CONTACT`.** — The documentation-feedback draft remains unsent.
 
 ---
 
@@ -84,7 +76,7 @@ The editorial decisions above are already closed. The following publication acti
 | Core canonical log | 42 records; SHA-256 `38e67630a7c345f1719795401ceaf7de43b1c5ec16da2adb568fb7ef8dc40b1b` |
 | P3 canonical log | 12 records; SHA-256 `17f36f7551d598a4724f4557d8b235d810ec4fb259d8d4b842eabc8f34c5d78e` |
 | GitHub Releases | none |
-| Development version | `0.1.1.dev0` |
+| Release version on `main` | `0.1.1` |
 | GitHub metadata | existing description; empty homepage; empty topics; no publication metadata applied |
 | `AGENTS.md` | absent; `CLAUDE.md` exists instead |
 
@@ -112,8 +104,9 @@ PUBLICATION_MAIN_PROMOTED
 PUBLIC_READINESS_AUDIT_PASS
 ```
 
-These states authorize the owner-decision stage only. They do not authorize public visibility, a
-new tag, a GitHub Release, metadata changes, external publication or TypeSafe contact.
+The owner subsequently approved the recommended PC3 combination. PC4 may therefore execute the
+`v0.1.1` tag, GitHub Release, approved metadata and `PRIVATE → PUBLIC` transition after the exact
+release commit passes all gates. External publication and TypeSafe contact remain explicitly out of scope.
 
 ---
 ## 4. Optional, and explicitly not blockers
@@ -124,7 +117,7 @@ none of it should be treated as gating.**
 - [ ] A social preview image for the repository (deliberately not generated; see below).
 - [ ] GitHub Pages for the blog, if option B or C in the venue comparison is chosen.
 - [ ] A DOI via Zenodo, if the release should be citable by DOI rather than by tag.
-- [ ] `CITATION.cff` review — it exists and points at the tag; a DOI would change it.
+- [x] `CITATION.cff` review — `main` now identifies `v0.1.1`; the immutable `v0.1.0` tag retains its historical citation metadata.
 
 **No decorative assets were created during P5-C.** No logo, no social card, no architecture
 illustration. Adding image assets to a release candidate that is otherwise byte-accounted-for would
