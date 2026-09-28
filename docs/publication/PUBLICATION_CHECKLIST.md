@@ -1,6 +1,6 @@
 # Publication checklist
 
-**Status: PUBLICATION EXECUTED.** PC4 completed: the repository is public, `v0.1.1` and its GitHub Release exist, and the repository-hosted bilingual blog is live.
+**Status: PUBLICATION CLOSURE COMPLETE.** PC4 publication and PC5 post-public acceptance are complete; the repository is public, `v0.1.1` and its GitHub Release exist, the bilingual blog is live, and the remote branch surface is reduced to `main`.
 
 This checklist separates three things that are easy to blur together: what has already been
 established mechanically, what only a human can establish, and what only the owner can decide.
@@ -57,7 +57,7 @@ The owner approved the recommended PC3 combination, and the approved GitHub-side
 - [x] **Promote `0.1.1.dev0` to `0.1.1`.** — Executed in the release commit; this is publication/presentation closure, not new Jev evidence.
 - [x] **Create `v0.1.1`.** — Executed; annotated tag points at `22a211517b5133f1e8c67965f2a44054c342d8e5`.
 - [x] **Create a GitHub Release for `v0.1.1`.** — Executed: `v0.1.1 — Publication Closure`.
-- [x] **Apply repository metadata; leave homepage empty.** — Executed. The owner subsequently requested a bilingual About description; that follow-up remains manual because the GitHub integration lacks repository-administration write permission.
+- [x] **Apply repository metadata; leave homepage empty.** — Executed, including the owner-requested bilingual About description.
 - [x] **First publication surface: repository-hosted bilingual blog only.** — No external platform publication in this closure.
 - [x] **TypeSafe contact: `NO CONTACT`.** — The documentation-feedback draft remains unsent.
 

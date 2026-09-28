@@ -433,7 +433,7 @@ class TestThePublicationPackStaysConsistent:
         "BLOG_PUBLICATION_OPTIONS.md": "executed",
         "REPOSITORY_METADATA_PROPOSAL.md": "applied",
         "TYPESAFE_FEEDBACK_DRAFT.md": "not sent",
-        "PUBLICATION_CLOSURE.md": "post-publication acceptance pass",
+        "PUBLICATION_CLOSURE.md": "publication closure complete",
     }
 
     def _pack_files(self) -> list[Path]:
@@ -496,4 +496,5 @@ class TestThePublicationPackStaysConsistent:
         assert "v0.1.1" in text
         assert "scientific evidence anchor" in text
         assert "zero new Jev API calls" in text
-        assert "PUBLICATION_CLOSURE_COMPLETE = NO" in text
+        assert "PUBLICATION_CLOSURE_COMPLETE" in text
+        assert "PUBLICATION_CLOSURE_COMPLETE = NO" not in text

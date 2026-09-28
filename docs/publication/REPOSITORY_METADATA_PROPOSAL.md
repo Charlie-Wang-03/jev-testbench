@@ -1,6 +1,6 @@
 # Repository metadata proposal
 
-**Status: APPLIED, WITH OWNER-REQUESTED BILINGUAL ABOUT FOLLOW-UP.** The repository is public, the homepage remains empty, and topics are live. The owner subsequently requested that the About description become bilingual; the connected GitHub integration cannot write repository-administration fields, so that one follow-up is manual.
+**Status: APPLIED.** The repository is public, the About description is bilingual, the homepage remains empty, and topics are live.
 
 **One item in this file is no longer a proposal.** The repository rename was decided by the owner in
 P5-E and applied: `PROJECT_RENAME: OWNER_APPROVED`, `jev-test` → `jev-testbench`. See
@@ -10,20 +10,17 @@ P5-E and applied: `PROJECT_RENAME: OWNER_APPROVED`, `jev-test` → `jev-testbenc
 
 ## Description
 
-**Publication Closure recommendation:**
+**Live About description:**
 
-```
-A lightweight, auditable Jev testbench built through Agentic Engineering, with frozen evidence, a
-preregistered null result, and a bilingual reflection on cognitive debt.
+```text
+A lightweight, auditable Jev testbench built through Agentic Engineering, with frozen evidence, a preregistered null result, and a bilingual technical blog. 基于 Agentic Engineering 的轻量、可审计 Jev 实验台，包含冻结证据、预注册负结果、双语技术博客与认知负债反思。
 ```
 
-This description names the current project rather than the historical `v0.1.0` release. It keeps
-`benchmark`, performance numbers, novelty language and production claims out of the repository
-metadata. `cognitive debt` is presented as a reflection topic, not as a scientific metric or a new
-standard.
+The bilingual description keeps `benchmark`, performance numbers, novelty language and production
+claims out of repository metadata. `cognitive debt` remains a project-level working concept rather
+than a claimed scientific metric or standard.
 
 ---
-
 ## Homepage
 
 **Recommendation: leave the GitHub repository homepage field empty for the first publication.**
@@ -63,8 +60,8 @@ Not used: `benchmark`, `leaderboard`, `calibration`, `production-ready`, or `cog
 **`PROJECT_RENAME: OWNER_APPROVED`** — decided by the owner in P5-E, and applied.
 
 `jev-test` read as a scratch name because it was one when the repository was created. The owner
-renamed it to **`jev-testbench`**, and chose to do it while the repository is still private, which is
-the point at which a rename costs almost nothing.
+renamed it to **`jev-testbench`** before publication, when the repository was still private and the
+rename cost was minimal.
 
 What the rename did and did not touch:
 
@@ -91,11 +88,11 @@ Description, homepage and topics:
 - [x] Apply the initial approved English description.
 - [x] Apply topics.
 - [x] Leave the homepage field empty.
-- [ ] Replace the About description with the owner-requested bilingual wording recorded in the final publication closure record.
+- [x] Replace the About description with the owner-requested bilingual wording.
 
 Name:
 
 - [x] The repository rename — decided in P5-E: `PROJECT_RENAME: OWNER_APPROVED`.
 - [x] Apply it: `Charlie-Wang-03/jev-test` → `Charlie-Wang-03/jev-testbench` — done by the owner.
 
-**The repository is `PUBLIC`; homepage and topics are in their intended live state. Only the bilingual About wording follow-up remains.**
+**The repository is `PUBLIC`; bilingual About description, homepage and topics are all in their intended live state.**

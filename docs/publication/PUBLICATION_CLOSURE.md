@@ -1,6 +1,6 @@
 # Publication Closure
 
-**Status: POST-PUBLICATION ACCEPTANCE PASS WITH NON-BLOCKING MAINTENANCE PENDING.**
+**Status: PUBLICATION CLOSURE COMPLETE.**
 
 This is the operational closure record for `Charlie-Wang-03/jev-testbench`. It is not scientific
 evidence and does not modify the frozen `v0.1.0` evidence set.
@@ -102,66 +102,37 @@ Verified from live GitHub repository state:
 - no open pull request exists;
 - repository search found no current-tree private server address or Windows absolute-path leak.
 
-The execution sandbox used for this acceptance has outbound DNS disabled, so an independent
-unauthenticated `git clone https://github.com/Charlie-Wang-03/jev-testbench.git` could not be
-executed from that sandbox. This is recorded as an environment limitation, not replaced with a
-claim that the anonymous clone was directly exercised. GitHub's live repository state itself
-reports the repository as public.
+The owner explicitly waived a separate anonymous clean-clone gate for final closure. The operational
+handoff instead requires the existing local checkout to fetch/prune remote refs and fast-forward to
+the final public `main` after this closure commit.
 
 ---
 
-## 6. Owner-requested non-blocking maintenance
+## 6. Owner-requested maintenance — COMPLETE
 
 ### 6.1 Bilingual About description
 
-The owner requested a bilingual About description after publication. The connected GitHub
-integration cannot update repository-administration fields (`403 Resource not accessible by
-integration`), so this one field requires a manual GitHub UI edit.
-
-Use exactly:
+The live GitHub About description is bilingual:
 
 ```text
-A lightweight, auditable Jev testbench built through Agentic Engineering, with frozen evidence, a preregistered null result, and a bilingual technical blog.｜基于 Agentic Engineering 的轻量、可审计 Jev 实验台，包含冻结证据、预注册负结果、双语技术博客与认知负债反思。
+A lightweight, auditable Jev testbench built through Agentic Engineering, with frozen evidence, a preregistered null result, and a bilingual technical blog. 基于 Agentic Engineering 的轻量、可审计 Jev 实验台，包含冻结证据、预注册负结果、双语技术博客与认知负债反思。
 ```
 
 Homepage remains empty.
 
 ### 6.2 Branch cleanup
 
-There are 14 non-`main` historical branches. Each branch tip is already an ancestor of `main`,
-and there are no open pull requests. Therefore deleting those branch refs would not delete any
-commit reachable from `main`; `v0.1.0` and `v0.1.1` are independently anchored by annotated tags.
-
-Recommended final branch surface:
+The remote branch surface now contains only:
 
 ```text
 main
 ```
 
-Branches safe to delete after explicit owner approval:
-
-```text
-audit/p1-official-local-evidence
-audit/p2-insight-triage
-chore/rename-jev-testbench
-docs/p5-technical-blog
-docs/p5b-bilingual-blog
-docs/p5e-cognitive-debt
-docs/p5f-english-realignment
-experiment/p3-boundary-locus
-infra/p5-post-freeze-lifecycle
-release/p3.5-open-source-readiness
-release/p5c1-ci-row
-release/p5c1-publication-pack-closure
-release/v0.1.0-evidence-freeze
-repair/p0-report-integrity
-```
-
-Branch deletion is not required for scientific or publication integrity; it is repository-surface
-cleanup.
+The 14 historical working branches were fully merged before deletion; there are no open pull
+requests. Historical release provenance remains independently anchored by the annotated `v0.1.0`
+and `v0.1.1` tags.
 
 ---
-
 ## 7. Closure state
 
 ```text
@@ -175,11 +146,10 @@ RELEASE_PUBLICATION_COMPLETE
 BILINGUAL_BLOG_PUBLICATION_COMPLETE
 
 POST_PUBLICATION_ACCEPTANCE_PASS
-OWNER_REQUESTED_MAINTENANCE_PENDING
+OWNER_REQUESTED_MAINTENANCE_COMPLETE
 
-PUBLICATION_CLOSURE_COMPLETE = NO
+PUBLICATION_CLOSURE_COMPLETE
 ```
 
-The only remaining owner-requested maintenance is the bilingual About edit and the optional deletion
-of fully merged historical branches. Neither reopens Jev experimentation, the bilingual blog,
-scientific claims or the frozen evidence.
+Publication Closure is complete. Future work begins from the public `main` state and must not rewrite
+`v0.1.0`, move `v0.1.1`, or reinterpret `v0.1.1` as new Jev scientific evidence.
