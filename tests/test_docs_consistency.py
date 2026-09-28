@@ -428,7 +428,7 @@ class TestThePublicationPackStaysConsistent:
     }
 
     STATUS_MARKERS = {
-        "PUBLICATION_CHECKLIST.md": "publication executed",
+        "PUBLICATION_CHECKLIST.md": "publication closure complete",
         "GITHUB_RELEASE_DRAFT.md": "published",
         "BLOG_PUBLICATION_OPTIONS.md": "executed",
         "REPOSITORY_METADATA_PROPOSAL.md": "applied",
