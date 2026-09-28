@@ -1,6 +1,6 @@
 # Repository metadata proposal
 
-**Status: OWNER APPROVED. Not published/applied yet.** The description and topic set below were approved for PC4; the homepage is approved to remain empty. The live GitHub fields have not yet been changed.
+**Status: APPLIED, WITH OWNER-REQUESTED BILINGUAL ABOUT FOLLOW-UP.** The repository is public, the homepage remains empty, and topics are live. The owner subsequently requested that the About description become bilingual; the connected GitHub integration cannot write repository-administration fields, so that one follow-up is manual.
 
 **One item in this file is no longer a proposal.** The repository rename was decided by the owner in
 P5-E and applied: `PROJECT_RENAME: OWNER_APPROVED`, `jev-test` → `jev-testbench`. See
@@ -36,49 +36,28 @@ later, the field can be set then without changing the evidence or release semant
 ---
 ## Topics
 
-GitHub allows up to 20. The recommended set stays intentionally narrow.
+The live topic set is:
 
-**Publication Closure recommendation (10):**
+```text
+agentic-engineering
+ai-agents
+jev
+llm
+model-evaluation
+preregistration
+probabilistic-ai
+python
+reproducibility
+typesafe
+typesafe-ai
+```
 
-| Topic | Why |
-|---|---|
-| `jev` | The subject itself. |
-| `typesafe` | Product/vendor namespace used by the project. |
-| `llm` | Broad discovery term for the surrounding model ecosystem. |
-| `ai-agents` | The engineering context in which the primitive is evaluated. |
-| `agentic-engineering` | The project-building/process layer explicitly documented here. |
-| `model-evaluation` | The measurement and evidence discipline. |
-| `reproducibility` | Frozen logs, deterministic derived artifacts and offline verification. |
-| `preregistration` | The defining P3 design practice. |
-| `probabilistic-ai` | The probabilistic-decision framing. |
-| `python` | Implementation language. |
+The first ten match the Publication Closure recommendation. `typesafe-ai` was also applied by the
+owner; it is a narrow discovery alias and does not widen any scientific claim.
 
-Not recommended: `benchmark`, `leaderboard`, `calibration`, `production-ready`, or
-`cognitive-debt`. The first four would widen or misstate the project; the last would make a
-project-level working concept look like an established technical taxonomy.
----|---|---|
-| `jev` | The subject. Low volume, high precision — anyone searching it wants this. | Yes |
-| `typesafe` | Same. | Yes |
-| `llm` | The broad discovery term. High volume, but it is how most people would find this at all. | Yes |
-| `ai-agents` | The engineering audience, and the half of the repository that is not evaluation. | Yes |
-| `model-evaluation` | The method. | Yes |
-| `reproducibility` | A stated value of the repository, not just a property of it. | Yes |
-| `preregistration` | The distinguishing topic, and the one that carries the strongest signal about what this repository does differently. | Yes |
-| `probabilistic-ai` | The paradigm the subject belongs to. | Yes |
-| `python` | The implementation language. Ordinary, but it is a real filter for the audience. | Yes |
-
-**Considered and not recommended:**
-
-| Topic | Why not |
-|---|---|
-| `benchmark` / `benchmarking` | Attracts the reading the repository spends its whole text refusing. The wrong audience arrives expecting a leaderboard. |
-| `uncertainty-quantification` / `calibration` | Accurate as a topic, but the repository explicitly does **not** validate calibration, and a topic tag does not carry a scope. |
-| `llm-evaluation` alongside `model-evaluation` | Near-duplicate; two tags that mean the same thing spend a slot without adding reach. |
-| `typesafe-ai` alongside `typesafe` | Same. |
-| `data-science`, `machine-learning`, `artificial-intelligence` | Too broad to be a filter — they would put this in front of everyone and communicate nothing. |
+Not used: `benchmark`, `leaderboard`, `calibration`, `production-ready`, or `cognitive-debt`.
 
 ---
-
 ## Repository name
 
 **`PROJECT_RENAME: OWNER_APPROVED`** — decided by the owner in P5-E, and applied.
@@ -109,14 +88,14 @@ that redirect over and break every one of them.
 
 Description, homepage and topics:
 
-- [x] Approve the description above.
-- [x] Approve the topic set above.
-- [x] Approve leaving the homepage field empty.
-- [ ] Apply the approved metadata on GitHub.
+- [x] Apply the initial approved English description.
+- [x] Apply topics.
+- [x] Leave the homepage field empty.
+- [ ] Replace the About description with the owner-requested bilingual wording recorded in the final publication closure record.
 
 Name:
 
 - [x] The repository rename — decided in P5-E: `PROJECT_RENAME: OWNER_APPROVED`.
 - [x] Apply it: `Charlie-Wang-03/jev-test` → `Charlie-Wang-03/jev-testbench` — done by the owner.
 
-**No GitHub description, homepage or topic has been modified yet. The repository is still `PRIVATE`; only the owner decision is closed.**
+**The repository is `PUBLIC`; homepage and topics are in their intended live state. Only the bilingual About wording follow-up remains.**

@@ -1,6 +1,6 @@
 # Publication checklist
 
-**Status: OWNER_PUBLICATION_DECISIONS_APPROVED. PC4 is in progress on a private repository; nothing has been published yet.**
+**Status: PUBLICATION EXECUTED.** PC4 completed: the repository is public, `v0.1.1` and its GitHub Release exist, and the repository-hosted bilingual blog is live.
 
 This checklist separates three things that are easy to blur together: what has already been
 established mechanically, what only a human can establish, and what only the owner can decide.
@@ -51,13 +51,13 @@ The blog bodies are not reopened for wording preference, style work, audit metri
 ---
 ## 3. Owner publication decisions — APPROVED
 
-The owner approved the recommended PC3 combination. These are execution authorizations, not claims that the GitHub-side actions have already happened.
+The owner approved the recommended PC3 combination, and the approved GitHub-side publication actions have now been executed.
 
-- [x] **Make the GitHub repository public.** — Approved for PC4; still `PRIVATE` until the final GitHub-side step.
+- [x] **Make the GitHub repository public.** — Executed.
 - [x] **Promote `0.1.1.dev0` to `0.1.1`.** — Executed in the release commit; this is publication/presentation closure, not new Jev evidence.
-- [x] **Create `v0.1.1`.** — Approved; the tag must point at the exact final green release commit.
-- [x] **Create a GitHub Release for `v0.1.1`.** — Approved. The canonical body is [`GITHUB_RELEASE_DRAFT.md`](GITHUB_RELEASE_DRAFT.md).
-- [x] **Apply the proposed repository description and topics; leave homepage empty.** — Approved; GitHub-side application is still pending.
+- [x] **Create `v0.1.1`.** — Executed; annotated tag points at `22a211517b5133f1e8c67965f2a44054c342d8e5`.
+- [x] **Create a GitHub Release for `v0.1.1`.** — Executed: `v0.1.1 — Publication Closure`.
+- [x] **Apply repository metadata; leave homepage empty.** — Executed. The owner subsequently requested a bilingual About description; that follow-up remains manual because the GitHub integration lacks repository-administration write permission.
 - [x] **First publication surface: repository-hosted bilingual blog only.** — No external platform publication in this closure.
 - [x] **TypeSafe contact: `NO CONTACT`.** — The documentation-feedback draft remains unsent.
 
@@ -67,7 +67,7 @@ The owner approved the recommended PC3 combination. These are execution authoriz
 
 | Item | Live state |
 |---|---|
-| Repository | `PRIVATE`; default branch `main` |
+| Repository at PC0–PC2 checkpoint | `PRIVATE`; default branch `main` |
 | Pre-promotion `main` | `ab9013d69f0fbd3a23352571d68e0a940df23492` |
 | Approved branch | `docs/p5f-english-realignment` at `a2306ac7cb0c18bf9e9dd856633d50bb693e267f` |
 | Promotion | fast-forward only; no merge commit, rebase, force push or history rewrite |
@@ -75,9 +75,9 @@ The owner approved the recommended PC3 combination. These are execution authoriz
 | Evidence tag | `v0.1.0` dereferences to `37ef2e425d5e9e534f856a7243be848ff17f0cbb` |
 | Core canonical log | 42 records; SHA-256 `38e67630a7c345f1719795401ceaf7de43b1c5ec16da2adb568fb7ef8dc40b1b` |
 | P3 canonical log | 12 records; SHA-256 `17f36f7551d598a4724f4557d8b235d810ec4fb259d8d4b842eabc8f34c5d78e` |
-| GitHub Releases | none |
+| GitHub Releases at PC0–PC2 checkpoint | none |
 | Release version on `main` | `0.1.1` |
-| GitHub metadata | existing description; empty homepage; empty topics; no publication metadata applied |
+| GitHub metadata at PC0–PC2 checkpoint | existing description; empty homepage; empty topics; no publication metadata applied |
 | `AGENTS.md` | absent; `CLAUDE.md` exists instead |
 
 Security/public-history reconciliation reused the earlier full-history/object-database audit through
@@ -104,9 +104,9 @@ PUBLICATION_MAIN_PROMOTED
 PUBLIC_READINESS_AUDIT_PASS
 ```
 
-The owner subsequently approved the recommended PC3 combination. PC4 may therefore execute the
-`v0.1.1` tag, GitHub Release, approved metadata and `PRIVATE → PUBLIC` transition after the exact
-release commit passes all gates. External publication and TypeSafe contact remain explicitly out of scope.
+The owner subsequently approved the recommended PC3 combination. PC4 executed the `v0.1.1` tag,
+GitHub Release, approved metadata and `PRIVATE → PUBLIC` transition after the exact release commit
+passed all gates. External publication and TypeSafe contact remain explicitly out of scope.
 
 ---
 ## 4. Optional, and explicitly not blockers
@@ -135,4 +135,4 @@ Whoever publishes any version of these articles, anywhere:
 3. **Link to `v0.1.0`, not to `main`.** `main` moves; the release does not.
 4. **A correction goes to the canonical text first**, then propagates.
 
-**Repository state right now: `PRIVATE` · approved blog work promoted to `main` · no `v0.1.1` tag · no GitHub Release · no external blog publication · no TypeSafe message sent.**
+**Repository state right now: `PUBLIC` · `v0.1.1` tag and GitHub Release live · repository-hosted bilingual blog live · no external blog publication · no TypeSafe message sent.**

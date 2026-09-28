@@ -60,19 +60,20 @@ drift apart.
 | [Contributing](../CONTRIBUTING.md) | Setup, the license, and the rules a change here has to preserve. |
 | [Security](../SECURITY.md) | The real risks in this project, and how to report a problem. |
 
-## Publication readiness
+## Publication
 
-**Nothing in this section has been published.** The repository is private, no GitHub Release exists,
-and no external post has been made. These files are the decision pack for the owner, prepared so the
-decisions can be taken against exact wording rather than against a description of it.
+The repository is public. The current public-facing release is **`v0.1.1 — Publication Closure`**;
+the immutable scientific evidence anchor remains **`v0.1.0`**.
 
 | Document | What it is |
 |---|---|
-| [Publication checklist](publication/PUBLICATION_CHECKLIST.md) | The reconciled PC0–PC2 baseline, public-readiness gates, and the publication actions that still require owner approval. **Start here.** |
-| [Blog publication options](publication/BLOG_PUBLICATION_OPTIONS.md) | Repository-only, external venues, or canonical-plus-syndication; the trade-offs, without a decision. |
-| [GitHub Release draft](publication/GITHUB_RELEASE_DRAFT.md) | The exact release body that would be used, if a Release is decided on. Not published. |
-| [Repository metadata proposal](publication/REPOSITORY_METADATA_PROPOSAL.md) | Proposed description and topics, with what is deliberately absent from them. Not applied. |
-| [TypeSafe feedback draft](publication/TYPESAFE_FEEDBACK_DRAFT.md) | Four `V1_DOCUMENTATION_FEEDBACK` observations. **Not sent.** Every item needs a fresh recheck first. |
+| [Publication checklist](publication/PUBLICATION_CHECKLIST.md) | The PC0–PC4 gates and owner decisions, updated to the executed state. |
+| [GitHub Release notes](publication/GITHUB_RELEASE_DRAFT.md) | Repository copy of the published `v0.1.1` Release notes. |
+| [Repository metadata](publication/REPOSITORY_METADATA_PROPOSAL.md) | The metadata decision and live state, including the owner's bilingual About follow-up. |
+| [Blog publication options](publication/BLOG_PUBLICATION_OPTIONS.md) | The venue comparison and the executed choice: repository-hosted bilingual publication only. |
+| [TypeSafe feedback draft](publication/TYPESAFE_FEEDBACK_DRAFT.md) | Four `V1_DOCUMENTATION_FEEDBACK` observations. **Not sent.** |
+
+No external blog copy was published and no TypeSafe message was sent.
 
 ## Reference
 

@@ -1,14 +1,12 @@
 # GitHub Release notes — `v0.1.1`
 
-**Status: APPROVED CONTENT. Not published yet.** The owner approved the recommended PC3 publication combination. This
-file is the canonical Release body to attach to `v0.1.1`; publication still occurs through GitHub's
-Release object rather than by changing this file.
+**Status: PUBLISHED.** This file is the repository copy of the body published in the GitHub Release `v0.1.1 — Publication Closure`. Post-public corrections must keep this copy and the Release object semantically aligned.
 
 **Release title:** `v0.1.1 — Publication Closure`
 
 ---
 
-## Draft body
+## Published body
 
 > ## `v0.1.1` — Publication Closure
 >
@@ -24,7 +22,7 @@ Release object rather than by changing this file.
 > - **`v0.1.0`** is the immutable historical evidence/software freeze. It was frozen under the
 >   historical project name `jev-test` and remains bound to commit
 >   `37ef2e425d5e9e534f856a7243be848ff17f0cbb`.
-> - **`v0.1.1`** is the candidate publication/presentation closure under the current project name
+> - **`v0.1.1`** is the publication/presentation closure under the current project name
 >   `jev-testbench`: project identity, public-facing documentation, Agentic Engineering/process
 >   material and the human-approved bilingual blog.
 > - Genuinely new Jev scientific evidence is reserved for **`v0.2.0` or later**.
@@ -91,9 +89,9 @@ Release object rather than by changing this file.
 
 ---
 
-## Execution contract
+## Executed release contract
 
-The release commit must carry `0.1.1` consistently in `pyproject.toml`, `uv.lock`,
-`jev_lab.__version__` and `CITATION.cff`, and must pass the full offline CI before the tag is
-created. The `v0.1.1` tag must point at that exact commit. The GitHub Release must be created
-against that tag. `v0.1.0` must not move, be recreated or be edited.
+The release commit carries `0.1.1` consistently in `pyproject.toml`, `uv.lock`,
+`jev_lab.__version__` and `CITATION.cff`; its full offline CI passed before publication. The
+annotated `v0.1.1` tag points at `22a211517b5133f1e8c67965f2a44054c342d8e5`, and the GitHub
+Release is attached to that tag. `v0.1.0` remains unchanged.
