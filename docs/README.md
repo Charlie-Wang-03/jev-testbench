@@ -67,6 +67,7 @@ the immutable scientific evidence anchor remains **`v0.1.0`**.
 
 | Document | What it is |
 |---|---|
+| [Publication closure](publication/PUBLICATION_CLOSURE.md) | Live publication state, release semantics, post-public acceptance and remaining maintenance. **Start here for operations.** |
 | [Publication checklist](publication/PUBLICATION_CHECKLIST.md) | The PC0–PC4 gates and owner decisions, updated to the executed state. |
 | [GitHub Release notes](publication/GITHUB_RELEASE_DRAFT.md) | Repository copy of the published `v0.1.1` Release notes. |
 | [Repository metadata](publication/REPOSITORY_METADATA_PROPOSAL.md) | The metadata decision and live state, including the owner's bilingual About follow-up. |

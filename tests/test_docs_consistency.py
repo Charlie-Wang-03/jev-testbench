@@ -418,28 +418,29 @@ class TestThePublicationPackStaysConsistent:
     STEP_RENAME = "no rename is proposed"
     RESOLVED_RENAME_ASK = "Decide about a repository rename"
 
-    # Every document here is able to say what it is. One of these must be present.
-    UNPUBLISHED_MARKERS = [
-        "not published",
-        "nothing has been published",
-        "not sent",
-        "nothing has been sent",
-        "proposal only",
-        "decision support only",
-    ]
+    PUBLICATION_FILES = {
+        "PUBLICATION_CHECKLIST.md",
+        "GITHUB_RELEASE_DRAFT.md",
+        "BLOG_PUBLICATION_OPTIONS.md",
+        "REPOSITORY_METADATA_PROPOSAL.md",
+        "TYPESAFE_FEEDBACK_DRAFT.md",
+        "PUBLICATION_CLOSURE.md",
+    }
+
+    STATUS_MARKERS = {
+        "PUBLICATION_CHECKLIST.md": "publication executed",
+        "GITHUB_RELEASE_DRAFT.md": "published",
+        "BLOG_PUBLICATION_OPTIONS.md": "executed",
+        "REPOSITORY_METADATA_PROPOSAL.md": "applied",
+        "TYPESAFE_FEEDBACK_DRAFT.md": "not sent",
+        "PUBLICATION_CLOSURE.md": "post-publication acceptance pass",
+    }
 
     def _pack_files(self) -> list[Path]:
         return sorted((REPO_ROOT / "docs/publication").glob("*.md"))
 
-    def test_the_pack_is_the_five_documents_the_index_lists(self):
-        """A sixth file would need its own status line and its own index row."""
-        assert {path.name for path in self._pack_files()} == {
-            "PUBLICATION_CHECKLIST.md",
-            "GITHUB_RELEASE_DRAFT.md",
-            "BLOG_PUBLICATION_OPTIONS.md",
-            "REPOSITORY_METADATA_PROPOSAL.md",
-            "TYPESAFE_FEEDBACK_DRAFT.md",
-        }
+    def test_the_publication_directory_is_the_five_records_plus_closure(self):
+        assert {path.name for path in self._pack_files()} == self.PUBLICATION_FILES
 
     @pytest.mark.parametrize("phrase", OVERCLAIMS)
     def test_no_pack_document_outruns_the_frozen_novelty_state(self, phrase):
@@ -451,7 +452,6 @@ class TestThePublicationPackStaysConsistent:
             )
 
     def test_the_release_draft_carries_the_states_that_scope_it(self):
-        """The guard above forbids the overclaim; this requires the honest version be present."""
         text = read("docs/publication/GITHUB_RELEASE_DRAFT.md")
         assert "NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET" in text
         assert "PUBLIC_NOVELTY_UNRESOLVED" in text
@@ -467,32 +467,13 @@ class TestThePublicationPackStaysConsistent:
             )
 
     def test_the_pack_records_the_rename_as_a_decision_already_taken(self):
-        """The rename was proposed here and decided by the owner in P5-E.
-
-        The project is `jev-testbench`; `v0.1.0` was frozen under the historical name `jev-test`.
-        A pack still offering the rename as an open question asks the owner to re-make a decision
-        they have made, which is the second failure mode above.
-        """
-        assert self.RENAME_DECIDED in read("docs/publication/REPOSITORY_METADATA_PROPOSAL.md"), (
-            f"the metadata proposal does not record {self.RENAME_DECIDED!r}"
-        )
+        assert self.RENAME_DECIDED in read("docs/publication/REPOSITORY_METADATA_PROPOSAL.md")
         for path in self._pack_files():
             text = read(f"docs/publication/{path.name}")
             for stale in (self.STEP_RENAME, self.RESOLVED_RENAME_ASK):
-                assert stale not in text, (
-                    f"{path.name} still carries {stale!r}. The rename was decided in P5-E; the "
-                    "frozen v0.1.0 set keeps the old name because that is the name it was "
-                    "published under, and that is a historical fact rather than an open question."
-                )
+                assert stale not in text
 
-    def test_every_pack_document_says_in_its_status_line_that_it_is_unpublished(self):
-        """'Draft' that reads as 'live' is the failure that matters in this directory.
-
-        The check is on the status line rather than on the whole file. A document can say "nothing
-        has been sent" in a closing paragraph while its header reads as though it went out, and the
-        header is the part a skimming reader takes away -- so a whole-file scan would pass on a
-        document whose first line claims it is live.
-        """
+    def test_every_publication_document_status_matches_live_phase(self):
         for path in self._pack_files():
             status = next(
                 (
@@ -503,6 +484,16 @@ class TestThePublicationPackStaysConsistent:
                 None,
             )
             assert status is not None, f"{path.name} has no `**Status:` line"
-            assert any(marker in status.lower() for marker in self.UNPUBLISHED_MARKERS), (
-                f"{path.name} has a status line that does not say it is unpublished: {status!r}"
+            marker = self.STATUS_MARKERS[path.name]
+            assert marker in status.lower(), (
+                f"{path.name} status does not carry the expected live-phase marker {marker!r}: "
+                f"{status!r}"
             )
+
+    def test_publication_closure_keeps_the_two_release_roles_distinct(self):
+        text = read("docs/publication/PUBLICATION_CLOSURE.md")
+        assert "v0.1.0" in text
+        assert "v0.1.1" in text
+        assert "scientific evidence anchor" in text
+        assert "zero new Jev API calls" in text
+        assert "PUBLICATION_CLOSURE_COMPLETE = NO" in text
