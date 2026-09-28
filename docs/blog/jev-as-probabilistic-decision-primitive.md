@@ -196,7 +196,7 @@ The only sentence available is this one: on this payload, moving both fields tog
 
 And that ran straight into a question the official documentation does not answer. TypeSafe's known-limitations page lists literal reading as its first failure mode, and its remedy is to state explicit conditions in `instructions` and write edge cases into `criteria`. The documentation also offers the line that `criteria` should be treated as an extension of `instructions`.
 
-But it gives that as a bundle. It has never been taken apart.
+But the material we reviewed always presents the two together.
 
 **Is that boundary carried by `instructions`, or by `criteria`?**
 
@@ -299,7 +299,7 @@ The experiment did not fail. The original large effect **replicated**: the 0.55 
 
 **A large effect is not the same thing as an identified cause.**
 
-Looking at 0.55, the natural impulse is to write "Jev weights X more heavily" immediately. But an experiment that changed two variables together cannot answer that question, however large the effect. Answering it needs no additional calls — it needs a design that pulls the variables apart. And that design has to be settled before the data is seen, or the temptation is to keep adjusting it until it says what you want to hear.
+Looking at 0.55, the natural impulse is to write "Jev weights X more heavily" immediately. But an experiment that changed two variables together cannot answer that question, however large the effect. For P3, that meant replacing the confounded design before making any more calls. And that design was settled before the new data were seen.
 
 Nor can a null result be quietly translated into something friendlier.
 
@@ -311,7 +311,7 @@ Two further limits are load-bearing and travel with the conclusion.
 
 `FIELD_ALIGNMENT_CAVEAT`. The two crossed arms are a wider field plus a narrower field, not two independently varying definitions. So this result describes the properties of this mixed-specificity construction — not where Jev actually stores a decision boundary.
 
-n = 3. Three repeats support a median and a range. They do not support any interval estimate. That is why no confidence interval is reported here: not because one was unwanted, but because this design cannot carry one.
+n = 3. Three repeats are enough to report a median and a range. We did not treat n = 3 as enough for a useful interval estimate, so none is reported here. That is not because a confidence interval was unwanted, but because this design does not support one.
 
 The conclusion is what it literally says, with nothing added. On this payload, at this sample size, under this design, the effect cannot be attributed to a single field.
 
@@ -365,7 +365,7 @@ Put those two stories together and they say the same thing. **This repository do
 
 After all of that, three items were left that transfer to other work.
 
-The first is about typed output. Passing schema validation is not the same as being correct. All 42 of 42 responses passed validation, and that establishes nothing at all: no ground truth, no adversarial input, only format compliance on benign payloads. It is the weakest form of evidence available in support of a type-safety claim.
+The first is about typed output. Passing schema validation is not the same as being correct. All 42 of 42 responses passed validation, and that establishes only format compliance on these benign payloads — no ground-truth accuracy and no adversarial robustness. It is the weakest form of evidence available in support of a type-safety claim.
 
 Connected to it is `confidence`. The official documentation scopes calibration to a set of predictions, and says plainly that confidence describes the model's answer, not a guarantee that the answer is correct. There is a sharper local example. In `06_composite_scoring`, one dimension scored **1.62** on a 0-to-3 rubric at a confidence of only **0.24**, while carrying **97.4%** of that state's composite risk. The arithmetic was right, the confidence was low, and they are simply two different questions. A policy that reads low confidence as "the answer is wrong" and high confidence as "the answer is right" is reading the wrong number.
 
@@ -457,7 +457,7 @@ There is no Jev finding here that is both new relative to TypeSafe's public mate
 
 That is a good result. A repository built to test findings received a negative test result, which means it was doing what it was built for rather than accumulating trophies.
 
-About Jev, this conclusion is willing to sign its name.
+That is the conclusion this article is willing to stand behind.
 
 But there was one more story to delete.
 
@@ -481,7 +481,7 @@ Looking at that division of labour, a more uncomfortable question surfaces.
 
 If an agent pushes implementation forward much faster than the owner can absorb that work, those two curves diverge.
 
-In this project they did diverge. It ran 10 registered experiments, recorded 54 calls, froze a release, and left behind several audits, a preregistration and a frozen evidence set. Every one of those things is real, running and mechanically checkable. But the range of what the owner can independently explain, independently verify and independently modify did not expand at the same rate.
+In this project they did diverge. It ran 10 registered experiments, recorded 54 calls, froze a release, and left behind several audits, a preregistration and a frozen evidence set. Every one of those things is real, recorded, and mechanically checkable. But the range of what the owner can independently explain, independently verify and independently modify did not expand at the same rate.
 
 That gap has a working name.
 
@@ -495,7 +495,7 @@ complexity the owner can independently explain / verify / modify
 
 This is only a working concept. It is not a term this project introduced to research, and it is not a measurable quantity. It has no units, no instrument, and no value anywhere in this repository; those lines are there to point at a shape.
 
-What this project does about it is externalise it. Canonical logs, preregistration, claim audits, an errata registry, an evidence freeze, offline tests. Those things are real and they work: they preserve facts, constrain narratives, and support later reconstruction, so that a person a year from now — including the owner — can walk back through them.
+What this project can do about that gap is externalise as much of the project's state as possible. Canonical logs, preregistration, claim audits, an errata registry, an evidence freeze, offline tests. Those things are real and they work: they preserve facts, constrain narratives, and support later reconstruction, so that a person a year from now — including the owner — can walk back through them.
 
 But they do not automatically become human understanding.
 

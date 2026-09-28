@@ -6,10 +6,15 @@ recorded in [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING
 **Not a basis:** the `v0.1.0` frozen evidence. The Chinese audit's §6 explains why that is so, and the
 reasoning is not repeated here.
 **Audit date:** 2026-09-28 · **Auditor:** the author · **API calls made during the audit: 0.**
+**Revision:** 3 — recomputed after the final human-read corrections. Seven sentences changed, and two of
+them introduced a collective form, so the counts in §2.2 and §3 rise from five to seven. Both additions
+name the project's own work rather than the owner's, so **`PROCESS_ATTRIBUTION_UNRESOLVED_EN` remains 0.**
+The two new forms are classified in §2.2 beside the five they join.
+
 **Revision:** 2 — recomputed after the English editorial micro-pass. Revision 1 miscounted the bare `I`s by
 one and did not count collective forms at all; both are corrected below, and the two new collective
-phrases the micro-pass introduced are classified. **`PROCESS_ATTRIBUTION_UNRESOLVED_EN` is 0 in both
-revisions** — the corrections change counts, not the verdict, because neither the mis-counted `I` nor any
+phrases the micro-pass introduced are classified. **`PROCESS_ATTRIBUTION_UNRESOLVED_EN` is 0 in every
+revision** — the corrections change counts, not the verdict, because neither the mis-counted `I` nor any
 collective form attributes an execution to the owner.
 
 ---
@@ -81,19 +86,21 @@ pronoun.)*
 
 ### 2.2 The collective forms, counted rather than waved at
 
-Revision 1 said the article's only `we` was in a design principle and a refused quotation. That was
-imprecise then and is incomplete now, because the editorial micro-pass added one. **The collective forms
-are counted here in full: `we` four times, `our` once, `us` zero, `me` zero, `my` once.**
+Revision 1 said the article's only `we` was in a design principle and a refused quotation; revision 2
+corrected that to five collective forms. **The final read adds two more, and the forms are counted here in
+full: `we` six times, `our` once, `us` zero, `me` zero, `my` once — seven collective forms in all.**
 
 | Line | Text | Classification | Why it stands |
 |---|---|---|---|
+| §7 | But the material **we** reviewed always presents the two together. | `PROJECT_OBSERVATION` | **New in the final read.** It replaces a global assertion about the world (*It has never been taken apart*) with a statement scoped to what this project actually read, so the `we` names the same P2 evidence review as the two rows below it. A narrowed scope cannot create an owner-execution attribution; it can only remove one. |
 | §7 | The vendor material **we** reviewed did not decompose it. | `PROJECT_OBSERVATION` | **New in the micro-pass.** Names a collective doing a piece of work — reviewing vendor material — not the owner doing an execution. The work it names is the P2 evidence review, which the disclosure in §16 assigns to ChatGPT under owner direction. An owner-attribution defect would require the sentence to say the owner did it; `we` says the project did. |
 | §7 | And **our** public-material search did not turn up a controlled attribution experiment. | `PROJECT_OBSERVATION` | **New in the micro-pass**, and the same reading. It replaces an agentless *nothing … turned up*, which hid the searcher entirely; naming the searcher is the correction, not a new claim about who searched. |
 | §10 | …is not "**we** failed to get a result". | `PROJECT_OBSERVATION` | A quoted construction the article rejects. |
+| §10 | **We** did not treat n = 3 as enough for a useful interval estimate… | `PROJECT_OBSERVATION` | **New in the final read.** A restraint rather than a claim: the sentence withholds a statistic instead of asserting that work was done. The project's own generated P3 result document already carries the same limit in its own words — *n=3 supports a median and a range, and no interval estimate* ([`P3_BOUNDARY_LOCUS_RESULT.md`](../audits/P3_BOUNDARY_LOCUS_RESULT.md) §7) — so the `we` names a property of this analysis that is on the record independent of who computed it, and names no person. |
 | §12 | …whether **we** are allowed to act. | `AUTHORIAL_REFLECTION` | Generic *we* in a design principle. |
 | §12 | …as "**we** may execute"… | `AUTHORIAL_REFLECTION` | The same principle, quoted back. |
 
-**Why none of the five is an unresolved attribution.** The rule this audit applies is that *no sentence may
+**Why none of the seven is an unresolved attribution.** The rule this audit applies is that *no sentence may
 attribute to the owner an execution the agent performed*. A collective form that names the project's own
 work does not do that — it is the same register the Chinese uses throughout (这个项目, 这里的数据) and the
 same register this audit's own `PROJECT_OBSERVATION` category exists to name. **The one thing that would
@@ -123,7 +130,7 @@ corresponding sentences and not a weaker one.
 | First-person singular pronouns (excluding the P3 arm label `I`) | **2** |
 | …of which assert an action performed in this project | **0** |
 | …of which are quotations rather than assertions | **1** |
-| Collective forms (`we` / `our` / `us`) | **5** |
+| Collective forms (`we` / `our` / `us`) | **7** |
 | …of which can only mean the owner | **0** |
 | First-person action phrases **absent** from the article | **11 of 12** |
 | Sentences attributing an execution in this project to the owner | **0** |

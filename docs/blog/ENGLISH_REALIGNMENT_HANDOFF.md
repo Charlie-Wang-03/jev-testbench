@@ -6,6 +6,9 @@
 **Amended:** 2026-09-28, by the English human editorial micro-pass (claim audit revision 11; English
 style and process attribution audits revision 2). Seven wordings changed at the owner's editorial
 direction, no structure changed, the Chinese untouched. The status line above is unchanged.
+**Amended again:** 2026-09-28, by the final human-read corrections (claim audit revision 12; English style
+audit revision 3; English process attribution audit revision 3). Seven sentences changed, no structure and no
+figure changed, the Chinese untouched. The status line above is unchanged.
 **Audience:** the record. This is a **docs artifact**, not article prose.
 
 ---
@@ -23,7 +26,7 @@ audit trail behind it, are in:
 | | |
 |---|---|
 | The English article | [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md) |
-| Bilingual claim audit | [`…CLAIM_AUDIT.md`](jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md) — **revision 10**; §1.9 and §4 are the realignment record and the three parity gates. |
+| Bilingual claim audit | [`…CLAIM_AUDIT.md`](jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md) — **revision 12**; §1.9 and §4 are the realignment record and the three parity gates, and §1.10–§1.11 record the two editorial passes that followed it. |
 | English process attribution | [`…PROCESS_ATTRIBUTION_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.en.md) |
 | English style audit | [`…STYLE_AUDIT.en.md`](jev-as-probabilistic-decision-primitive.STYLE_AUDIT.en.md) |
 
@@ -42,9 +45,11 @@ the claim audit's §4 reports **novelty parity, bilingual factual-and-numeric pa
 a result now, not a state held open.
 
 **One thing this does not mean.** The English article has passed its mechanical gates, its author-side
-audits, and **one round of human editorial review** — the micro-pass of 2026-09-28, which corrected seven
-wordings and changed no structure. **The review is not the approval.** The article is now the final
-approval candidate; final human approval has not been given, and this file does not report that it has.
+audits, and **two rounds of human editorial review** — the micro-pass of 2026-09-28, which corrected seven
+wordings, and the final human-read corrections of the same date, which rewrote seven sentences. Neither
+changed the structure, a figure or a verdict. **The review is not the approval.** The article is now the
+final approval candidate; final human approval has not been given, and this file does not report that it
+has.
 
 ---
 

@@ -20,7 +20,19 @@ text. The one row that could not be located in either document is retired, and �
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
 **Audit date:** 2026-09-28 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 11 — the English human editorial micro-pass. Seven wording corrections were applied to the
+**Revision:** 12 — the final human-read corrections. Seven corrections were applied to the English article,
+rewriting seven lines, and nothing else in it was touched; the Chinese is byte-identical to `f0ae65e`. Four of the seven change the
+statement of a claim this audit classifies — the novelty sentence in §7, the P3 design sentence in §8, the
+`n = 3` caveat in §10, and the schema-validation sentence in §12 — and **one row's statement is narrowed to
+record what the English now says**: C-46 no longer asserts that three repeats *cannot* support an interval
+estimate. The other three corrections carry no claim a reader could act on. **No row is added, retired or
+reclassified:** the totals hold at **70 substantive claims — 45 `A` + 25 `B` + 0 `C`** — and
+`DO_NOT_STATE_ZH` and `DO_NOT_STATE_EN` remain 0. §1.11 records the pass, including the two places where the
+English is now narrower than the frozen Chinese. **§4.2's fifty-token table was re-run row by row under the
+rule stated at the top of that section and all fifty rows hold**; one figure in the prose beneath it did not,
+and is corrected there.
+
+**Revision 11 — the English human editorial micro-pass.** Seven wording corrections were applied to the
 English article, none of them structural. Four tighten a statement that had been written more broadly
 than what was actually done, and one of those four also restores fidelity to the Chinese by putting the
 searcher back into the sentence that describes the prior-art search. One removes a pun, and two are
@@ -322,8 +334,11 @@ approved Chinese states the broader version — 官方没拆, 这是预注册唯
 editorial review. The direction matters and is the safe one: the English claims less than its source,
 never more. `DO_NOT_STATE_EN` is 0 and stays 0, because narrowing a claim cannot create an unsafe one. **A
 reader comparing the two texts sentence by sentence will find these four places differ, and this paragraph
-is the record that the difference is intentional.** Four sentences out of a 440-sentence article, all four
-narrower in English, none changing a figure, a finding or a verdict.
+is the record that the difference is intentional.** Four sentences out of a 438-sentence article, all four
+narrower in English, none changing a figure, a finding or a verdict. *(Revision 11 wrote that denominator as
+440, taken from the style audit's revisions 1–2. Revision 3 of that file states a counting method that
+reproduces; on it the article has 438 prose sentences after revision 12 and had 439 before it. The figure is
+corrected here rather than left as a number no method produces — the same treatment §4.2's prose got.)*
 
 **The public-novelty correction is the opposite case: it restores parity rather than departing from it.**
 The Chinese says 公开材料里也没有找到带控制变量的归因实验 — *did not find*, a search with an agent. The English
@@ -342,6 +357,88 @@ about what TypeSafe published.
 
 **What did not change.** No row is added or retired, no class moves, no verdict flips, and the Chinese
 article was not touched: it is byte-identical to `f0ae65e`.
+
+### 1.11 Revision 12: the final human-read corrections
+
+Seven corrections were applied to the English article, rewriting seven lines — **eleven sentences replaced by
+ten** — and no other text changed. The Chinese was not touched; it is byte-identical to `f0ae65e`. **Four of
+the seven bear on a claim this audit classifies, and one of those moves that row's statement. Three carry no
+claim about Jev, about a measurement, or about anything TypeSafe published.**
+
+**The novelty sentence (§7) is the second scoping of a claim already narrowed once, and it is C-32 again.**
+The English had said *It has never been taken apart* — a statement about the vendor's material that a reader
+can only take as a claim about everything published anywhere. It now says *But the material we reviewed
+always presents the two together*. **Both halves of the claim are now facts about this project's reading of
+the vendor's material rather than facts about the vendor**, because the micro-pass had already scoped the
+other half (§1.10). C-32's statement below records the narrower English form; its class is unchanged at `A`,
+and the narrower statement is the easier one to support.
+
+**The P3 design sentence (§8) becomes a description of what happened, and it removes a false denial.** The
+English had said *Answering it needs no additional calls — it needs a design that pulls the variables apart.
+And that design has to be settled before the data is seen, or the temptation is to keep adjusting it until it
+says what you want to hear.* Two things were wrong with it. It said the question needed no additional calls,
+when **the confounded design was replaced precisely so that twelve more calls could be made** — the article's
+own §9 reports them. And it stated a rule in the imperative (*has to be*) at a point where the article
+should be reporting what the project did. It now reads *For P3, that meant replacing the confounded design
+before making any more calls. And that design was settled before the new data were seen.* **The claim is
+C-35's** — design, order, statistics and thresholds committed before the first request — and it is now stated
+where it mattered, as a fact the frozen preregistration carries. No new row, no class change, no verdict
+moved.
+
+**The `n = 3` sentence (§10) is the row that moves, because the English no longer makes the same statistical
+claim the Chinese makes.** The English had said *Three repeats support a median and a range. They do not
+support any interval estimate.* That is a general claim about three repeats, and a stronger one than this
+project's own result document makes. It now says *Three repeats are enough to report a median and a range. We
+did not treat n = 3 as enough for a useful interval estimate, so none is reported here. That is not because a
+confidence interval was unwanted, but because this design does not support one.* **The middle clause is a
+decision about what this project reports, and the last clause is the frozen limit restated** — the generated
+P3 result document ([`P3_BOUNDARY_LOCUS_RESULT.md`](../audits/P3_BOUNDARY_LOCUS_RESULT.md) §7) already says
+*n=3 supports a median and a range, and no interval estimate* and gives the design as the reason. C-46's
+statement below is updated to record both forms. Class stays `A`; a caveat stated more narrowly is still a
+caveat.
+
+**The schema-validation sentence (§12) stops contradicting the paragraph it sits in.** The English had said
+the 42-of-42 result *establishes nothing at all: no ground truth, no adversarial input, only format
+compliance on benign payloads*. The paragraph opens by saying that passing schema validation is not the same
+as being correct, which concedes that it establishes something — that the format held. The sentence now says
+*establishes only format compliance on these benign payloads — no ground-truth accuracy and no adversarial
+robustness*. **C-50's claim does not move**: 42 of 42 responses were schema-valid, and that is the weakest
+kind of type-safety evidence. What changed is that the sentence names the two things it declines to claim
+instead of declining everything.
+
+**Three corrections carry no claim a reader could act on.**
+
+- The §15 sentence that signs the article's name — *About Jev, this conclusion is willing to sign its name*
+  became *That is the conclusion this article is willing to stand behind*. C-70's carrier: the willingness is
+  the same, and the English now names the article rather than personifying the conclusion.
+- The §16 sentence about what the project's artifacts are — *real, running and mechanically checkable* became
+  *real, recorded, and mechanically checkable*.
+- The §16 sentence about externalisation — *What this project does about it is externalise it* became *What
+  this project can do about that gap is externalise as much of the project's state as possible*.
+
+Both of the last two are C-75's carriers. None of the three changes what is asserted about Jev, about a
+measurement, or about what TypeSafe published.
+
+**Two of the seven make the English narrower than the frozen Chinese, and the direction is recorded rather
+than smoothed.** The Chinese was not edited to match, because it is approved and frozen.
+
+1. **`n = 3`.** The Chinese says 三个重复能支撑一个中位数和一个极差，支撑不了任何区间估计 — three repeats support a
+   median and a range, and *no interval estimate*, stated flatly. The English now states this project's
+   decision and this design's limit instead. **English statistical wording is narrower / more precise; no
+   scientific conclusion changes.**
+2. **`real, running and mechanically checkable`.** The Chinese says 这些东西都是真的、在跑的、可以被机械复核的 — real,
+   *running*, and mechanically checkable. The English drops *running* and says *recorded*.
+
+**Neither departure claims more than its source, and both are deliberate.** They join the four the micro-pass
+established (§1.10), which makes **six sentences in the pair where the English is narrower than the Chinese
+and the difference is intentional rather than drift.** `DO_NOT_STATE_EN` is 0 and stays 0; narrowing cannot
+create an unsafe claim.
+
+**The token table did not move, and the audit's own prose did.** §4.2 re-runs at fifty tokens with the same
+three differences and the same reasons, recounted mechanically rather than read. The sentence beneath the
+table that counts the English's `of` spellings said *fourteen*; recounted, the three ratio tokens it names
+occur **nine** times in the English, and `45 / 45` is a twelfth expression written with a slash. The figure is
+corrected in §4.2, and the count is now taken from the table rather than from memory.
 
 ---
 
@@ -386,10 +483,10 @@ in the same or immediately adjacent sentence, in that language), `n/a` (the clas
 | C-29 | Routing: 4/4 function matches, 4/4 argument matches, 4/4 suppressed, handler never entered | B — our architecture | The `12` records; P2 §4.1 (G) | 路由, 三条经验 | §6, §12 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-30 | Route confidences 0.76 / 0.58 / 0.72 / 1.0 against a 0.8 floor; the 1.0 case withheld by `needs_human_review` 0.94 ≥ 0.5 | B — our own policy; thresholds are demonstration parameters | Log: the four `function` answers carry those confidences; `needs_human_review` = 0.94 | 路由 | §6 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-31 | `07`: an 82-byte byte-identical state, `Noul` 0.75 → 0.20, a 0.55 move | B — the `07` illustration | Log: `state_utf8_bytes = 82`; vague `0.75`, explicit `0.20` | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-32 | The official remedy for the literal-reading edge is given as a bundle and never decomposed — **stated in the English as a fact about the material reviewed, not about the vendor** (§1.10) | A — official | `TS-DOC-JAG`; P2 §4.3 | 07 | §7 | yes | yes | `SAFE_TO_STATE` |
+| C-32 | The official remedy for the literal-reading edge is given as a bundle and never decomposed — **stated in the English as a fact about the material reviewed, not about the vendor, in both halves of the claim** (§1.10, §1.11) | A — official | `TS-DOC-JAG`; P2 §4.3 | 07 | §7 | yes | yes | `SAFE_TO_STATE` |
 | C-33 | The novelty check returned `PUBLIC_NOVELTY_UNRESOLVED`, recorded as unresolved, never as "nobody has done this" | B — anything about novelty | P2 §4.8 | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-34 | It was the only question that passed triage and was worth spending calls on | B — novelty | P2 §5: exactly one `R_GO` candidate | 07 | §7 | yes | yes | `SAFE_WITH_SCOPE` |
-| C-35 | Design, order, statistics and thresholds were committed before the first request | A — preregistration | Freeze §5.1; `db7d06f` | P3 设计 | §8 | n/a | n/a | `SAFE_TO_STATE` |
+| C-35 | Design, order, statistics and thresholds were committed before the first request — **the English states it at the point of the P3 decision, as what happened rather than as a rule that must hold** (§1.11) | A — preregistration | Freeze §5.1; `db7d06f` | P3 设计 | §8 | n/a | n/a | `SAFE_TO_STATE` |
 | C-36 | A 2×2 of the two fields, 3 repeats per arm, 12 calls, declared as a hard ceiling | A — preregistration | `P3_BOUNDARY_LOCUS_PREREGISTRATION.md` §9; freeze §6.1 | P3 设计 | §8 | n/a | n/a | `SAFE_TO_STATE` |
 | C-37 | The pre-registered design hazard: the crossed arms must state the same boundary | A — preregistration | Preregistration §9 | P3 设计 | §8 | n/a | n/a | `SAFE_TO_STATE` |
 | C-38 | P3 raw values, medians and ranges for all four arms | A — local measurement | P3 log: `N` 0.77/0.76/0.75; `I` 0.31/0.33/0.29; `C` 0.37/0.36/0.33; `B` 0.20/0.21/0.20 | P3 结果 | §9 | n/a | n/a | `SAFE_TO_STATE` |
@@ -400,11 +497,11 @@ in the same or immediately adjacent sentence, in that language), `n/a` (the clas
 | C-43 | The large effect replicated; the *attribution* is what failed | A — the null, stated correctly | P3 result §4 | 负结果 | §10 | n/a | n/a | `SAFE_TO_STATE` |
 | C-44 | Two summaries are explicitly refused: "the boundary lives in both fields" and "criteria are what matter" | A — refusals | Freeze §6.1 names both as the two wrong summaries | 负结果 | §10 | n/a | n/a | `SAFE_TO_STATE` |
 | C-45 | `FIELD_ALIGNMENT_CAVEAT` limits the result to this mixed-specificity construction | A — caveat | Freeze §6.1; P3 result §7 | 负结果 | §10 | yes | yes | `SAFE_TO_STATE` |
-| C-46 | **n = 3 per arm** supports a median and a range and no interval estimate | A — caveat | Freeze §6.1 | 负结果 | §10 | yes | yes | `SAFE_TO_STATE` |
+| C-46 | **n = 3 per arm** supports a median and a range and no interval estimate — **stated in the English as this design's limit and this project's decision about what to report, not as a property of three repeats** (§1.11) | A — caveat | Freeze §6.1; P3 result §7 | 负结果 | §10 | yes | yes | `SAFE_TO_STATE` |
 | C-47 | The analyzer defect, its disclosure in the commit that recorded the measurement, its post-run repair, the deliberate preservation of the incorrect rendering in Git history, and the invariance of every measurement, threshold and verdict | A — engineering + provenance | `ERR-002`; P3 result, "Post-run analyzer correction provenance" | 分析器 | §11 | n/a | n/a | `SAFE_TO_STATE` |
 | C-48 | `ERR-001`: P1 states 42 of 42; the correct figure is 45 of 45; P1's text was not edited | B — the corrected count, which requires citing the erratum | Log recount; `ERRATA.md` | 勘误 | §11 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-49 | The 42 records carry 119 answers between them | A — canonical log | Log: 119 answers total | 勘误 | §11 | n/a | n/a | `SAFE_TO_STATE` |
-| C-50 | 42/42 responses were schema-valid; that is the weakest kind of type-safety evidence | A — non-claim | `findings.md` §1 | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
+| C-50 | 42/42 responses were schema-valid; that is the weakest kind of type-safety evidence — **the English names the two things it declines to claim (accuracy, robustness) rather than denying everything** (§1.11) | A — non-claim | `findings.md` §1 | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
 | C-51 | In `06_composite_scoring`, one dimension scored 1.62 on a 0–3 rubric at confidence 0.24 and carried 97.4% of that state's composite risk | A — local measurement, one named case | Log: `evidence_quality` raw 1.62, confidence 0.24; recomputed share **97.41%** | 三条经验 | §12 | n/a | n/a | `SAFE_TO_STATE` |
 | C-52 | Official calibration is group-scoped; confidence "describes the model's answer, not a guarantee that the answer is correct" | A — official, attributed | `TS-DOC-SYS1`, `TS-DOC-CONF` | 三条经验 | §12 | yes | yes | `SAFE_TO_STATE` |
 | C-53 | This project neither validated nor falsified calibration, in either direction | A — non-claim | `NO_CALIBRATION_VALIDATION` | 三条经验 | §12 | n/a | n/a | `SAFE_TO_STATE` |
@@ -420,12 +517,12 @@ in the same or immediately adjacent sentence, in that language), `n/a` (the clas
 | C-65 | First-person framing of the author's own work: the opening curiosity about typed output; not wanting to run a design twice; finding the analyzer defect awkward rather than heroic | A — first-person, no product claim | Every item traces to work actually done and recorded; **re-attributed in P5-E** where the underlying action was an agent's. **The NAS item was dropped in revision 8** with the rest of the NAS material — it was a framing clause, not a separate claim | 开头, 测量台, 分析器 | §1, §11, §13 | n/a | n/a | `SAFE_TO_STATE` |
 | C-66 | The narrative device: candidate findings were written up and then deleted; **the ones that fell, fell for two different reasons — prior art for batching and repeatability, this bench's own policy for the gate and the routing blocks** — and none was kept or killed for how it looked. **The article describes four in detail and states the triage total of seven once**, in the closing movement, where the survivor is named as 一个值得继续追的问题 rather than as a finding — so the prose carries the count *and* the survivor's open status (see §1.6 for the reading risk the first form of that sentence opened and the fourth correction closed) | **B** — novelty-adjacent | P2 §5–§6: seven triage candidates, all retired | 四个候选, 结尾 | §6, §7 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-67 | Method claims about this bench: an evaluation repository's job is to delete the stories its evidence cannot carry (carried by 一个用来检验发现的仓库…在做它该做的事，而不是在累积战利品); what it accumulates is that ability (carried by 这个仓库真正积累的，不是故事。是删故事的能力。). **P5-E1 deleted a third sentence that restated the first half ahead of the second**; the claim is unchanged and both halves still stand, one sentence apart. | A — methodology opinion about the bench, not about Jev | Freeze §5.3; the P2 triage outcome | 结尾 | §15 | n/a | n/a | `SAFE_TO_STATE` |
-| C-70 | The author is willing to put a name to the frozen state string | **B** — novelty-adjacent | Freeze §5.3; the string is quoted in the same paragraph and restated in scope around it | 结尾 | §15 | yes | yes | `SAFE_WITH_SCOPE` |
+| C-70 | The author is willing to put a name to the frozen state string — **restated in the English as the article standing behind the conclusion rather than as the conclusion signing its name** (§1.11) | **B** — novelty-adjacent | Freeze §5.3; the string is quoted in the same paragraph and restated in scope around it | 结尾 | §15 | yes | yes | `SAFE_WITH_SCOPE` |
 | C-71 | No adjudication of vendor claims: incommensurable, not "the vendor is wrong" and not "the local run proves them right" | A — contract rule | `BLOG_CLAIM_CONTRACT.md`; P1 audit | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
 | C-72 | Every state is synthetic; there is no real personal, customer or proprietary data here | A — contract rule | Repository practice; freeze §7 | 非声明 | §14 | n/a | n/a | `SAFE_TO_STATE` |
 | C-73 | The bench keeps **two** canonical logs: the core phases write `results/usage.jsonl`, P3 writes its own `results/p3_boundary_locus/usage.jsonl`, and the two are not merged | A — canonical log identity | Freeze §3 names both hashes; both logs re-hashed during this audit | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
 | C-74 | Latency is recorded as end-to-end local wall-clock; it is a measurement, **not** a model-inference latency benchmark | A — non-claim about what the latency figure means | `findings.md`; the transport-attempt rule in `CLAUDE.md`; freeze §3.3 | 测量台 | §2 | n/a | n/a | `SAFE_TO_STATE` |
-| C-75 | External mechanisms — canonical logs, preregistration, claim audit, errata, the evidence freeze, offline tests — make false statements harder to make; **they do not by themselves give a maintainer the ability to independently explain and verify the facts they hold** | A — non-claim about what the mechanisms do | Freeze §7; the process attribution audit §6 domain separation | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
+| C-75 | External mechanisms — canonical logs, preregistration, claim audit, errata, the evidence freeze, offline tests — make false statements harder to make; **they do not by themselves give a maintainer the ability to independently explain and verify the facts they hold** — **the English calls the artifacts *recorded* where the Chinese says 在跑的, and asks what the project *can do* where the Chinese says what it *does*** (§1.11) | A — non-claim about what the mechanisms do | Freeze §7; the process attribution audit §6 domain separation | 结尾 | §16 | n/a | n/a | `SAFE_TO_STATE` |
 
 ---
 
@@ -461,6 +558,12 @@ that differs, and it differs only by C-73, C-74 and C-75.
 **There is no r9 column either, and for the same reason.** The narrative positioning closure re-states one
 preregistration sentence and classifies identically, so revision 9's figures are revision 8's. §1.8 is where
 that is argued; the column would repeat these numbers to the row.
+
+**There is no r12 column, for the fourth time and the same reason.** The final human-read corrections rewrite
+seven sentences and narrow the statement of one existing row, C-46; they add no row, retire no row and flip
+no verdict. **Revision 12's figures are revision 11's**, so the `English (r10)` column above is also the
+revision-11 and revision-12 column, unchanged to the row. §1.11 records the corrections and the two
+asymmetries they create.
 
 **There is no r11 column, for the third time and the same reason.** The English editorial micro-pass
 corrects seven sentences and narrows the statement of one existing row; it adds no row, retires no row and
@@ -529,6 +632,12 @@ the Chinese, §15 in the English — and both restate it in scope around the blo
 string restated as a negative, and the four candidates that fell are said to have fallen to official or
 public prior art in the same two groups in both languages.
 
+**Revision 12 tightened the gate's weakest sentence one step further.** The English sentence about the
+official remedy used to assert that the two official tools *have never been taken apart* — a statement about
+the world — and now says that the material this project reviewed always presents them together (§1.11). This
+gate exists to stop the pair from claiming to be first, and a sentence scoped to what was actually read
+cannot claim it.
+
 ### 4.2 Bilingual factual and numeric parity — **PASS**
 
 The check: every figure the two languages must agree on is present in both, and means the same thing in
@@ -573,10 +682,14 @@ none is a changed figure:
 | `45 / 45` | 2 | 3 | **The English states the same corrected figure one extra time, in a different spelling.** Both articles point at the erratum in §1 and state the corrected value in §11. The English also writes the value out in full in its §1 statement — **45 of 45** Noul answers — where the Chinese says 45 个 Noul 答案, which is a count rather than a ratio and does not match this token. Same figure, same places, one more expression of it. |
 
 **The other three ratio tokens are identical across the two spellings.** `5 / 5` and `10 / 10` are 1 and 1
-in both articles; `4 / 4` is 7 and 7. **In every one of those fourteen English occurrences the English
-writes `of`** — *4 of 4 correct functions*, *all **10 of 10** selected values were identical* — so a reader
-checking the literal string `4 / 4` against the English finds nothing, which is why the rule is stated at
-the top of this section rather than assumed.
+in both articles; `4 / 4` is 7 and 7. **In all nine of those English occurrences the English writes `of`** —
+*4 of 4 correct functions*, *all **10 of 10** selected values were identical* — so a reader checking the
+literal string `4 / 4` against the English finds nothing, which is why the rule is stated at the top of this
+section rather than assumed. *(This sentence said fourteen until revision 12. Recounted against the table, the
+three tokens it names have nine English occurrences: 7 + 1 + 1. Revision 11's correction fixed two rows of
+the table; the prose beneath it was carried forward without the same recount.)* **The `45 / 45` row is the
+one place the English writes a ratio with a slash** — three times in all, twice as *45 of 45* and once as the
+literal `45 / 45`, in the sentence that says the notation *was written down incorrectly at one point*.
 
 **Three further classes of statement were compared directly, and agree in both languages.** Every
 comparison keeps its direction (`0.05 < 0.10`, `0.61 ≥ 0.60`, `0.75 → 0.20`, a `0.56` endpoint gap); every
@@ -613,8 +726,9 @@ in the English sentence itself rather than assumed from the Chinese: `C-05`'s di
 `C-19`'s one-payload boundary and its refusal to sit beside the vendor's multiplier, `C-26`'s *our own
 constant, named by its own label, never calibrated*, `C-33`'s *unresolved, not nobody-has-done-this*,
 `C-40`'s *descriptive arithmetic, not part of the decision rule*, `C-45`'s `FIELD_ALIGNMENT_CAVEAT`,
-`C-46`'s `n = 3`, `C-48`'s erratum-carrying corrected count, and `C-54`'s inert handlers with
-`ACTUAL_HANDLER_EXECUTION_UNTESTED`. One row the frozen English did not carry at all — `C-05`'s
+`C-46`'s `n = 3` — now stated as this design's limit rather than as a property of three repeats, which is a
+scope read in the English sentence itself — `C-48`'s erratum-carrying corrected count, and `C-54`'s inert
+handlers with `ACTUAL_HANDLER_EXECUTION_UNTESTED`. One row the frozen English did not carry at all — `C-05`'s
 display-quantisation caveat — is present in the new English with its scope, which is why its English scope
 cell reads `yes` where revision 2 recorded `n/a`.
 
