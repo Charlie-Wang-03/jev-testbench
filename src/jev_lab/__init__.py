@@ -12,7 +12,7 @@ Ground rules:
 
 __all__ = ["__version__"]
 
-# The version lifecycle, matching `pyproject.toml`: `0.1.0` is the frozen evidence release tagged
-# `v0.1.0` (and that tag carries its own copy of this file); `0.1.1.dev0` is post-freeze
-# development identity. See `pyproject.toml` for the full reading.
-__version__ = "0.1.1.dev0"
+# The version lifecycle, matching `pyproject.toml`: `0.1.0` is the immutable historical evidence
+# release; `0.1.1` is Publication Closure under the current `jev-testbench` identity and contains
+# no new Jev scientific evidence. See `pyproject.toml` for the full reading.
+__version__ = "0.1.1"

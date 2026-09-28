@@ -1,36 +1,33 @@
 cff-version: 1.2.0
-# This file describes one release, not the project's current state: `version` and the title's
-# project name are the identity `v0.1.0` was published under, and neither is updated when the
-# project moves on. Only the URLs follow the repository, which is where a reader has to land.
-#
-# v0.1.0 was frozen under the historical project name `jev-test`. The repository has since been
-# renamed `jev-testbench`. No later version has been released.
+# This file describes the current public-facing project release. The immutable v0.1.0 tag carries
+# its own historical CITATION.cff under the old project name `jev-test`; that file is not rewritten.
 message: >-
-  If you cite this release, cite the tag v0.1.0. It is a frozen evidence set; `main` will move.
-  v0.1.0 was frozen under the historical project name `jev-test`; the repository has since been
-  renamed `jev-testbench`, and the URLs below follow it. The release itself is unchanged by that.
-title: "jev-test: local evaluation bench and evidence freeze for TypeSafe Jev 1.13.0"
+  Cite v0.1.1 for the current jev-testbench Publication Closure state. If your claim depends on the
+  frozen Jev measurements, cite v0.1.0 as the scientific evidence anchor: 42 core records plus 12 P3
+  records, unchanged by this release.
+title: "jev-testbench: a lightweight Jev testbench built through Agentic Engineering"
 abstract: >-
-  A measurement bench for TypeSafe's Jev model and the audit trail of what it measured:
-  two frozen canonical logs (42 core records, 12 P3 records), a dated official-claims
-  audit, a novelty triage, and a preregistered two-field experiment that returned a null.
-  The scientific state at this release is NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET; the
-  primary P3 verdict is P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION. No general accuracy,
-  calibration, latency, batching-ratio, determinism or production-safety claim is made.
+  Publication Closure for jev-testbench: a lightweight TypeSafe Jev exploratory testbench, its
+  auditable evidence trail, a preregistered null attribution result, an Agentic Engineering process
+  record, and a human-approved bilingual technical blog. This release adds no new Jev API calls,
+  experiments, measurements, or scientific claims. The immutable v0.1.0 tag remains the scientific
+  evidence freeze and preserves the historical project name jev-test. The carried-forward scientific
+  state is NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET and P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION.
 type: software
 authors:
   - family-names: Wang
     given-names: Yichuan
     email: 133667618+Charlie-Wang-03@users.noreply.github.com
-version: 0.1.0
-date-released: 2026-09-27
+version: 0.1.1
+date-released: 2026-09-28
 license: MIT
 repository-code: "https://github.com/Charlie-Wang-03/jev-testbench"
-url: "https://github.com/Charlie-Wang-03/jev-testbench/tree/v0.1.0"
+url: "https://github.com/Charlie-Wang-03/jev-testbench/tree/v0.1.1"
 keywords:
   - typesafe
   - jev
   - llm-evaluation
+  - agentic-engineering
   - reproducibility
   - preregistration
   - negative-results

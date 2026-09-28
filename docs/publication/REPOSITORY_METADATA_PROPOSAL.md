@@ -97,7 +97,7 @@ What the rename did and did not touch:
 | The distribution name | Now `jev-testbench`. The import package stays `jev_lab`, because the supported interface is the CLI and the evidence files, not a Python library API. |
 | The frozen release `v0.1.0` | **Unchanged.** It was published under the name `jev-test`, and that is a historical fact about it rather than a stale string. |
 | [`docs/evidence/v0.1.0/`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md) | **Unchanged.** Its manifest still records `"name": "jev-test"`, and `evidence_freeze verify v0.1.0` still passes. |
-| [`CITATION.cff`](../../CITATION.cff) | Keeps `version: 0.1.0` and the title it was published under; its URLs follow the repository. |
+| [`CITATION.cff`](../../CITATION.cff) | On the `v0.1.1` release commit, identifies the current `jev-testbench` Publication Closure release. The immutable `v0.1.0` tag keeps its own historical `CITATION.cff` under `jev-test`. |
 | The bilingual blog | Current and human-approved. Historical `jev-test` mentions remain only where they describe the pre-rename project state or frozen provenance. |
 
 The one thing that must not happen is creating a new repository at `Charlie-Wang-03/jev-test`. The

@@ -1,9 +1,10 @@
-# GitHub Release draft — candidate `v0.1.1`
+# GitHub Release notes — `v0.1.1`
 
-**Status: DRAFT. Not published.** No `v0.1.1` tag or GitHub Release exists. This file is decision
-support for Publication Closure; it does not authorize tag creation or release publication.
+**Status: APPROVED CONTENT.** The owner approved the recommended PC3 publication combination. This
+file is the canonical Release body to attach to `v0.1.1`; publication still occurs through GitHub's
+Release object rather than by changing this file.
 
-**Proposed release title:** `v0.1.1 — Publication Closure`
+**Release title:** `v0.1.1 — Publication Closure`
 
 ---
 
@@ -90,13 +91,9 @@ support for Publication Closure; it does not authorize tag creation or release p
 
 ---
 
-## Preconditions before this draft can be published
+## Execution contract
 
-1. Owner approves `0.1.1.dev0 → 0.1.1`.
-2. Source version, `uv.lock`, `jev_lab.__version__` and `CITATION.cff` are updated in one ordinary
-   release commit and pass the full offline CI.
-3. Owner approves creation of the `v0.1.1` tag at that exact release commit.
-4. Owner separately approves creation of the GitHub Release against that tag.
-5. `v0.1.0` is not moved, recreated or edited.
-
-Until those approvals exist, this file is only a draft.
+The release commit must carry `0.1.1` consistently in `pyproject.toml`, `uv.lock`,
+`jev_lab.__version__` and `CITATION.cff`, and must pass the full offline CI before the tag is
+created. The `v0.1.1` tag must point at that exact commit. The GitHub Release must be created
+against that tag. `v0.1.0` must not move, be recreated or be edited.

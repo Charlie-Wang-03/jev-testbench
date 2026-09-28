@@ -6,10 +6,11 @@ name = "jev-testbench"
 #             historical name, `jev-test`. That release is immutable and this file on `main` has no
 #             bearing on it -- the tag carries its own copy.
 #   0.1.1.dev0 development identity after that freeze: project identity, presentation and process
-#             documentation. It contains no new measurement and must never be tagged as a release;
-#             it exists so that "post-freeze" and "the release" are distinguishable at a glance.
+#             documentation before Publication Closure. It contains no new measurement.
+#   0.1.1     Publication Closure under the current project identity `jev-testbench`: public-facing
+#             documentation, process record and bilingual blog, with no new Jev scientific evidence.
 #   0.2.0     reserved for genuinely new scientific evidence.
-version = "0.1.1.dev0"
+version = "0.1.1"
 # The word "benchmark" is avoided on purpose: this repository has no ground truth, so it does not
 # produce an accuracy score, which is what the word promises. What it produces is a log and a set
 # of labelled claims about that log.
