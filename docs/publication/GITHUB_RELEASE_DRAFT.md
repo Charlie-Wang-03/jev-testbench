@@ -1,6 +1,6 @@
 # GitHub Release notes — `v0.1.1`
 
-**Status: APPROVED CONTENT.** The owner approved the recommended PC3 publication combination. This
+**Status: APPROVED CONTENT. Not published yet.** The owner approved the recommended PC3 publication combination. This
 file is the canonical Release body to attach to `v0.1.1`; publication still occurs through GitHub's
 Release object rather than by changing this file.
 
