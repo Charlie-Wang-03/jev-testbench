@@ -1,14 +1,19 @@
-# Process attribution audit — the Chinese article (P5-E1)
+# Process attribution audit — the Chinese article
 
 **Audited document:** [`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
 **Basis of this audit:** `OWNER_DECLARED_PROJECT_PROCESS` — the owner's declaration of who did what,
 recorded in [`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.md) §2.
 **Not a basis:** the `v0.1.0` frozen evidence. See §6.
-**Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 4 — recomputed after the blog scope cleanup, which removed one row. Supersedes revision 3
-(the micro corrections) and revision 2 (P5-E1). The re-verifications are recorded in §9 through §11; the
-findings of revision 1 stand unchanged. **The cleanup column in §7 is the only figure this revision moves,
-and it moves because a statement left the article — see §11.**
+**Audit date:** 2026-10-12 · **Auditor:** the author with ChatGPT editorial supervision · **Jev API calls made during revision 5: 0.**
+**Revision:** 5 — post-public `human-writing` editorial maintenance. The owner reopened the Chinese
+prose after Publication Closure. The pass changes wording and removes one authorial metaphor; it does not
+change who performed any project action. The full process sweep was re-run on the edited Chinese article.
+`PROCESS_ATTRIBUTION_UNRESOLVED = 0` remains unchanged. The only inventory movement is row 27, which is
+retired because the gorilla / machine-gun / fire metaphor was removed rather than re-attributed. See §12.
+
+**Revision 4 — historical.** Recomputed after the blog scope cleanup, which removed one row. Supersedes
+revision 3 (the micro corrections) and revision 2 (P5-E1). The re-verifications are recorded in §9 through
+§11; the findings of revision 1 stand unchanged.
 
 ---
 
@@ -133,8 +138,8 @@ anchor, since the article has no numbered sections.
 | 23 | The non-claims | `PROJECT_OBSERVATION` | Statements about what the evidence supports. |
 | 25 | The closing disclosure of AI involvement | `PROJECT_OBSERVATION` | The role split, stated plainly. |
 | 26 | Cognitive debt, its definition and the repayment argument | `AUTHORIAL_REFLECTION` | The owner's working concept, explicitly labelled as one. **The micro correction replaced the block's closing aphorism** (它们没有让解释真话变得可能) with a statement that names a party and a capability (但不会自动让维护者获得独立解释、验证这些事实的能力). 维护者 is a role noun, not the owner and not an agent; the sentence asserts what the mechanisms do not confer, never who executed anything, so it stays reflection. |
-| 27 | The gorilla and fire metaphor | `AUTHORIAL_REFLECTION` | Used once, as a figure. |
-| 28 | 这篇文章是开始偿还的第一笔 | `AUTHORIAL_REFLECTION` | Editorial stance about the article itself. |
+| 27 | **Retired in revision 5** — the gorilla / machine-gun / fire metaphor | — | Removed as a style-only edit under `human-writing`; no process attribution remains to classify. |
+| 28 | 这篇文章只算第一笔偿还，离还清还很远 | `AUTHORIAL_REFLECTION` | Same editorial stance, rewritten without the `不是 A，而是 B` cadence. |
 | 29 | The rate divergence: implementation advanced faster than the owner's comprehension of it | `AUTHORIAL_REFLECTION` | **Split out as its own row in the P5-E1 re-verification.** Revision 1 folded it into row 26 as part of the cognitive-debt argument; it is a distinct process statement and is now counted as one. The P5-E1 wording made it *more* precise rather than less: the P5-E form (实施的速度主要由 agent 决定，而理解的速度仍然由人决定) named a generic 人 as the second party, and the corrected form (agent 把实施推进得远快于 owner 消化这些工作的速度) names the role. Neither form attributes an execution to the owner. |
 
 **No row is unresolved.** Every statement either names an owner-level act, is impersonal with the
@@ -148,7 +153,7 @@ The work order named two ways the ending could go wrong. Both were checked in th
 
 **5.1 It must not be a "gotcha".** The disclosure is not saved for a twist: the Agentic Engineering
 method is named in the **测量台** section, roughly a fifth of the way in, and the ending returns to it
-rather than revealing it. The article states its own reason — 这篇文章的生产关系本身就是这个项目元层实验的一部分，所以它写在正文里，而不是藏在脚注里. A reader who stops halfway has already been told.
+rather than revealing it. The article now states the reason directly: 这里披露分工，是因为文章的生产关系本身就是项目元层实验的一部分。它应该写在正文里，不能缩到脚注. A reader who stops halfway has already been told.
 
 **5.2 It must not over-claim the AI's share.** The article uses 大部分 for the implementation and
 主要 for each role, and it names the owner's own column explicitly — 决定这个项目要回答什么问题 /
@@ -183,14 +188,18 @@ process layer, this audit would be claiming a rigour it does not have — §1 sa
 
 ## 7. Totals
 
-| Result | P5-D | P5-E | P5-E1 | micro | cleanup |
-|---|---:|---:|---:|---:|---:|
-| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** | **2** | **2** |
-| …of which assert an action performed in this project | 88 | **0** | **0** | **0** | **0** |
-| …of which are quotations rather than assertions | 4 | **2** | **2** | **2** | **2** |
-| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** | **9 of 10** | **9 of 10** |
-| Process statements classified | — | 28 | **29** | **29** | **28** |
-| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** | **0** | **0** |
+| Result | P5-D | P5-E | P5-E1 | micro | cleanup | human-writing |
+|---|---:|---:|---:|---:|---:|---:|
+| First-person singular pronouns (我, excluding 我们) | **92** | **2** | **2** | **2** | **2** | **2** |
+| …of which assert an action performed in this project | 88 | **0** | **0** | **0** | **0** | **0** |
+| …of which are quotations rather than assertions | 4 | **2** | **2** | **2** | **2** | **2** |
+| First-person action phrases **absent** from the article | 8 of 10 | **9 of 10** | **9 of 10** | **9 of 10** | **9 of 10** | **9 of 10** |
+| Process statements classified | — | 28 | **29** | **29** | **28** | **27** |
+| `PROCESS_ATTRIBUTION_UNRESOLVED` | — | **0** | **0** | **0** | **0** | **0** |
+
+**Revision 5 moves one figure again, also by subtraction.** The `human-writing` column drops the
+classified-process count 28 → 27 because row 27's authorial metaphor left the article. No actor, decision or
+execution moved with it. The first-person and unresolved counts stay fixed.
 
 **The cleanup column moves one figure, and it is a subtraction, not a finding.** Row 24 — *the NAS question
 being kept open*, classified `HUMAN_DECISION + AUTHORIAL_REFLECTION` — described the sentence 这个问题确实想
@@ -336,3 +345,31 @@ two documents, and it is now carried in
 [`ENGLISH_REALIGNMENT_HANDOFF.md`](ENGLISH_REALIGNMENT_HANDOFF.md) instead. **It was never in §4's
 inventory**, so this is not a second removal; it is recorded so that a reader comparing revisions does not
 go looking for it.
+
+
+---
+
+## 12. Post-public `human-writing` re-verification
+
+The revision-5 editorial pass touched the opening, several scientific transitions, the process disclosure,
+the cognitive-debt reflection and the closing movement. The process question was re-run on the final Chinese
+text rather than inferred from the old inventory.
+
+**Result: no attribution drift.**
+
+- The total character count of `我` remains **4**: two singular occurrences, both quotations, plus two
+  occurrences inside `我们`.
+- No sentence attributes an experiment execution, code change, Jev API call, analyzer repair or repository
+  implementation to the human owner.
+- The role split remains explicit: owner for direction/approval/final responsibility, ChatGPT mainly for
+  decomposition/planning/evidence review/editorial supervision, Claude Code mainly for repository
+  implementation/tests/Jev calls/repairs/drafts.
+- The sentence explaining why the disclosure sits in the body was rewritten, but its attribution is
+  unchanged.
+- Row 27 is retired because the metaphor itself was deleted. Row 28 keeps the same authorial-reflection
+  class under plainer wording.
+- `PROCESS_ATTRIBUTION_UNRESOLVED = 0`.
+
+This revision also updates the linked Chinese process note
+[`AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.zh-CN.md`](../AGENTIC_ENGINEERING_AND_COGNITIVE_DEBT.zh-CN.md)
+for prose only. That document remains an owner-declared process record, not Jev evidence.
