@@ -1,39 +1,51 @@
-# Style audit — the Chinese narrative rewrite (P5-E1)
+# Style audit — the Chinese technical blog
 
 **Audited document:** [`jev-as-probabilistic-decision-primitive.zh-CN.md`](jev-as-probabilistic-decision-primitive.zh-CN.md)
-**Style source:** `khazix-writer/SKILL.md` (414 lines), `references/style_examples.md` (428 lines),
-`references/content_methodology.md` (136 lines), read in full from
-`github.com/KKKKhazix/khazix-skills` during P5-D. The four-layer self-check below is the skill's own
-(`SKILL.md` §"自检输出格式"), run by hand against the rewritten text.
-**Article archetype:** `调查实验型 × 方法论分享型`, primary 调查实验型. Recorded before writing; unchanged in P5-E.
-**Audit date:** 2026-09-27 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 7 — recomputed after the narrative positioning closure, which rewrote one sentence of the
-preregistration block. This revision also adds the **Normative-tone check**. Supersedes revision 6 (the blog
-scope cleanup), revision 5 (the fourth correction), revision 4 (the first three micro corrections), revision
-3, which recomputed everything in P5-E1 and added the **Over-stylization check**, and revision 2 (P5-E),
-which superseded the P5-D revision, whose two colloquial-expression counts (11 and 35) contradicted each
-other and are withdrawn.
-**This revision makes the article 34 characters longer and takes one metric down with it.** The replaced
-sentence was a one-sentence paragraph; its replacement is a two-sentence paragraph, so 单句成段 falls
-101 → 100. Nothing was added to compensate, and the fall is recorded rather than repaired.
-**Revision 6 was the first in which the article got shorter** — 339 characters, every one of them a deletion
-rather than a compression. 口语化表达 fell 32 → 30, 单句成段 106 → 101, 短拍 34 → 33, and **nothing was
-added to compensate.**
+**Current style source:** `KKKKhazix/human-writing` v1.1.0, specifically `human-writing/SKILL.md`,
+`references/forum-prose.md`, `references/reality.md`, `references/revision.md`, and the published hard
+patterns in `scripts/check_prose.py`, read through the GitHub connector on 2026-10-12.
+**Historical style source:** revisions 1–7 used `khazix-writer`; their measurements and rationale are
+preserved below as history, not presented as current `human-writing` metrics.
+**Audit date:** 2026-10-12 · **Auditor:** the author with ChatGPT editorial supervision ·
+**Jev API calls made during this pass:** 0.
+**Revision:** 8 — post-public editorial maintenance after `v0.1.1`.
 
-**What this file is not.** It is not a claim audit. Whether a sentence is *permitted* is decided by
-[`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md) and recorded in
-[`jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md`](jev-as-probabilistic-decision-primitive.CLAIM_AUDIT.md),
-and whether a sentence is *correctly attributed to a person* is decided in
-[`…PROCESS_ATTRIBUTION_AUDIT.zh-CN.md`](jev-as-probabilistic-decision-primitive.PROCESS_ATTRIBUTION_AUDIT.zh-CN.md).
-A sentence can pass every layer below and still be a claim defect or an attribution defect, and the
-three audits are kept separate for that reason. Where style and the evidence contract pull against
-each other, §"Evidence-contract overrides" records which won.
+The owner explicitly reopened the Chinese prose after Publication Closure for a conservative
+`human-writing` pass. The scientific evidence, release tags, English adaptation and canonical logs are
+outside this edit.
 
-**Two hard limits on this audit.** It checks style only, and it makes no statement about whether the
-article is *good* — that judgment belongs to a human reader. And the style was applied as a set of
-writing rules, not as an impersonation: no author identity, life story, fixed footer, or contact
-address was reproduced, and every remaining first-person statement in the article is a decision the
-owner actually took, per the process attribution audit.
+## Revision 8 result
+
+The pass removes high-signal model-writing shapes without changing the evidence envelope.
+
+- The H1 no longer uses a prompt-like colon.
+- The opening cross-sentence reversal was rewritten as a direct statement.
+- Hard reversal templates such as `不是 A 而是 B`, `恰恰相反`, and `真正……的是` were removed where
+  they were doing rhetorical work rather than factual negation.
+- The closing gorilla / machine-gun / fire metaphor was removed. The same point is now stated directly:
+  agent execution can accelerate faster than owner comprehension.
+- No invented scene, personal experience, quotation or external fact was added.
+- The numeric-token multiset is unchanged between `main` at `8188e955` and this revision.
+- The five publication-critical markers remain present verbatim:
+  `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`,
+  `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION`, `PUBLIC_NOVELTY_UNRESOLVED`,
+  `FIELD_ALIGNMENT_CAVEAT`, and `ACTUAL_HANDLER_EXECUTION_UNTESTED`.
+- The raw Markdown file is 14,571 characters, down from 14,651; the change is prose compression, not
+  evidence deletion.
+- The total count of the character `我` remains 4.
+
+A connector-side scan using the same published `human-writing` hard patterns, with code spans, fenced code,
+URLs and Markdown links masked, reports **0 hard hits in the prose** for reversal templates, hard stops,
+hard jargon, model road-sign phrases, prose colons, em dashes and en dashes.
+
+This is still an author-side style audit. It does not replace human editorial judgment, claim classification
+or process-attribution review.
+
+## Historical audit record
+
+Everything below this divider is retained from revisions 1–7. Quantitative figures there describe the text
+at those revisions unless a later note explicitly says otherwise; revision 8 intentionally does not optimize
+the old `khazix-writer` punchline/colloquial-count targets.
 
 ---
 
