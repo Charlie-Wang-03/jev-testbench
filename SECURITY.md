@@ -186,7 +186,7 @@ Committed, pasted, synced, screenshotted, or printed into a log — the remedy i
 
 ## Supported versions and scope
 
-There are no releases and no maintained branches: `main` is the only line, and fixes land there.
+Historical releases exist, including the immutable evidence freeze and the publication-closure release, but `main` is the only actively maintained line and fixes land there. Frozen release evidence remains immutable.
 Issues in the TypeSafe SDK or the TypeSafe service itself are TypeSafe's to handle, not this
 repository's. Issues in GitHub's platform are GitHub's. Everything about how *this* repository
 handles its credential, its log, and its budget is in scope here.
