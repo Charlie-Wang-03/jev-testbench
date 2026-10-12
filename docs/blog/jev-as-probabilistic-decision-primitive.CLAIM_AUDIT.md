@@ -8,9 +8,10 @@ involvement and cognitive debt), corrected again in P5-E1 — nine narrowly-scop
 structural change — given three one-line micro corrections plus a fourth that closed the reading risk the
 third of those opened, given a scope cleanup that removed two matters the project no longer covers (the
 internal governance status at the top of the article, and the whole NAS topic), and finally closed as an
-exploratory narrative rather than an evaluation standard. **It was then approved by the owner and frozen.**
-It is byte-identical to its `f0ae65e` state and was not touched by this revision; §1.5 through §1.9 record
-what each pass changed and which rows it moved.
+exploratory narrative rather than an evaluation standard. **It was then approved by the owner and frozen for the v0.1.1 publication snapshot.** On
+2026-10-12 the owner explicitly reopened the Chinese prose for post-public editorial maintenance using
+`KKKKhazix/human-writing`. Revision 13 records that wording-only pass. The immutable v0.1.1 tag still
+contains the previously approved text; this audit now tracks the moving `main` narrative after publication.
 [`jev-as-probabilistic-decision-primitive.md`](jev-as-probabilistic-decision-primitive.md)
 is the **English adaptation, written fresh from the approved Chinese in P5-F**. It is an adaptation rather
 than a translation, and it replaces the frozen P5-B file wholesale rather than patching it. Its column
@@ -19,8 +20,16 @@ text. The one row that could not be located in either document is retired, and �
 **Standard:** [`BLOG_CLAIM_CONTRACT.md`](../evidence/v0.1.0/BLOG_CLAIM_CONTRACT.md)
 **Evidence base:** release `v0.1.0` — [`PUBLIC_EVIDENCE_FREEZE.md`](../evidence/v0.1.0/PUBLIC_EVIDENCE_FREEZE.md),
 [`evidence-manifest.json`](../evidence/v0.1.0/evidence-manifest.json), and the two canonical logs.
-**Audit date:** 2026-09-28 · **Auditor:** the author · **API calls made during the audit: 0.**
-**Revision:** 12 — the final human-read corrections. Seven corrections were applied to the English article,
+**Audit date:** 2026-10-12 · **Auditor:** the author with ChatGPT editorial supervision · **Jev API calls made during revision 13: 0.**
+**Revision:** 13 — post-public Chinese editorial maintenance under `human-writing` v1.1.0.
+The Chinese source narrative was edited for prose only; the English adaptation, frozen evidence, canonical
+logs and both release tags were untouched. The edited passages were re-read against their existing claim
+rows. **No row is added, retired or reclassified:** totals remain **70 substantive claims — 45 `A` + 25
+`B` + 0 `C`**; `DO_NOT_STATE_ZH = 0` and `DO_NOT_STATE_EN = 0`. No numeric token changed in the
+Chinese article, and all five publication-critical state markers remain verbatim. §1.12 records the
+affected claim-bearing passages and the invariants used to accept the wording changes.
+
+**Revision 12 — the final human-read corrections.** Seven corrections were applied to the English article,
 rewriting seven lines, and nothing else in it was touched; the Chinese is byte-identical to `f0ae65e`. Four of the seven change the
 statement of a claim this audit classifies — the novelty sentence in §7, the P3 design sentence in §8, the
 `n = 3` caveat in §10, and the schema-validation sentence in §12 — and **one row's statement is narrowed to
@@ -170,7 +179,7 @@ went through and what came out.
 **The second half of the fix is a tightening in the same direction as the rest of the pass.** The old
 endings — 只剩一个, 只剩一个问题 — left the survivor's status to the reader. `值得继续追` states it: the
 survivor is an **open question with a falsifiable unknown**, not an established finding. That is exactly how
-the next paragraph describes it (它活下来的理由不是效应大，恰恰是它有一个明确的、可以证伪的未知), so the
+the next paragraph describes it (它活下来，是因为留下了一个明确、可以证伪的未知。效应大小本身没有给它通行证), so the
 sentence is now consistent with its own continuation and cannot be read as reporting a positive result.
 **No row moves and no verdict flips:** C-66 is re-scoped back to its pre-correction width and keeps class
 `B`, because the compression risk §7 tracks — *seven stories were deleted* standing in for *seven
@@ -441,6 +450,37 @@ occur **nine** times in the English, and `45 / 45` is a twelfth expression writt
 corrected in §4.2, and the count is now taken from the table rather than from memory.
 
 ---
+
+### 1.12 Post-public `human-writing` editorial maintenance
+
+Revision 13 changes the Chinese prose after publication, so it re-checks every edited sentence that carries
+contract content instead of treating the pass as style-only by assumption.
+
+| Existing row(s) | Wording changed | Re-verification |
+|---|---|---|
+| **C-15** | The 0.001 USD paragraph now says directly that the figure is a local estimate and that TypeSafe Console is authoritative for billing. | Same scope, same number, same evidence class. |
+| **C-66** | The four-candidate explanation now separates prior-art demotions from bench-policy results without the `不是 A 而是 B` reversal. | Same two-cause classification; no candidate changes category. |
+| **C-34** | The surviving question is framed positively as a falsifiable unknown; effect size is explicitly denied any gatekeeping role. | Still an open question, not a positive finding. |
+| **C-42 / C-43** | The P3 null is stated as “experiment ran; attribution did not hold” instead of a two-line reversal. | `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION` and the replicated endpoint effect are unchanged. |
+| **C-46** | The n = 3 caveat now says the design does not support an interval estimate, without the rhetorical “not because we did not want to”. | Same limitation and same scope. |
+| **C-57** | The transport-attempt paragraph replaces “真正有效的是” with a direct description of which field the bench actually uses. | Same engineering limitation: `retry_count = null` means unreported; `transport_attempt_count` licenses only the observed-no-retry statement. |
+
+The pass also rewrites process/reflection material that is outside this contract: the Agentic Engineering
+disclosure, cognitive-debt framing, several transition sentences, and the closing metaphor. Those changes are
+tracked in the process-attribution and style audits rather than converted into Jev claim rows.
+
+Three invariants were checked against the pre-pass `main` article:
+
+1. the complete numeric-token multiset is unchanged;
+2. `NO_STRONG_JEV_SPECIFIC_NOVEL_FINDING_YET`,
+   `P3_KILL_NO_SINGLE_FIELD_ATTRIBUTION`, `PUBLIC_NOVELTY_UNRESOLVED`,
+   `FIELD_ALIGNMENT_CAVEAT`, and `ACTUAL_HANDLER_EXECUTION_UNTESTED` all remain present verbatim;
+3. no edited passage widens novelty, factual/numeric scope, or the P3 attribution result.
+
+The English article was not edited. Revision 13 therefore changes wording parity, not claim parity: the
+Chinese remains inside the same audited claim envelope and introduces no statement the English side would
+need in order to keep the three existing parity gates semantically valid.
+
 
 ## 2. The audit
 
